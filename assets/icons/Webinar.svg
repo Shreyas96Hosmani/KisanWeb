@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="55" height="75" viewBox="0 0 55 75">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_435" data-name="Rectangle 435" width="22" height="22" transform="translate(-7488 4054)" fill="#fff" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Webinar" transform="translate(7503 -4039)">
+    <text id="Webinar-2" data-name="Webinar" transform="translate(-7497 4110)" fill="#252525" font-size="10" font-family="Poppins-Medium, Poppins" font-weight="500" letter-spacing="0.018em"><tspan x="0" y="0">Webinar</tspan></text>
+    <circle id="Ellipse_64" data-name="Ellipse 64" cx="27.5" cy="27.5" r="27.5" transform="translate(-7503 4039)" fill="#05aeba" opacity="0.2"/>
+    <g id="Mask_Group_6" data-name="Mask Group 6" transform="translate(2 2)" clip-path="url(#clip-path)">
+      <path id="calender" d="M0,19.933a2.224,2.224,0,0,0,2.356,2.062H19.638a2.224,2.224,0,0,0,2.356-2.062V8.248H0Zm3.142-8.248A.743.743,0,0,1,3.927,11H8.641a.743.743,0,0,1,.785.688v4.124a.743.743,0,0,1-.785.688H3.927a.743.743,0,0,1-.785-.687Zm16.5-8.936H17.281V.688A.743.743,0,0,0,16.5,0H14.925a.743.743,0,0,0-.785.688V2.749H7.855V.688A.743.743,0,0,0,7.07,0H5.5a.743.743,0,0,0-.785.688V2.749H2.356A2.224,2.224,0,0,0,0,4.811V6.873H21.994V4.811a2.224,2.224,0,0,0-2.356-2.062Z" transform="translate(-7487.998 4054.001)" fill="#05aeba"/>
+    </g>
+  </g>
+</svg>

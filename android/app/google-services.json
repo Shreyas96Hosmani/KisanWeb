@@ -1,0 +1,88 @@
+{
+  "project_info": {
+    "project_number": "799381838308",
+    "firebase_url": "https://kisanchattesting.firebaseio.com",
+    "project_id": "kisanchattesting",
+    "storage_bucket": "kisanchattesting.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:799381838308:android:7845b31941e51c59b80ff1",
+        "android_client_info": {
+          "package_name": "com.kisan.samvaad.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "799381838308-4kt5tp31jf6j420n3aoe69q1u3ikkhci.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kisan.samvaad.test",
+            "certificate_hash": "1269e41790a64cc0a584515d106bbfae318f5e8a"
+          }
+        },
+        {
+          "client_id": "799381838308-arpu16t4ecojpec9t7f8b1ouvcp13u0e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kisan.samvaad.test",
+            "certificate_hash": "1dea10e098b0cad9a33c4d3c6bb08b7eecee86ae"
+          }
+        },
+        {
+          "client_id": "799381838308-brggtu4n17qpvh1qhp6ck551cj8jk9c1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kisan.samvaad.test",
+            "certificate_hash": "de13653693a65c488336b2f4639d8f20aa4fd4f6"
+          }
+        },
+        {
+          "client_id": "799381838308-k2f424dmik8f4mbkphhh4jer9sf2m62d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kisan.samvaad.test",
+            "certificate_hash": "f859724530a6f8026f5c166322322f4a2dba04c5"
+          }
+        },
+        {
+          "client_id": "799381838308-th2rksnt9hrbodgud9f3hit0gi8kgfmb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kisan.samvaad.test",
+            "certificate_hash": "042d6a2c397a16837e6d7805d594f194d2558e50"
+          }
+        },
+        {
+          "client_id": "799381838308-uu343u038hll5m66je9tf7a7p9ubl0lk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kisan.samvaad.test",
+            "certificate_hash": "bac9cf32b354a9164343ab5d1df80ddb5962c9f5"
+          }
+        },
+        {
+          "client_id": "799381838308-793a3trdgdo34osbfcnpk53aqasc6nhr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ5NIv27HolUIFTJ4opdGBIUcpZnbcDyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "799381838308-793a3trdgdo34osbfcnpk53aqasc6nhr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
