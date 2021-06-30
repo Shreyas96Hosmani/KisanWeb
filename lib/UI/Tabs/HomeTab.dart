@@ -12,6 +12,9 @@ import 'package:kisanweb/Helpers/helper.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
 import 'package:kisanweb/Models/AdsObject.dart';
 import 'package:kisanweb/Models/WebinarListParser.dart';
+import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
+import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
+
 //import 'package:kisanweb/UI/BannerEvents/event_page.dart';
 //import 'package:kisanweb/UI/Categories/categories_page.dart';
 //import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
@@ -22,6 +25,7 @@ import 'package:kisanweb/UI/HomeScreen/HomeScreen.dart';
 import 'package:kisanweb/UI/HomeScreen/Widgets/SubTile.dart';
 import 'package:kisanweb/UI/Intro/InitialScreen.dart';
 import 'package:kisanweb/UI/Profile/BasicProfile.dart';
+
 //import 'package:kisanweb/UI/SearchScreen/SearchScreen.dart';
 //import 'package:kisanweb/UI/Subscribe/SubscribeToMembership.dart';
 //import 'package:kisanweb/UI/NotficationScreen/Notifications.dart';
@@ -62,14 +66,17 @@ class _HomeTabState extends State<HomeTab> {
   Widget build(BuildContext context) {
     final providerListener = Provider.of<CustomViewModel>(context);
 
+    print("Images : ${providerListener.homeAdsListImages.length}");
+
     return Scaffold(
       body: Container(
         color: Colors.white,
         width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 206),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              providerListener.membershipInfo != null
+              /*providerListener.membershipInfo != null
                   ? providerListener.membershipInfo.status != "active"
                       ? InkWell(
                           onTap: () {
@@ -89,153 +96,191 @@ class _HomeTabState extends State<HomeTab> {
                         )
                   : SizedBox(
                       height: 1,
-                    ),
-              providerListener.homeAdsListImages.length > 0
+                    ),*/
+              //Ads now showing
+              /*providerListener.homeAdsListImages.length > 0
                   ? ImageSlider()
                   : SizedBox(
                       height: 1,
-                    ),
-              providerListener.categoryList.length > 0
-                  ? Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: SubCatTitles(
-                            title: getTranslated(context, 'categories_label'),
-                          ),
-                        ),
-                        Container(
-                          height: 130,
-                          child: ListView.builder(
-                              itemCount: providerListener.categoryList.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return CategoryTiles(context,
-                                    providerListener.categoryList[index]);
-                              }),
-                        )
-                      ],
-                    )
-                  : SizedBox(
-                      height: 1,
-                    ),
-              //Divider(),
-              providerListener.featuredproductsList.length > 0
-                  ? Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: SubCatTitles(
-                            title: getTranslated(context, 'featured_products'),
-                            image: "assets/images/star1.png",
-                          ),
-                        ),
-                        Container(
-                          height: 300,
-                          child: ListView.builder(
-                              itemCount:
-                                  providerListener.featuredproductsList.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return FeaturedProducts(
-                                  name: providerListener
-                                      .featuredproductsList[index]
-                                      .title_english,
-                                  desc: providerListener
-                                      .featuredproductsList[index]
-                                      .organisation_name,
-                                  image: providerListener
-                                      .featuredproductsList[index].bigthumb_url,
-                                  onPressed: () {
-//                                    push(
-//                                        context,
-//                                        DetailedProducts(
-//                                            providerListener
-//                                                .featuredproductsList[index].id,
-//                                            providerListener
-//                                                .featuredproductsList[index]
-//                                                .user_id));
-                                  },
-                                );
-                              }),
-                        ),
-                      ],
-                    )
-                  : SizedBox(
-                      height: 1,
-                    ),
-              //CustomDivider(),
-              providerListener.featuredcompaniesList.length > 0
-                  ? Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: SubCatTitles(
-                            title: getTranslated(context, 'featured_brands'),
-                            image: "assets/images/bookmark.png",
-                          ),
-                        ),
-                        Container(
-                          height: getProportionateScreenHeight(170),
-                          color: Colors.white,
-                          child: ListView.builder(
-                              itemCount:
-                                  providerListener.featuredcompaniesList.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return FeaturedBrands(
-                                  id: providerListener
-                                      .featuredcompaniesList[index].user_id,
-                                  organisation_name: providerListener
-                                      .featuredcompaniesList[index]
-                                      .organisation_name,
-                                  image: providerListener
-                                      .featuredcompaniesList[index]
-                                      .image_bigthumb_url,
-                                );
-                              }),
-                        ),
-                      ],
-                    )
-                  : SizedBox(
-                      height: 1,
-                    ),
-              SizedBox(
-                height: getProportionateScreenHeight(30),
+                    ),*/
+              //temp reference only
+              Container(
+                height: getProportionateScreenHeight(313),
+                decoration: BoxDecoration(
+                    color: Color(0xFFF3FFF0),
+                    border: Border.all(color: Color(0xFF88D974))),
               ),
-              AdTile(context, providerListener.topAd),
+              Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        child: Column(
+                          children: [
+                            providerListener.categoryList.length > 0
+                                ? Column(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: SubCatTitles(
+                                          title: getTranslated(
+                                              context, 'categories_label'),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 130,
+                                        child: ListView.builder(
+                                            itemCount: providerListener
+                                                .categoryList.length,
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (context, index) {
+                                              return CategoryTiles(
+                                                  context,
+                                                  providerListener
+                                                      .categoryList[index]);
+                                            }),
+                                      )
+                                    ],
+                                  )
+                                : SizedBox(
+                                    height: 1,
+                                  ),
+                            //Divider(),
+                            providerListener.featuredproductsList.length > 0
+                                ? Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: SubCatTitles(
+                                          title: getTranslated(
+                                              context, 'featured_products'),
+                                          image: "assets/images/star1.png",
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 300,
+                                        child: ListView.builder(
+                                            itemCount: providerListener
+                                                .featuredproductsList.length,
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (context, index) {
+                                              return FeaturedProducts(
+                                                name: providerListener
+                                                    .featuredproductsList[index]
+                                                    .title_english,
+                                                desc: providerListener
+                                                    .featuredproductsList[index]
+                                                    .organisation_name,
+                                                image: providerListener
+                                                    .featuredproductsList[index]
+                                                    .bigthumb_url,
+                                                onPressed: () {
+                                                  push(
+                                                      context,
+                                                      DetailedProducts(
+                                                          providerListener
+                                                              .featuredproductsList[
+                                                                  index]
+                                                              .id,
+                                                          providerListener
+                                                              .featuredproductsList[
+                                                                  index]
+                                                              .user_id));
+                                                },
+                                              );
+                                            }),
+                                      ),
+                                    ],
+                                  )
+                                : SizedBox(
+                                    height: 1,
+                                  ),
+                            //CustomDivider(),
+                            providerListener.featuredcompaniesList.length > 0
+                                ? Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: SubCatTitles(
+                                          title: getTranslated(
+                                              context, 'featured_brands'),
+                                          image: "assets/images/bookmark.png",
+                                        ),
+                                      ),
+                                      Container(
+                                        height:
+                                            getProportionateScreenHeight(170),
+                                        color: Colors.white,
+                                        child: ListView.builder(
+                                            itemCount: providerListener
+                                                .featuredcompaniesList.length,
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (context, index) {
+                                              return FeaturedBrands(
+                                                id: providerListener
+                                                    .featuredcompaniesList[
+                                                        index]
+                                                    .user_id,
+                                                organisation_name:
+                                                    providerListener
+                                                        .featuredcompaniesList[
+                                                            index]
+                                                        .organisation_name,
+                                                image: providerListener
+                                                    .featuredcompaniesList[
+                                                        index]
+                                                    .image_bigthumb_url,
+                                              );
+                                            }),
+                                      ),
+                                    ],
+                                  )
+                                : SizedBox(
+                                    height: 1,
+                                  ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(30),
+                            ),
 
-              //---------------"Newly Adds" Section---------------------
+                            //---------------"Newly Adds" Section---------------------
 
-              SizedBox(
-                height: getProportionateScreenHeight(30),
-              ),
-              providerListener.productsList.length > 0
-                  ? Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: getProportionateScreenWidth(20)),
-                          child: SubCatTitles(
-                            title:
-                                getTranslated(context, 'newly_added_products'),
-                            image: "assets/images/flag.png",
-                          ),
-                        ),
-                        Container(
-                          height: 300,
-                          child: ListView.builder(
-                              itemCount: providerListener.productsList.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return FeaturedProducts(
-                                  name: providerListener
-                                      .productsList[index].title_english,
-                                  desc: providerListener
-                                      .productsList[index].organisation_name,
-                                  image: providerListener
-                                      .productsList[index].bigthumb_url,
-                                  onPressed: () {
+                            SizedBox(
+                              height: getProportionateScreenHeight(30),
+                            ),
+                            providerListener.productsList.length > 0
+                                ? Column(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: SubCatTitles(
+                                          title: getTranslated(
+                                              context, 'newly_added_products'),
+                                          image: "assets/images/flag.png",
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 300,
+                                        child: ListView.builder(
+                                            itemCount: providerListener
+                                                .productsList.length,
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (context, index) {
+                                              return FeaturedProducts(
+                                                name: providerListener
+                                                    .productsList[index]
+                                                    .title_english,
+                                                desc: providerListener
+                                                    .productsList[index]
+                                                    .organisation_name,
+                                                image: providerListener
+                                                    .productsList[index]
+                                                    .bigthumb_url,
+                                                onPressed: () {
 //                                    push(
 //                                        context,
 //                                        DetailedProducts(
@@ -243,308 +288,361 @@ class _HomeTabState extends State<HomeTab> {
 //                                                .productsList[index].id,
 //                                            providerListener
 //                                                .productsList[index].user_id));
-                                  },
-                                );
-                              }),
-                        ),
-                      ],
-                    )
-                  : SizedBox(
-                      height: 1,
-                    ),
-              //CustomDivider(),
-              providerListener.companiesList.length > 0
-                  ? Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: getProportionateScreenWidth(20)),
-                          child: SubCatTitles(
-                            title: getTranslated(context, 'newly_added_brands'),
-                            image: "assets/images/bookmark.png",
-                          ),
-                        ),
-                        Container(
-                          height: 140,
-                          child: ListView.builder(
-                              itemCount: providerListener.companiesList.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return FeaturedBrands(
-                                  id: providerListener
-                                      .companiesList[index].user_id,
-                                  organisation_name: providerListener
-                                      .companiesList[index].organisation_name,
-                                  image: providerListener
-                                      .companiesList[index].image_bigthumb_url,
-                                );
-                              }),
-                        ),
-                      ],
-                    )
-                  : SizedBox(
-                      height: 1,
-                    ),
-              SizedBox(
-                height: getProportionateScreenHeight(30),
-              ),
-              AdTile(context, providerListener.middleAd),
-
-              //-------------Webinars Sections--------------
-
-              SizedBox(
-                height: getProportionateScreenHeight(30),
-              ),
-              providerListener.eventList.length > 0
-                  ? Container(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: getProportionateScreenWidth(20)),
-                            child: SubCatTitles(
-                              title:
-                                  getTranslated(context, 'upcoming_webinars'),
+                                                },
+                                              );
+                                            }),
+                                      ),
+                                    ],
+                                  )
+                                : SizedBox(
+                                    height: 1,
+                                  ),
+                            //CustomDivider(),
+                            providerListener.companiesList.length > 0
+                                ? Column(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: SubCatTitles(
+                                          title: getTranslated(
+                                              context, 'newly_added_brands'),
+                                          image: "assets/images/bookmark.png",
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 140,
+                                        child: ListView.builder(
+                                            itemCount: providerListener
+                                                .companiesList.length,
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (context, index) {
+                                              return FeaturedBrands(
+                                                id: providerListener
+                                                    .companiesList[index]
+                                                    .user_id,
+                                                organisation_name:
+                                                    providerListener
+                                                        .companiesList[index]
+                                                        .organisation_name,
+                                                image: providerListener
+                                                    .companiesList[index]
+                                                    .image_bigthumb_url,
+                                              );
+                                            }),
+                                      ),
+                                    ],
+                                  )
+                                : SizedBox(
+                                    height: 1,
+                                  ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(30),
                             ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.only(left: 20),
-                            height: 250,
-                            child: ListView.builder(
-                                itemCount:
-                                    5 + 1,
-                                clipBehavior: Clip.none,
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) {
-                                  if (index ==
-                                      5) {
-                                    return ViewAllButton(
-                                      OnPressed: () {
-                                        //push(context, ViewAllWebinars());
-                                      },
-                                    );
-                                  }
 
-                                  return WebinarTile(context,
-                                      providerListener.eventList[index]);
-                                }),
-                          ),
-                        ],
-                      ),
-                    )
-                  : SizedBox(
-                      height: 1,
-                    ),
-              SizedBox(
-                height: 20,
-              ),
-              providerListener.featuredeventList.length > 0
-                  ? Container(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: SubCatTitles(
-                            title:
-                                getTranslated(context, 'featured_webinars'),
-                          ),
-                        ),
-                        Container(
-                          height: 220,
-                          child: ListView.builder(
-                              itemCount:
-                                  providerListener.featuredeventList.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return FeaturesWebinar(
-                                    context,
-                                    providerListener
-                                        .featuredeventList[index]);
-                              }),
-                        ),
-                      ],
-                    ),
-                  )
-                  : SizedBox(
-                      height: 1,
-                    ),
-              SizedBox(
-                height: 10,
-              ),
-              //CustomDivider(),
-              /*    providerListener.offersList.length > 0
+                            //-------------Webinars Sections--------------
+
+                            SizedBox(
+                              height: getProportionateScreenHeight(30),
+                            ),
+                            providerListener.eventList.length > 0
+                                ? Container(
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: SubCatTitles(
+                                            title: getTranslated(
+                                                context, 'upcoming_webinars'),
+                                          ),
+                                        ),
+                                        Container(
+                                          padding:
+                                              const EdgeInsets.only(left: 20),
+                                          height: 250,
+                                          child: ListView.builder(
+                                              itemCount: 5 + 1,
+                                              scrollDirection: Axis.horizontal,
+                                              itemBuilder: (context, index) {
+                                                if (index == 5) {
+                                                  return ViewAllButton(
+                                                    OnPressed: () {
+                                                      //push(context, ViewAllWebinars());
+                                                    },
+                                                  );
+                                                }
+
+                                                return WebinarTile(
+                                                    context,
+                                                    providerListener
+                                                        .eventList[index]);
+                                              }),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : SizedBox(
+                                    height: 1,
+                                  ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            providerListener.featuredeventList.length > 0
+                                ? Container(
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: SubCatTitles(
+                                            title: getTranslated(
+                                                context, 'featured_webinars'),
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 220,
+                                          child: ListView.builder(
+                                              itemCount: providerListener
+                                                  .featuredeventList.length,
+                                              scrollDirection: Axis.horizontal,
+                                              itemBuilder: (context, index) {
+                                                return FeaturesWebinar(
+                                                    context,
+                                                    providerListener
+                                                            .featuredeventList[
+                                                        index]);
+                                              }),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : SizedBox(
+                                    height: 1,
+                                  ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            //CustomDivider(),
+                            /*    providerListener.offersList.length > 0
                   ? Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: SubCatTitles(
-                            title: "Latest Offers",
-                          ),
-                        ),
-                        Container(
-                          height: getProportionateScreenHeight(263),
-                          padding: EdgeInsets.only(left: 20),
-                          child: ListView.builder(
-                              itemCount: providerListener.offersList.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return LatestOfferTile(
-                                    providerListener.offersList[index]);
-                              }),
-                        ),
-                      ],
-                    )
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: SubCatTitles(
+                                title: "Latest Offers",
+                              ),
+                            ),
+                            Container(
+                              height: getProportionateScreenHeight(263),
+                              padding: EdgeInsets.only(left: 20),
+                              child: ListView.builder(
+                                  itemCount: providerListener.offersList.length,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return LatestOfferTile(
+                                        providerListener.offersList[index]);
+                                  }),
+                            ),
+                          ],
+                        )
                   : SizedBox(
-                      height: 1,
-                    ),
+                          height: 1,
+                        ),
               SizedBox(
                 height: getProportionateScreenHeight(30),
               ),*/
-              AdTile(context, providerListener.bottomAd),
-              /* SizedBox(
+                            /* SizedBox(
                 height: getProportionateScreenHeight(30),
               ),
 
               providerListener.demosList.length > 0
                   ? Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: getProportionateScreenWidth(20)),
-                          child: SubCatTitles(
-                            title: "Latest Demo",
-                          ),
-                        ),
-                        Container(
-                          height: getProportionateScreenHeight(263),
-                          padding: EdgeInsets.only(
-                              left: getProportionateScreenWidth(20)),
-                          child: ListView.builder(
-                              itemCount: providerListener.demosList.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return LatestDemo(
-                                    context, providerListener.demosList[index]);
-                              }),
-                        ),
-                      ],
-                    )
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: getProportionateScreenWidth(20)),
+                              child: SubCatTitles(
+                                title: "Latest Demo",
+                              ),
+                            ),
+                            Container(
+                              height: getProportionateScreenHeight(263),
+                              padding: EdgeInsets.only(
+                                  left: getProportionateScreenWidth(20)),
+                              child: ListView.builder(
+                                  itemCount: providerListener.demosList.length,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return LatestDemo(
+                                        context, providerListener.demosList[index]);
+                                  }),
+                            ),
+                          ],
+                        )
                   : SizedBox(
-                      height: 1,
-                    ),
+                          height: 1,
+                        ),
               SizedBox(
                 height: 30,
               ),*/
-              //CustomDivider(),
-              /*  providerListener.launchList.length > 0
+                            //CustomDivider(),
+                            /*  providerListener.launchList.length > 0
                   ? Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: getProportionateScreenWidth(22)),
-                          child: SubCatTitles(
-                            title: "Latest Product Launch",
-                          ),
-                        ),
-                        Container(
-                          height: 450,
-                          padding: EdgeInsets.only(
-                              left: getProportionateScreenWidth(20)),
-                          child: ListView.builder(
-                              itemCount: providerListener.launchList.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return LatestProductLaunch(context,
-                                    providerListener.launchList[index]);
-                              }),
-                        ),
-                      ],
-                    )
-                  : SizedBox(
-                      height: 1,
-                    ),*/
-              providerListener.notificationsList.length > 0
-                  ? CustomDivider()
-                  : SizedBox(
-                      height: 1,
-                    ),
-              providerListener.notificationsList.length > 0
-                  ? InkWell(
-                      onTap: () {
-                        //push(context, NotificationScreen());
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
                           children: [
-                            SubCatTitles(
-                              title: providerListener.notificationsList.length
-                                      .toString() +
-                                  " " +
-                                  getTranslated(context, 'unread_notification'),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: getProportionateScreenWidth(22)),
+                              child: SubCatTitles(
+                                title: "Latest Product Launch",
+                              ),
                             ),
-                            /*SizedBox(
-                              height: 30,
+                            Container(
+                              height: 450,
+                              padding: EdgeInsets.only(
+                                  left: getProportionateScreenWidth(20)),
+                              child: ListView.builder(
+                                  itemCount: providerListener.launchList.length,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return LatestProductLaunch(context,
+                                        providerListener.launchList[index]);
+                                  }),
+                            ),
+                          ],
+                        )
+                  : SizedBox(
+                          height: 1,
+                        ),*/
+                            providerListener.notificationsList.length > 0
+                                ? CustomDivider()
+                                : SizedBox(
+                                    height: 1,
+                                  ),
+                            providerListener.notificationsList.length > 0
+                                ? InkWell(
+                                    onTap: () {
+                                      //push(context, NotificationScreen());
+                                    },
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 20),
+                                      child: Column(
+                                        children: [
+                                          SubCatTitles(
+                                            title: providerListener
+                                                    .notificationsList.length
+                                                    .toString() +
+                                                " " +
+                                                getTranslated(context,
+                                                    'unread_notification'),
+                                          ),
+                                          /*SizedBox(
+                                  height: 30,
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text(
+                                    "View all Notification",
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 18,
+                                      color: Color(COLOR_ACCENT),
+                                    ),
+                                  ),
+                                ),*/
+                                        ],
+                                      ),
+                                    ))
+                                : SizedBox(
+                                    height: 1,
+                                  ),
+                            CustomDivider(),
+                            /*ColouredCustomButtons(
+                              imgPath: "assets/images/discount.png",
+                              bgColour: Color(0xFFF7F2D4),
+                              primaryColour: Color(0xFFA27000),
+                              text: "Offers",
+                              onPressed: () {},
                             ),
                             SizedBox(
-                              height: 15,
+                              height: getProportionateScreenHeight(15),
                             ),
-                            TextButton(
+                            ColouredCustomButtons(
+                              imgPath: "assets/images/calender.png",
+                              bgColour: Color(0xFFCEF7F5),
+                              primaryColour: Color(0xFF05AEBA),
+                              text: "Webinar",
                               onPressed: () {},
-                              child: Text(
-                                "View all Notification",
-                                style: GoogleFonts.poppins(
-                                  fontSize: 18,
-                                  color: Color(COLOR_ACCENT),
-                                ),
-                              ),
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(15),
+                            ),
+                            ColouredCustomButtons(
+                              imgPath: "assets/images/video_play.png",
+                              bgColour: Color(0xFFD8FCD8),
+                              primaryColour: Color(0xFF008840),
+                              text: "Demo",
+                              onPressed: () {},
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(15),
+                            ),
+                            ColouredCustomButtons(
+                              imgPath: "assets/images/rocket.png",
+                              bgColour: Color(0xFFFFE6E2),
+                              primaryColour: Color(0xFFC8341C),
+                              text: "Product Launch",
+                              onPressed: () {},
                             ),*/
+                            SizedBox(
+                              height: 50,
+                            ),
                           ],
                         ),
-                      ))
-                  : SizedBox(
-                      height: 1,
+                      ),
                     ),
-              CustomDivider(),
-              /*ColouredCustomButtons(
-                imgPath: "assets/images/discount.png",
-                bgColour: Color(0xFFF7F2D4),
-                primaryColour: Color(0xFFA27000),
-                text: "Offers",
-                onPressed: () {},
-              ),
-              SizedBox(
-                height: getProportionateScreenHeight(15),
-              ),
-              ColouredCustomButtons(
-                imgPath: "assets/images/calender.png",
-                bgColour: Color(0xFFCEF7F5),
-                primaryColour: Color(0xFF05AEBA),
-                text: "Webinar",
-                onPressed: () {},
-              ),
-              SizedBox(
-                height: getProportionateScreenHeight(15),
-              ),
-              ColouredCustomButtons(
-                imgPath: "assets/images/video_play.png",
-                bgColour: Color(0xFFD8FCD8),
-                primaryColour: Color(0xFF008840),
-                text: "Demo",
-                onPressed: () {},
-              ),
-              SizedBox(
-                height: getProportionateScreenHeight(15),
-              ),
-              ColouredCustomButtons(
-                imgPath: "assets/images/rocket.png",
-                bgColour: Color(0xFFFFE6E2),
-                primaryColour: Color(0xFFC8341C),
-                text: "Product Launch",
-                onPressed: () {},
-              ),*/
-              SizedBox(
-                height: 50,
+                    Container(
+                      width: 350,
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          LiveEventButton(),
+                          SizedBox(
+                            height: getProportionateScreenHeight(16.3),
+                          ),
+                          Container(
+                            height: 350,
+                            width: 350,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(
+                            height: getProportionateScreenHeight(16.3),
+                          ),
+                          Container(
+                            height: 350,
+                            width: 350,
+                            color: Colors.blueGrey,
+                          ),
+                          SizedBox(
+                            height: getProportionateScreenHeight(16.3),
+                          ),
+                          Container(
+                            height: 350,
+                            width: 350,
+                            color: Colors.tealAccent,
+                          ),
+                          /*AdTile(context, providerListener.topAd),
+                          AdTile(context, providerListener.middleAd),
+                          AdTile(context, providerListener.bottomAd),*/
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ],
           ),
@@ -641,6 +739,51 @@ class _HomeTabState extends State<HomeTab> {
   }
 }
 
+class LiveEventButton extends StatelessWidget {
+  const LiveEventButton({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: BoxConstraints.tightFor(
+          height: getProportionateScreenHeight(99), width: 350),
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+            primary: Color(0xFFFC7E67),
+            onPrimary: Colors.white,
+            padding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenHeight(31)),
+            side: BorderSide(color: Color(0xFFCC4026), width: 4),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            textStyle: GoogleFonts.poppins(
+              fontWeight: FontWeight.w600,
+              fontSize: getProportionateScreenHeight(23),
+            )),
+        child: Row(
+          children: [
+            SvgPicture.asset(
+              "assets/icons/dot_circle.svg",
+              height: 31,
+              color: Colors.white,
+            ),
+            SizedBox(
+              width: 20,
+            ),
+            Text(
+              "Attend\nLive Events Now",
+              maxLines: 2,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class ViewAllButton extends StatelessWidget {
   final Function OnPressed;
 
@@ -649,12 +792,10 @@ class ViewAllButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(
-          vertical: getProportionateScreenHeight(110),
-          horizontal: getProportionateScreenWidth(20)),
+      margin: EdgeInsets.symmetric(vertical: 100, horizontal: 20),
       child: ConstrainedBox(
         constraints: BoxConstraints.tightFor(
-          width: getProportionateScreenWidth(170),
+          width: 170,
           height: getProportionateScreenHeight(65),
         ),
         child: ElevatedButton(
@@ -676,11 +817,11 @@ class ViewAllButton extends StatelessWidget {
                     color: Colors.green),
               ),
               SizedBox(
-                width: getProportionateScreenWidth(7),
+                width: 10,
               ),
               SvgPicture.asset(
                 "assets/icons/forwardIcon.svg",
-                width: getProportionateScreenWidth(30),
+                width: 30,
               )
             ],
           ),
@@ -959,8 +1100,7 @@ Widget LatestProductLaunch(BuildContext context, LaunchListParser lauchOBJ) {
 
 Widget LatestDemo(BuildContext context, DemoListParser demoOBJ) {
   return GestureDetector(
-    onTap: () {
-    },
+    onTap: () {},
     child: Container(
       width: MediaQuery.of(context).size.width / 1.3,
       height: 200,
@@ -1059,11 +1199,9 @@ Widget WebinarTile(BuildContext context, WebinarListParser eventOBJ) {
       }
     },
     child: Container(
-      width: MediaQuery.of(context).size.width / 1.3,
+      width: 337,
       margin: EdgeInsets.only(
-          top: getProportionateScreenHeight(20),
-          bottom: getProportionateScreenHeight(20),
-          right: getProportionateScreenWidth(20)),
+          top: (20), bottom: getProportionateScreenHeight(20), right: 20),
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
           color: Colors.grey[300],
@@ -1091,7 +1229,7 @@ Widget WebinarTile(BuildContext context, WebinarListParser eventOBJ) {
                 left: 0,
                 right: 0,
                 child: Container(
-                  height: MediaQuery.of(context).size.width / 3 / 1.1,
+                  height: 71,
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
@@ -1167,7 +1305,7 @@ Widget WebinarTile(BuildContext context, WebinarListParser eventOBJ) {
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
                       child: Container(
-                        width: MediaQuery.of(context).size.width / 1.5 / 1.9,
+                        width: 175,
                         child: Text(
                           utf8.decode(eventOBJ.title.runes.toList()),
                           maxLines: 2,
@@ -1252,7 +1390,7 @@ Widget FeaturesWebinar(BuildContext context, WebinarListParser eventOBJ) {
       //push(context, WebinarMainScreen(eventOBJ.id));
     },
     child: Container(
-      width: MediaQuery.of(context).size.width / 1.25,
+      width: 337,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.green[500],
@@ -1272,15 +1410,15 @@ Widget FeaturesWebinar(BuildContext context, WebinarListParser eventOBJ) {
             fit: BoxFit.fill),
       ),
       margin: EdgeInsets.only(
-        top: getProportionateScreenHeight(20),
-        bottom: getProportionateScreenHeight(20),
-        left: getProportionateScreenWidth(20),
+        top: 20,
+        bottom: 20,
+        left: 20,
       ),
       child: Stack(
         children: [
           Container(
-            width: getProportionateScreenWidth(89),
-            height: getProportionateScreenHeight(51),
+            width: 89,
+            height: 51,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
@@ -1308,7 +1446,7 @@ Widget FeaturesWebinar(BuildContext context, WebinarListParser eventOBJ) {
             left: 0,
             right: 0,
             child: Container(
-              height: MediaQuery.of(context).size.width / 3 / 1.1,
+              height: 97,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(20),
@@ -1377,20 +1515,20 @@ class CompanyName extends StatelessWidget {
     return Row(
       children: [
         Container(
-            width: getProportionateScreenWidth(40),
-            height: getProportionateScreenWidth(40),
-            padding: EdgeInsets.all(3),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 2.0,
-                  spreadRadius: 1.0,
-                )
-              ],
-            ),
+          width: 40,
+          height: 40,
+          padding: EdgeInsets.all(3),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 2.0,
+                spreadRadius: 1.0,
+              )
+            ],
+          ),
           child: Image.network(smallthumb_url ?? "", fit: BoxFit.contain),
         ),
         SizedBox(
@@ -1444,7 +1582,8 @@ Widget AdTile(BuildContext context, AdsObject adOBJ) {
               }
             },
             child: Container(
-              height: SizeConfig.screenWidth,
+              height: 350,
+              width: 350,
               decoration: BoxDecoration(
                   color: Colors.grey,
                   image: DecorationImage(
@@ -1504,18 +1643,18 @@ class _FeaturedBrandsState extends State<FeaturedBrands> {
         bottom: getProportionateScreenHeight(10),
         left: getProportionateScreenWidth(10),
       ),
-      width: getProportionateScreenWidth(100),
+      width: 100,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ConstrainedBox(
             constraints: BoxConstraints.tightFor(
-              width: getProportionateScreenWidth(85),
-              height: getProportionateScreenWidth(85),
+              width: 85,
+              height: 85,
             ),
             child: ElevatedButton(
                 onPressed: () {
-                  //push(context, CompanyDetails(widget.id));
+                  push(context, CompanyDetails(widget.id));
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.white,
@@ -1531,7 +1670,7 @@ class _FeaturedBrandsState extends State<FeaturedBrands> {
                 )),
           ),
           SizedBox(
-            height: getProportionateScreenHeight(7),
+            height: 7,
           ),
           Text(
             widget.organisation_name,
@@ -1567,8 +1706,8 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
     return GestureDetector(
       onTap: widget.onPressed,
       child: Container(
-        width: getProportionateScreenWidth(150),
-        height: getProportionateScreenHeight(350),
+        width: 124,
+        height: 161,
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
             color: Colors.grey[200],
@@ -1640,12 +1779,12 @@ Widget CategoryTiles(BuildContext context, CategoryListParser categoryOBJ) {
     child: Container(
       child: ConstrainedBox(
         constraints: BoxConstraints.tightFor(
-          width: getProportionateScreenWidth(87),
-          height: getProportionateScreenHeight(74),
+          width: 93,
+          height: 75,
         ),
         child: ElevatedButton(
           onPressed: () {
-//            push(
+            //            push(
 //                context,
 //                CategoriesPage(
 //                    languageCode == "en"
@@ -1745,7 +1884,7 @@ class _ImageSliderState extends State<ImageSlider> {
                 },
                 height: 200,
                 autoPlay: true,
-                viewportFraction: 1,
+                viewportFraction: 3,
                 autoPlayAnimationDuration: Duration(milliseconds: 700)),
             items: providerListener.homeAdsListImages.map((url) {
               int index = providerListener.homeAdsListImages.indexOf(url);
@@ -1810,7 +1949,8 @@ class _ImageSliderState extends State<ImageSlider> {
                       }
                     },
                     child: Container(
-                      width: getProportionateScreenWidth(378),
+                      width: 479,
+                      height: 224,
                       margin: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),

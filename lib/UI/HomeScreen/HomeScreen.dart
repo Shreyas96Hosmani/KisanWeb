@@ -16,14 +16,17 @@ import 'package:kisanweb/Helpers/constants.dart';
 import 'package:kisanweb/Helpers/helper.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
 import 'package:kisanweb/Models/NotificationPayload.dart';
+
 //import 'package:kisanweb/UI/BannerEvents/event_page.dart';
 //import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
 import 'package:kisanweb/UI/HomeScreen/Widgets/bottom_tabs.dart';
 import 'package:kisanweb/UI/Intro/InitialScreen.dart';
 import 'package:kisanweb/UI/Intro/LanguageScreen.dart';
 import 'package:kisanweb/UI/Intro/splash_one.dart';
+
 //import 'package:kisanweb/UI/NotficationScreen/Notifications.dart';
 import 'package:kisanweb/UI/Profile/BasicProfile.dart';
+
 //import 'package:kisanweb/UI/SearchScreen/SearchScreen.dart';
 //import 'package:kisanweb/UI/Subscribe/SubscribeToMembership.dart';
 import 'package:kisanweb/UI/Tabs/HistoryTab.dart';
@@ -43,7 +46,6 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 //We are going to use the google client for this example...
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart' as urlLauncher;
-
 
 SharedPreferences prefs;
 String languageCode = 'en';
@@ -601,104 +603,160 @@ class _HomeScreenState extends State<HomeScreen> {
         ? Scaffold(
             key: _scaffoldKey,
             appBar: PreferredSize(
-              preferredSize: Size(MediaQuery.of(context).size.width, 80),
-              child: AppBar(
-                titleSpacing: 20,
-                title: Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Container(
-                    child: SvgPicture.asset(
-                      "assets/icons/greenKisan_Logo.svg",
-                      height: getProportionateScreenHeight(47),
-                    ),
-                  ),
-                ),
-                backgroundColor: Colors.white,
-                elevation: 0,
-                actions: [
-
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: IconButton(
-                      icon: SvgPicture.asset(
-                        "assets/icons/searchIcon.svg",
-                        width: getProportionateScreenWidth(25),
-                      ),
-                      color: Colors.black,
-                      onPressed: () {
-                        //push(context, SearchScreen());
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    width: getProportionateScreenWidth(10),
-                  ),
-                  Stack(
+              preferredSize: Size.fromHeight(80),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 204),
+                decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                  BoxShadow(
+                      color: Color(0xFF00A651).withOpacity(0.3),
+                      offset: Offset(0, -10),
+                      spreadRadius: 4,
+                      blurRadius: 10)
+                ]),
+                child: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: IconButton(
-                          onPressed: () {
-                            //push(context, NotificationScreen());
-                          },
-                          icon: Icon(
-                            Icons.notifications,
-                            size: 30,
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.menu_rounded,
+                              size: 36,
+                            ),
+                            color: Color(0xFF00A651),
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              _scaffoldKey.currentState.openDrawer();
+                            },
                           ),
-                          color: Colors.black,
+                          SizedBox(width: 30,),
+                          SvgPicture.asset(
+                            "assets/icons/greenKisan_Logo.svg",
+                            height: getProportionateScreenHeight(47),
+                          ),
+                        ],
+                      ),
+                      /*IconButton(
+                        padding: EdgeInsets.zero,
+                        icon: SvgPicture.asset(
+                          "assets/icons/searchIcon.svg",
+                          width: getProportionateScreenWidth(25),
+                        ),
+                        color: Color(0xFF00A651),
+                        onPressed: () {
+                          //push(context, SearchScreen());
+                        },
+                      ),*/
+                      Container(
+                        width: 600,
+                        child: TextField(
+                          onTap: () {
+                            //push(context, SearchScreen());
+                          },
+                          decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.arrow_back,
+                                color: Colors.black,
+                              ),
+                              hintText: "Search a product or company",
+                              focusColor: Color(0xFF00A651),
+                              filled: true,
+                              fillColor: Color(0xFFF8F8F8),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xFF00A651), width: 1.5),
+                                  borderRadius: BorderRadius.circular(15)),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xFF00A651), width: 1.5),
+                                  borderRadius: BorderRadius.circular(15)),
+                              suffixIcon: Icon(
+                                Icons.search,
+                                color: Color(0xFF9B9B9B),
+                              ),
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 18, fontWeight: FontWeight.w500)),
                         ),
                       ),
-                      providerListener.notificationsList.length > 0
-                          ? Padding(
-                              padding: const EdgeInsets.only(left: 25),
-                              child: Center(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 15,
-                                  width: 15,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(50)),
-                                    color: Colors.red,
-                                  ),
-                                  child: Text(
-                                    providerListener.notificationsList.length
-                                        .toString(),
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 10,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
+                      Stack(
+                        children: [
+                          Center(
+                            child: IconButton(
+                              onPressed: () {
+                                //push(context, NotificationScreen());
+                              },
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                Icons.notifications,
+                                color: Color(0xFF00A651),
+                                size: 36,
                               ),
-                            )
-                          : SizedBox(
-                              height: 1,
+                              color: Colors.black,
                             ),
+                          ),
+                          providerListener.notificationsList.length > 0
+                              ? Positioned(
+                                  top: 15,
+                                  right: 0,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 15,
+                                    width: 15,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(50)),
+                                      color: Colors.red,
+                                    ),
+                                    child: Text(
+                                      providerListener.notificationsList.length
+                                          .toString(),
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 10,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(
+                                  height: 1,
+                                ),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          //push(context, Profile());
+                        },
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: Colors.transparent,
+                          backgroundImage: providerListener
+                              .userprofileData.image_smallthumb_url.isEmpty
+                              ? AssetImage('assets/icons/defaultGreenProfile.svg')
+                              : NetworkImage(
+                              providerListener.userprofileData.image_smallthumb_url),
+                        ),
+                      ),
+                      /*IconButton(
+                        padding: EdgeInsets.zero,
+                        icon: providerListener
+                            .userprofileData.image_smallthumb_url.isEmpty
+                            ? AssetImage('assets/icons/defaultGreenProfile.svg')
+                            : NetworkImage(
+                            providerListener.userprofileData.image_smallthumb_url),
+                        color: Color(0xFF00A651),
+                        onPressed: () {
+                          //push(context, SearchScreen());
+                        },
+                      ),*/
                     ],
                   ),
-                  SizedBox(
-                    width: getProportionateScreenWidth(10),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: IconButton(
-                      onPressed: () {
-                        _scaffoldKey.currentState.openEndDrawer();
-                      },
-                      icon: SvgPicture.asset(
-                        "assets/icons/menuIcon.svg",
-                        width: getProportionateScreenWidth(20),
-                      ),
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-            endDrawer: CustomDrawer(context),
-            bottomNavigationBar: Container(
+            drawer: CustomDrawer(context),
+            /*bottomNavigationBar: Container(
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.only(top: 20),
@@ -711,7 +769,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
-            ),
+            ),*/
             body: WillPopScope(
               onWillPop: () => showDialog(
                 context: context,
@@ -819,19 +877,48 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: getProportionateScreenHeight(10),
               ),
+              DrawerSvgItem(
+                icon: "assets/icons/home.svg",
+                text: getTranslated(context, 'home'),
+                onPressed: () {},
+              ),
+              DrawerSvgItem(
+                icon: "assets/icons/webinarOptIcon.svg",
+                text: "Webinar",
+                onPressed: () {
+                  /*pop(context);
+                  push(context, LanguageScreen(2));*/
+                },
+              ),
+              DrawerSvgItem(
+                icon: "assets/icons/shortlisticon.svg",
+                text: "Wishlist",
+                onPressed: () {},
+              ),
+              DrawerSvgItem(
+                icon: "assets/icons/callHistoryIcon.svg",
+                text: "History",
+                onPressed: () {},
+              ),
+              //
               DrawerItem(
                 icon: Icons.calendar_today_rounded,
                 text: getTranslated(context, 'my_webinars'),
                 onPressed: () {},
               ),
-              DrawerItem(
+              DrawerSvgItem(
+                icon: "assets/icons/callHistoryIcon.svg",
+                text: "History",
+                onPressed: () {},
+              ),
+              /*DrawerItem(
                 icon: Icons.language,
                 text: getTranslated(context, 'language'),
                 onPressed: () {
                   pop(context);
                   push(context, LanguageScreen(2));
                 },
-              ),
+              ),*/
               DrawerItem(
                 icon: Icons.settings,
                 text: "Settings",
@@ -847,27 +934,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 text: "FAQ & Support",
                 onPressed: () {},
               ),
-              DrawerItem(
+              /*DrawerItem(
                 icon: Icons.info,
                 text: getTranslated(context, 'about_app'),
                 onPressed: () {},
-              ),
+              ),*/
               DrawerItem(
                 icon: Icons.description_rounded,
                 text: getTranslated(context, 'termandprivacypolicy'),
                 onPressed: () {},
               ),
-              DrawerItem(
-                icon: Icons.logout,
-                text: "Logout",
-                onPressed: () async {
-                  //TODO: remove if not needed
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  await prefs.clear();
-                  pushReplacement(context, InitialScreen("HomeScreen", 0, 0));
-                },
-              ),
+              // DrawerItem(
+              //   icon: Icons.logout,
+              //   text: "Logout",
+              //   onPressed: () async {
+              //     //TODO: remove if not needed
+              //     SharedPreferences prefs =
+              //         await SharedPreferences.getInstance();
+              //     await prefs.clear();
+              //     pushReplacement(context, InitialScreen("HomeScreen", 0, 0));
+              //   },
+              // ),
             ],
           )),
     );
@@ -875,11 +962,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget DrawerHeader(BuildContext context) {
     final providerListener = Provider.of<CustomViewModel>(context);
-
     return Container(
       child: Column(
         children: [
-          Row(
+          /*Row(
             children: [
               CircleAvatar(
                 radius: 25,
@@ -891,10 +977,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         providerListener.userprofileData.image_smallthumb_url),
               ),
               SizedBox(
-                width: getProportionateScreenWidth(10),
+                width: 10,
               ),
               Container(
-                width: getProportionateScreenWidth(155),
+                width: 155,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -943,7 +1029,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           SizedBox(
             height: getProportionateScreenHeight(20),
-          ),
+          ),*/
           providerListener.membershipInfo != null
               ? providerListener.membershipInfo.status != "active"
                   ? InkWell(
@@ -951,8 +1037,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         //push(context, SubscribeToMembership());
                       },
                       child: Container(
-                        width: getProportionateScreenWidth(282),
-                        height: getProportionateScreenHeight(115),
+                        width: 282,
+                        height: 115,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
@@ -966,7 +1052,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 "assets/images/tileOrange1.png",
                               ),
                               fit: BoxFit.cover),
-                          color: Color(0xFFE17628),
+                          color: Colors.transparent,
                         ),
                         child: Stack(
                           children: [
@@ -983,8 +1069,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             Container(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: getProportionateScreenWidth(17),
-                                  vertical: getProportionateScreenHeight(10)),
+                                  horizontal: 17,
+                                  vertical: 10),
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -1045,8 +1131,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         //push(context, SubscribeToMembership());
                       },
                       child: Container(
-                        width: getProportionateScreenWidth(282),
-                        height: getProportionateScreenHeight(115),
+                        width: 282,
+                        height: 115,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             image: DecorationImage(
@@ -1054,7 +1140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   "assets/images/tileGreen1.png",
                                 ),
                                 fit: BoxFit.cover),
-                            color: Color(0xFF00A651),
+                            color: Colors.transparent,
                             boxShadow: [
                               BoxShadow(
                                   color: Colors.black.withOpacity(0.3),
@@ -1077,8 +1163,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             Container(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: getProportionateScreenWidth(17),
-                                  vertical: getProportionateScreenHeight(10)),
+                                  horizontal: 17,
+                                  vertical: 10),
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -1175,6 +1261,50 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+class DrawerSvgItem extends StatelessWidget {
+  const DrawerSvgItem({
+    Key key,
+    this.icon,
+    this.text,
+    this.onPressed,
+  }) : super(key: key);
+
+  final String text,icon;
+  final Function onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onPressed,
+      child: Column(
+        children: [
+          ListTile(
+              visualDensity: VisualDensity(vertical: -1, horizontal: 0),
+              title: Row(
+                children: <Widget>[
+                  SvgPicture.asset(icon,color: Colors.white,height: 18,),
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: getProportionateScreenHeight(15),
+                          fontFamily: 'Poppins Medium'),
+                    ),
+                  )
+                ],
+              )),
+          Container(
+            height: getProportionateScreenHeight(1),
+            color: Colors.white.withOpacity(0.5),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class DrawerItem extends StatelessWidget {
   const DrawerItem({
     Key key,
@@ -1214,7 +1344,7 @@ class DrawerItem extends StatelessWidget {
                 ],
               )),
           Container(
-            height: getProportionateScreenHeight(2),
+            height: getProportionateScreenHeight(1),
             color: Colors.white.withOpacity(0.5),
           ),
         ],
