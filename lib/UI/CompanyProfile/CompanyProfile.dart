@@ -1517,7 +1517,7 @@ class CustomBackButton extends StatelessWidget {
         SizedBox(
           width: 10,
         ),
-        Text(text,
+        Text(text ?? "",
             style: GoogleFonts.poppins(color: Color(0xFF4A4A4A), fontSize: 16))
       ],
     );

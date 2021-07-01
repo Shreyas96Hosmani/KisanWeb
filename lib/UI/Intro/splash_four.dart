@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kisanweb/Helpers/constants.dart' as constants;
 import 'package:kisanweb/Helpers/size_config.dart';
+import 'package:kisanweb/UI/Auth/SocialAuth.dart';
 //import 'package:kisanweb/UI/Auth/SocialAuth.dart';
 import 'package:kisanweb/localization/language_constants.dart';
 
@@ -98,7 +99,7 @@ class _SplashFourState extends State<SplashFour> {
         ),
         InkWell(
           onTap: () {
-            //pushReplacement(context, SocialAuth());
+            pushReplacement(context, SocialAuth());
           },
           child: Container(
             height: getProportionateScreenWidth(60),

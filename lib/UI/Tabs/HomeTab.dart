@@ -12,6 +12,7 @@ import 'package:kisanweb/Helpers/helper.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
 import 'package:kisanweb/Models/AdsObject.dart';
 import 'package:kisanweb/Models/WebinarListParser.dart';
+import 'package:kisanweb/UI/BannerEvents/event_page.dart';
 import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
 import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
 
@@ -30,7 +31,7 @@ import 'package:kisanweb/UI/Profile/BasicProfile.dart';
 //import 'package:kisanweb/UI/Subscribe/SubscribeToMembership.dart';
 //import 'package:kisanweb/UI/NotficationScreen/Notifications.dart';
 //import 'package:kisanweb/UI/Offers/offer_page.dart';
-//import 'package:kisanweb/UI/Webinars/webinar_main_screen.dart';
+import 'package:kisanweb/UI/Webinars/webinar_main_screen.dart';
 import 'package:kisanweb/View%20Models/CustomViewModel.dart';
 import 'package:kisanweb/Models/DemoListParser.dart';
 import 'package:kisanweb/Models/OfferListParser.dart';
@@ -76,7 +77,7 @@ class _HomeTabState extends State<HomeTab> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              /*providerListener.membershipInfo != null
+              providerListener.membershipInfo != null
                   ? providerListener.membershipInfo.status != "active"
                       ? InkWell(
                           onTap: () {
@@ -96,20 +97,20 @@ class _HomeTabState extends State<HomeTab> {
                         )
                   : SizedBox(
                       height: 1,
-                    ),*/
+                    ),
               //Ads now showing
-              /*providerListener.homeAdsListImages.length > 0
+              providerListener.homeAdsListImages.length > 0
                   ? ImageSlider()
                   : SizedBox(
                       height: 1,
-                    ),*/
+                    ),
               //temp reference only
-              Container(
+              /*Container(
                 height: getProportionateScreenHeight(313),
                 decoration: BoxDecoration(
                     color: Color(0xFFF3FFF0),
                     border: Border.all(color: Color(0xFF88D974))),
-              ),
+              ),*/
               Container(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -611,7 +612,7 @@ class _HomeTabState extends State<HomeTab> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           LiveEventButton(),
-                          SizedBox(
+                          /*SizedBox(
                             height: getProportionateScreenHeight(16.3),
                           ),
                           Container(
@@ -634,10 +635,19 @@ class _HomeTabState extends State<HomeTab> {
                             height: 350,
                             width: 350,
                             color: Colors.tealAccent,
+                          ),*/
+                          SizedBox(
+                            height: 20,
                           ),
-                          /*AdTile(context, providerListener.topAd),
+                          AdTile(context, providerListener.topAd),
+                          SizedBox(
+                            height: 20,
+                          ),
                           AdTile(context, providerListener.middleAd),
-                          AdTile(context, providerListener.bottomAd),*/
+                          SizedBox(
+                            height: 20,
+                          ),
+                          AdTile(context, providerListener.bottomAd),
                         ],
                       ),
                     )
@@ -1193,9 +1203,9 @@ Widget WebinarTile(BuildContext context, WebinarListParser eventOBJ) {
   return GestureDetector(
     onTap: () {
       if (eventOBJ.type == "WSM") {
-        //push(context, BannerEventPage(eventOBJ.id));
+        push(context, BannerEventPage(eventOBJ.id));
       } else {
-        //push(context, WebinarMainScreen(eventOBJ.id));
+        push(context, WebinarMainScreen(eventOBJ.id));
       }
     },
     child: Container(
@@ -1387,7 +1397,7 @@ Widget WebinarTile(BuildContext context, WebinarListParser eventOBJ) {
 Widget FeaturesWebinar(BuildContext context, WebinarListParser eventOBJ) {
   return GestureDetector(
     onTap: () {
-      //push(context, WebinarMainScreen(eventOBJ.id));
+      push(context, WebinarMainScreen(eventOBJ.id));
     },
     child: Container(
       width: 337,
@@ -1557,12 +1567,12 @@ Widget AdTile(BuildContext context, AdsObject adOBJ) {
             onTap: () {
               if (adOBJ.link_type == "internal") {
                 if (adOBJ.link_for == "Event") {
-                  //push(context, BannerEventPage(adOBJ.linking_id ?? 0));
+                  push(context, BannerEventPage(adOBJ.linking_id ?? 0));
                 } else if (adOBJ.link_for == "Webinar") {
-                  // push(context, BannerEventPage());
+                   //push(context, BannerEventPage());
                   toastCommon(context, "webinar coming soon");
                 } else if (adOBJ.link_for == "Webinar") {
-                  // push(context, BannerEventPage());
+                  //push(context, BannerEventPage());
                   toastCommon(context, "webinar coming soon");
                 } else if (adOBJ.link_for == "Product") {
 //                  push(
@@ -1896,20 +1906,20 @@ class _ImageSliderState extends State<ImageSlider> {
                           "internal") {
                         if (providerListener.homeAdsList[index].link_for ==
                             "Event") {
-//                          push(
-//                              context,
-//                              BannerEventPage(providerListener
-//                                      .homeAdsList[index].linking_id ??
-//                                  0));
+                         push(
+                             context,
+                             BannerEventPage(providerListener
+                                     .homeAdsList[index].linking_id ??
+                                 0));
                         } else if (providerListener
                                 .homeAdsList[index].link_for ==
                             "Webinar") {
-                          // push(context, BannerEventPage());
+                           //push(context, BannerEventPage());
                           toastCommon(context, "webinar coming soon");
                         } else if (providerListener
                                 .homeAdsList[index].link_for ==
                             "Webinar") {
-                          // push(context, BannerEventPage());
+                           //push(context, BannerEventPage());
                           toastCommon(context, "webinar coming soon");
                         } else if (providerListener
                                 .homeAdsList[index].link_for ==
