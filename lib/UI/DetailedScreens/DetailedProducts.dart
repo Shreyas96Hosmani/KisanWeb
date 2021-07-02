@@ -423,745 +423,13 @@ class _DetailedProductsState extends State<DetailedProducts> {
       topRight: Radius.circular(24.0),
     );
 
-    print("Length : ${providerListener.productsListofSimilar.length}");
-    print(
-        "Height : ${(providerListener.productsListofSimilar.length / 2).ceil()}");
-
     return _isloaded == true
         ? Scaffold(
             extendBodyBehindAppBar: true,
             body: Stack(
               children: [
-                /*SingleChildScrollView(
-                    child: providerListener.productsDetails != null
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              providerListener.productsDetailsAssetsUrl.length >
-                                      0
-                                  ? Stack(
-                                      children: [
-                                        CarouselSlider(
-                                          options: CarouselOptions(
-                                              onPageChanged: (index, onTap) {
-                                                setState(() {
-                                                  currentS = index;
-                                                });
-                                                print(currentS.toString());
-                                              },
-                                              autoPlay: true,
-                                              height: SizeConfig.screenWidth,
-                                              viewportFraction: 1,
-                                              autoPlayAnimationDuration:
-                                                  Duration(milliseconds: 2000)),
-                                          items: providerListener
-                                              .productsDetailsAssetsUrl
-                                              .map((url) {
-                                            int index = providerListener
-                                                .productsDetailsAssetsUrl
-                                                .indexOf(url);
-                                            return Builder(
-                                              builder: (BuildContext context) {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    providerListener
-                                                                .productsDetailsAssets[
-                                                                    index]
-                                                                .media_type ==
-                                                            "youtubevideo"
-                                                        ? push(
-                                                            context,
-                                                            SamplePlayer(
-                                                                null,
-                                                                providerListener
-                                                                    .productsDetailsAssets[
-                                                                        index]
-                                                                    .media_url))
-                                                        : push(
-                                                            context,
-                                                            ViewPhotos(
-                                                              url: providerListener
-                                                                      .productsDetailsAssets[
-                                                                          index]
-                                                                      .media_url ??
-                                                                  "",
-                                                            ));
-                                                  },
-                                                  child: Stack(
-                                                    children: [
-                                                      Container(
-                                                        width: SizeConfig
-                                                                .screenWidth -
-                                                            10,
-                                                        margin: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 0,
-                                                                vertical: 0),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color:
-                                                              Colors.green[700],
-                                                          image: DecorationImage(
-                                                              image: NetworkImage(
-                                                                  providerListener
-                                                                          .productsDetailsAssets[
-                                                                              index]
-                                                                          .media_url ??
-                                                                      ""),
-                                                              fit: BoxFit.fill),
-                                                        ),
-                                                      ),
-                                                      providerListener
-                                                                  .productsDetailsAssets[
-                                                                      index]
-                                                                  .media_type ==
-                                                              "youtubevideo"
-                                                          ? Center(
-                                                              child: Opacity(
-                                                                opacity: 0.7,
-                                                                child: Icon(
-                                                                  Icons
-                                                                      .play_circle_fill,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  size: 50,
-                                                                ),
-                                                              ),
-                                                            )
-                                                          : SizedBox(
-                                                              height: 1,
-                                                            ),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          }).toList(),
-                                        ),
-                                        Positioned(
-                                          top: SizeConfig.screenWidth / 1.1,
-                                          left: 0,
-                                          right: 0,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: providerListener
-                                                .productsDetailsAssetsUrl
-                                                .map((url) {
-                                              int index = providerListener
-                                                  .productsDetailsAssetsUrl
-                                                  .indexOf(url);
-                                              return Container(
-                                                width: 30.0,
-                                                height: 5.0,
-                                                margin: EdgeInsets.symmetric(
-                                                    vertical: 10.0,
-                                                    horizontal: 10.0),
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.rectangle,
-                                                  color: currentS == index
-                                                      ? Colors.white
-                                                      : Colors.black
-                                                          .withOpacity(0.3),
-                                                ),
-                                              );
-                                            }).toList(),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          right: 10,
-                                          top: 35,
-                                          child: ConstrainedBox(
-                                            constraints:
-                                                BoxConstraints.tightFor(
-                                              width: 55,
-                                              height: 55,
-                                            ),
-                                            child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  primary: Colors.white
-                                                      .withOpacity(0.5),
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15))),
-                                              onPressed: () async {
-                                                final RenderBox box =
-                                                    context.findRenderObject();
-                                                if (Platform.isAndroid) {
-                                                  var response = await http.get(
-                                                      Uri.parse((providerListener
-                                                              .productsDetails
-                                                              .bigthumb_url ??
-                                                          "")));
-                                                  final documentDirectory =
-                                                      (await getExternalStorageDirectory())
-                                                          .path;
-                                                  File imgFile = new File(
-                                                      '$documentDirectory/' +
-                                                          providerListener
-                                                              .productsDetails
-                                                              .title_english +
-                                                          ".png");
-                                                  imgFile.writeAsBytesSync(
-                                                      response.bodyBytes);
-
-                                                  Share.shareFiles([
-                                                    "${documentDirectory}/" +
-                                                        providerListener
-                                                            .productsDetails
-                                                            .title_english +
-                                                        ".png"
-                                                  ],
-                                                      text: "Hi, Check out this product.\n" +
-                                                          (providerListener
-                                                                  .productsDetails
-                                                                  .title_english ??
-                                                              "") +
-                                                          " on kisan App\n");
-                                                } else {
-                                                  Share.share(
-                                                      "Hi, Check out this product.\n" +
-                                                          (providerListener
-                                                                  .productsDetails
-                                                                  .title_english ??
-                                                              "") +
-                                                          " on kisan App\n",
-                                                      subject: (providerListener
-                                                              .productsDetails
-                                                              .bigthumb_url ??
-                                                          ""),
-                                                      sharePositionOrigin:
-                                                          box.localToGlobal(
-                                                                  Offset.zero) &
-                                                              box.size);
-                                                }
-                                              },
-                                              child: Icon(
-                                                Icons.share,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          left: 10,
-                                          top: 35,
-                                          child: ConstrainedBox(
-                                            constraints:
-                                                BoxConstraints.tightFor(
-                                              width: 55,
-                                              height: 55,
-                                            ),
-                                            child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  primary: Colors.white
-                                                      .withOpacity(0.5),
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 20),
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15))),
-                                              onPressed: () {
-                                                pop(context);
-                                              },
-                                              child: Icon(
-                                                Icons.arrow_back_ios,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : SizedBox(
-                                      height: 1,
-                                    ),
-                              SizedBox(
-                                height: 27,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 30),
-                                child: Text(
-                                  languageCode == "en"
-                                      ? utf8.decode(providerListener
-                                              .productsDetails.title_english
-                                              .toString()
-                                              .runes
-                                              .toList() ??
-                                          "")
-                                      : languageCode == "hi"
-                                          ? utf8.decode(providerListener
-                                                  .productsDetails.title_hindi
-                                                  .toString()
-                                                  .runes
-                                                  .toList() ??
-                                              "")
-                                          : utf8.decode(providerListener
-                                                  .productsDetails.title_marathi
-                                                  .toString()
-                                                  .runes
-                                                  .toList() ??
-                                              ""),
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 20,
-                                    color: Color(0xFF044BB0),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 16,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 30),
-                                child: RichText(
-                                    text: TextSpan(
-                                        text: currencySymbl,
-                                        style: GoogleFonts.poppins(
-                                          color: Color(0xFF393939),
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                        children: [
-                                      TextSpan(
-                                        text: " " +
-                                            (providerListener.productsDetails
-                                                        .price ??
-                                                    0)
-                                                .toString(),
-                                        style: GoogleFonts.poppins(
-                                            color: Color(0xFF393939),
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      TextSpan(
-                                          text: " onwards",
-                                          style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 20))
-                                    ])),
-                              ),
-                              SizedBox(
-                                height: 18,
-                              ),
-                              Container(
-                                width: double.infinity,
-                                padding: EdgeInsets.symmetric(horizontal: 30),
-                                child: Text(
-                                  parseHtmlString(languageCode == "en"
-                                      ? utf8.decode(providerListener
-                                              .productsDetails.desc_english
-                                              .toString()
-                                              .runes
-                                              .toList() ??
-                                          "")
-                                      : languageCode == "hi"
-                                          ? utf8.decode(providerListener
-                                                  .productsDetails.desc_hindi
-                                                  .toString()
-                                                  .runes
-                                                  .toList() ??
-                                              "")
-                                          : utf8.decode(providerListener
-                                                  .productsDetails.desc_marathi
-                                                  .toString()
-                                                  .runes
-                                                  .toList() ??
-                                              "")),
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 14,
-                                      color: Color(0xFF393939),
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 30),
-                                child: Text(
-                                  'Special Offer',
-                                  style: GoogleFonts.poppins(
-                                    color: Color(0xFF044BB0),
-                                    fontSize: getProportionateScreenHeight(20),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                height: 220,
-                                child: ListView.builder(
-                                    itemCount: 3,
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, index) {
-                                      //TODO: get from server
-                                      return Offers(context);
-                                    }),
-                              ),
-                              //PDF Button ------------
-                              SizedBox(
-                                height: 30,
-                              ),
-                              providerListener.productsDetailsBrouchers.length >
-                                      0
-                                  ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 30),
-                                          child: Text(
-                                            getTranslated(context, 'Broucher'),
-                                            style: GoogleFonts.poppins(
-                                              color: Color(0xFF044BB0),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 13,
-                                        ),
-                                        Container(
-                                          height: ((providerListener
-                                                      .productsDetailsBrouchers
-                                                      .length)
-                                                  .toDouble()) *
-                                              100,
-                                          width: SizeConfig.screenWidth,
-                                          child: MediaQuery.removePadding(
-                                            context: context,
-                                            removeTop: true,
-                                            removeBottom: true,
-                                            child: ListView.builder(
-                                                itemCount: providerListener
-                                                    .productsDetailsBrouchers
-                                                    .length,
-                                                scrollDirection: Axis.vertical,
-                                                physics:
-                                                    NeverScrollableScrollPhysics(),
-                                                itemBuilder: (context, index) {
-                                                  return PDFButton(
-                                                    onWholePressed: () {
-                                                      push(
-                                                          context,
-                                                          pdfviewer(
-                                                              providerListener
-                                                                  .productsDetailsBrouchers[
-                                                                      index]
-                                                                  .title,
-                                                              providerListener
-                                                                  .productsDetailsBrouchers[
-                                                                      index]
-                                                                  .media_url));
-                                                    },
-                                                    onDownloadPressed: () {
-                                                      print("Download Pdf");
-                                                      setState(() {
-                                                        download_link =
-                                                            providerListener
-                                                                .productsDetailsBrouchers[
-                                                                    index]
-                                                                .media_url;
-                                                      });
-
-                                                      universalLoader.style(
-                                                          message:
-                                                              'Downloading file...',
-                                                          backgroundColor:
-                                                              Colors.white,
-                                                          progressWidget:
-                                                              CircularProgressIndicator(
-                                                            strokeWidth: 10,
-                                                            backgroundColor: Color(
-                                                                COLOR_PRIMARY),
-                                                            valueColor:
-                                                                AlwaysStoppedAnimation<
-                                                                        Color>(
-                                                                    Color(
-                                                                        COLOR_BACKGROUND)),
-                                                          ),
-                                                          elevation: 10.0,
-                                                          insetAnimCurve: Curves
-                                                              .easeInOutSine,
-                                                          progress: 0.0,
-                                                          maxProgress: 100.0,
-                                                          progressTextStyle:
-                                                              TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontSize:
-                                                                      13.0,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
-                                                          messageTextStyle: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize: 19.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600));
-
-                                                      _download();
-                                                    },
-                                                    onPdfPressed: () {
-                                                      print("View Pdf");
-                                                      push(
-                                                          context,
-                                                          pdfviewer(
-                                                              providerListener
-                                                                  .productsDetailsBrouchers[
-                                                                      index]
-                                                                  .title,
-                                                              providerListener
-                                                                  .productsDetailsBrouchers[
-                                                                      index]
-                                                                  .media_url));
-                                                    },
-                                                    broucherOBJ: providerListener
-                                                            .productsDetailsBrouchers[
-                                                        index],
-                                                  );
-                                                }),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : SizedBox(
-                                      height: 1,
-                                    ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 30),
-                                child: CompanyLink(
-                                  title: providerListener
-                                          .productsDetails.organisation_name ??
-                                      "",
-                                  imagePath: providerListener
-                                          .productsDetails.image_bigthumb_url ??
-                                      "",
-                                  onPressed: () {
-                                    push(
-                                        context,
-                                        CompanyDetails(providerListener
-                                            .productsDetails.user_id));
-                                    print(
-                                        "Company link Pressed : To Company Profile");
-                                  },
-                                ),
-                              ),
-                              //-----More from the company
-                              SizedBox(
-                                height: 31,
-                              ),
-                              providerListener
-                                          .productsListFromSameCompany.length >
-                                      0
-                                  ? Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 30),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            width: 300,
-                                            child: Text(
-                                              getTranslated(
-                                                      context, 'Simmilar') +
-                                                  "More from " +
-                                                  (providerListener
-                                                          .productsDetails
-                                                          .organisation_name ??
-                                                      ""),
-                                              maxLines: 2,
-                                              style: GoogleFonts.poppins(
-                                                color: Color(0xFF044BB0),
-                                                fontSize:
-                                                    getProportionateScreenHeight(
-                                                        20),
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                          //Change it with different SVG
-                                          GestureDetector(
-                                            onTap: () {},
-                                            child: Icon(
-                                              Icons.play_circle_fill_outlined,
-                                              size: 25,
-                                              color: Colors.grey,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  : SizedBox(
-                                      height: 1,
-                                    ),
-                              providerListener
-                                          .productsListFromSameCompany.length >
-                                      0
-                                  ? Container(
-                                      height: 260,
-                                      child: ListView.builder(
-                                          itemCount: providerListener
-                                              .productsListFromSameCompany
-                                              .length,
-                                          scrollDirection: Axis.horizontal,
-                                          itemBuilder: (context, index) {
-                                            return MoreProds(
-                                              name: providerListener
-                                                      .productsListFromSameCompany[
-                                                          index]
-                                                      .title_english ??
-                                                  "",
-                                              desc: parseHtmlString(providerListener
-                                                      .productsListFromSameCompany[
-                                                          index]
-                                                      .desc_english) ??
-                                                  "",
-                                              imgPath: providerListener
-                                                      .productsListFromSameCompany[
-                                                          index]
-                                                      .bigthumb_url ??
-                                                  "",
-                                              onPressed: () {
-                                                pushReplacement(
-                                                    context,
-                                                    DetailedProducts(
-                                                        providerListener
-                                                            .productsListFromSameCompany[
-                                                                index]
-                                                            .id,
-                                                        providerListener
-                                                            .productsListFromSameCompany[
-                                                                index]
-                                                            .user_id));
-                                              },
-                                            );
-                                          }),
-                                    )
-                                  : SizedBox(
-                                      height: 1,
-                                    ),
-                              SizedBox(
-                                height: 36,
-                              ),
-                              providerListener.productsListofSimilar.length > 0
-                                  ? Container(
-                                      height: (providerListener
-                                                          .productsListofSimilar
-                                                          .length /
-                                                      2)
-                                                  .ceil()
-                                                  .toDouble() *
-                                              265 +
-                                          100,
-                                      width: double.infinity,
-                                      color: Color(0xFFEBEBEB),
-                                      padding: EdgeInsets.only(
-                                          left: 30,
-                                          right: 30,
-                                          top: 24,
-                                          bottom: 0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            getTranslated(
-                                                context, 'simmilar_prod'),
-                                            style: GoogleFonts.poppins(
-                                              color: Color(0xFF383838),
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Container(
-                                            height: (providerListener
-                                                            .productsListofSimilar
-                                                            .length /
-                                                        2)
-                                                    .ceil()
-                                                    .toDouble() *
-                                                232,
-                                            child: MediaQuery.removePadding(
-                                              context: context,
-                                              removeBottom: true,
-                                              child: GridView.count(
-                                                  crossAxisCount: 2,
-                                                  mainAxisSpacing: 20,
-                                                  crossAxisSpacing: 20,
-                                                  physics:
-                                                      NeverScrollableScrollPhysics(),
-                                                  childAspectRatio: 0.8,
-                                                  children: List.generate(
-                                                      providerListener
-                                                          .productsListofSimilar
-                                                          .length, (index) {
-                                                    return GridProds(
-                                                      name: providerListener
-                                                              .productsListofSimilar[
-                                                                  index]
-                                                              .title_english ??
-                                                          "",
-                                                      desc: parseHtmlString(
-                                                              providerListener
-                                                                  .productsListofSimilar[
-                                                                      index]
-                                                                  .desc_english) ??
-                                                          "",
-                                                      imgPath: providerListener
-                                                              .productsListofSimilar[
-                                                                  index]
-                                                              .bigthumb_url ??
-                                                          "",
-                                                      onPressed: () {
-                                                        pushReplacement(
-                                                            context,
-                                                            DetailedProducts(
-                                                                providerListener
-                                                                    .productsListofSimilar[
-                                                                        index]
-                                                                    .id,
-                                                                providerListener
-                                                                    .productsListofSimilar[
-                                                                        index]
-                                                                    .user_id));
-                                                      },
-                                                    );
-                                                  })),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 70,
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  : SizedBox(
-                                      height: 1,
-                                    ),
-                              SizedBox(
-                                height: getProportionateScreenHeight(80),
-                              )
-                            ],
-                          )
-                        : SizedBox(
-                            height: 1,
-                          )),*/
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 206),
+                  padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(206)),
                   child: SingleChildScrollView(
                     child: Container(
                       child: Column(
@@ -1179,7 +447,7 @@ class _DetailedProductsState extends State<DetailedProducts> {
                                 width: 20,
                               ),
                               Container(
-                                width: 85,
+                                width: getProportionateScreenWidth(85),
                                 height: providerListener
                                         .productsDetailsAssetsUrl.length
                                         .toDouble() *
@@ -1191,8 +459,8 @@ class _DetailedProductsState extends State<DetailedProducts> {
                                     itemBuilder: (context, index) {
                                       return Container(
                                         margin: EdgeInsets.only(bottom: 20),
-                                        width: 85,
-                                        height: 85,
+                                        width: getProportionateScreenWidth(85),
+                                        height: getProportionateScreenWidth(85),
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(5),
@@ -1213,8 +481,8 @@ class _DetailedProductsState extends State<DetailedProducts> {
                                 width: 20,
                               ),
                               Container(
-                                width: 550,
-                                height: 550,
+                                width: getProportionateScreenWidth(550),
+                                height: getProportionateScreenWidth(550),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
                                     border:
@@ -3463,3 +2731,732 @@ class CompanyLink extends StatelessWidget {
     );
   }
 }
+
+/*SingleChildScrollView(
+                    child: providerListener.productsDetails != null
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              providerListener.productsDetailsAssetsUrl.length >
+                                      0
+                                  ? Stack(
+                                      children: [
+                                        CarouselSlider(
+                                          options: CarouselOptions(
+                                              onPageChanged: (index, onTap) {
+                                                setState(() {
+                                                  currentS = index;
+                                                });
+                                                print(currentS.toString());
+                                              },
+                                              autoPlay: true,
+                                              height: SizeConfig.screenWidth,
+                                              viewportFraction: 1,
+                                              autoPlayAnimationDuration:
+                                                  Duration(milliseconds: 2000)),
+                                          items: providerListener
+                                              .productsDetailsAssetsUrl
+                                              .map((url) {
+                                            int index = providerListener
+                                                .productsDetailsAssetsUrl
+                                                .indexOf(url);
+                                            return Builder(
+                                              builder: (BuildContext context) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    providerListener
+                                                                .productsDetailsAssets[
+                                                                    index]
+                                                                .media_type ==
+                                                            "youtubevideo"
+                                                        ? push(
+                                                            context,
+                                                            SamplePlayer(
+                                                                null,
+                                                                providerListener
+                                                                    .productsDetailsAssets[
+                                                                        index]
+                                                                    .media_url))
+                                                        : push(
+                                                            context,
+                                                            ViewPhotos(
+                                                              url: providerListener
+                                                                      .productsDetailsAssets[
+                                                                          index]
+                                                                      .media_url ??
+                                                                  "",
+                                                            ));
+                                                  },
+                                                  child: Stack(
+                                                    children: [
+                                                      Container(
+                                                        width: SizeConfig
+                                                                .screenWidth -
+                                                            10,
+                                                        margin: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 0,
+                                                                vertical: 0),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color:
+                                                              Colors.green[700],
+                                                          image: DecorationImage(
+                                                              image: NetworkImage(
+                                                                  providerListener
+                                                                          .productsDetailsAssets[
+                                                                              index]
+                                                                          .media_url ??
+                                                                      ""),
+                                                              fit: BoxFit.fill),
+                                                        ),
+                                                      ),
+                                                      providerListener
+                                                                  .productsDetailsAssets[
+                                                                      index]
+                                                                  .media_type ==
+                                                              "youtubevideo"
+                                                          ? Center(
+                                                              child: Opacity(
+                                                                opacity: 0.7,
+                                                                child: Icon(
+                                                                  Icons
+                                                                      .play_circle_fill,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  size: 50,
+                                                                ),
+                                                              ),
+                                                            )
+                                                          : SizedBox(
+                                                              height: 1,
+                                                            ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          }).toList(),
+                                        ),
+                                        Positioned(
+                                          top: SizeConfig.screenWidth / 1.1,
+                                          left: 0,
+                                          right: 0,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: providerListener
+                                                .productsDetailsAssetsUrl
+                                                .map((url) {
+                                              int index = providerListener
+                                                  .productsDetailsAssetsUrl
+                                                  .indexOf(url);
+                                              return Container(
+                                                width: 30.0,
+                                                height: 5.0,
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: 10.0,
+                                                    horizontal: 10.0),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.rectangle,
+                                                  color: currentS == index
+                                                      ? Colors.white
+                                                      : Colors.black
+                                                          .withOpacity(0.3),
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          right: 10,
+                                          top: 35,
+                                          child: ConstrainedBox(
+                                            constraints:
+                                                BoxConstraints.tightFor(
+                                              width: 55,
+                                              height: 55,
+                                            ),
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  primary: Colors.white
+                                                      .withOpacity(0.5),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15))),
+                                              onPressed: () async {
+                                                final RenderBox box =
+                                                    context.findRenderObject();
+                                                if (Platform.isAndroid) {
+                                                  var response = await http.get(
+                                                      Uri.parse((providerListener
+                                                              .productsDetails
+                                                              .bigthumb_url ??
+                                                          "")));
+                                                  final documentDirectory =
+                                                      (await getExternalStorageDirectory())
+                                                          .path;
+                                                  File imgFile = new File(
+                                                      '$documentDirectory/' +
+                                                          providerListener
+                                                              .productsDetails
+                                                              .title_english +
+                                                          ".png");
+                                                  imgFile.writeAsBytesSync(
+                                                      response.bodyBytes);
+
+                                                  Share.shareFiles([
+                                                    "${documentDirectory}/" +
+                                                        providerListener
+                                                            .productsDetails
+                                                            .title_english +
+                                                        ".png"
+                                                  ],
+                                                      text: "Hi, Check out this product.\n" +
+                                                          (providerListener
+                                                                  .productsDetails
+                                                                  .title_english ??
+                                                              "") +
+                                                          " on kisan App\n");
+                                                } else {
+                                                  Share.share(
+                                                      "Hi, Check out this product.\n" +
+                                                          (providerListener
+                                                                  .productsDetails
+                                                                  .title_english ??
+                                                              "") +
+                                                          " on kisan App\n",
+                                                      subject: (providerListener
+                                                              .productsDetails
+                                                              .bigthumb_url ??
+                                                          ""),
+                                                      sharePositionOrigin:
+                                                          box.localToGlobal(
+                                                                  Offset.zero) &
+                                                              box.size);
+                                                }
+                                              },
+                                              child: Icon(
+                                                Icons.share,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          left: 10,
+                                          top: 35,
+                                          child: ConstrainedBox(
+                                            constraints:
+                                                BoxConstraints.tightFor(
+                                              width: 55,
+                                              height: 55,
+                                            ),
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  primary: Colors.white
+                                                      .withOpacity(0.5),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 20),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15))),
+                                              onPressed: () {
+                                                pop(context);
+                                              },
+                                              child: Icon(
+                                                Icons.arrow_back_ios,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : SizedBox(
+                                      height: 1,
+                                    ),
+                              SizedBox(
+                                height: 27,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 30),
+                                child: Text(
+                                  languageCode == "en"
+                                      ? utf8.decode(providerListener
+                                              .productsDetails.title_english
+                                              .toString()
+                                              .runes
+                                              .toList() ??
+                                          "")
+                                      : languageCode == "hi"
+                                          ? utf8.decode(providerListener
+                                                  .productsDetails.title_hindi
+                                                  .toString()
+                                                  .runes
+                                                  .toList() ??
+                                              "")
+                                          : utf8.decode(providerListener
+                                                  .productsDetails.title_marathi
+                                                  .toString()
+                                                  .runes
+                                                  .toList() ??
+                                              ""),
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 20,
+                                    color: Color(0xFF044BB0),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 30),
+                                child: RichText(
+                                    text: TextSpan(
+                                        text: currencySymbl,
+                                        style: GoogleFonts.poppins(
+                                          color: Color(0xFF393939),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                        children: [
+                                      TextSpan(
+                                        text: " " +
+                                            (providerListener.productsDetails
+                                                        .price ??
+                                                    0)
+                                                .toString(),
+                                        style: GoogleFonts.poppins(
+                                            color: Color(0xFF393939),
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      TextSpan(
+                                          text: " onwards",
+                                          style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 20))
+                                    ])),
+                              ),
+                              SizedBox(
+                                height: 18,
+                              ),
+                              Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.symmetric(horizontal: 30),
+                                child: Text(
+                                  parseHtmlString(languageCode == "en"
+                                      ? utf8.decode(providerListener
+                                              .productsDetails.desc_english
+                                              .toString()
+                                              .runes
+                                              .toList() ??
+                                          "")
+                                      : languageCode == "hi"
+                                          ? utf8.decode(providerListener
+                                                  .productsDetails.desc_hindi
+                                                  .toString()
+                                                  .runes
+                                                  .toList() ??
+                                              "")
+                                          : utf8.decode(providerListener
+                                                  .productsDetails.desc_marathi
+                                                  .toString()
+                                                  .runes
+                                                  .toList() ??
+                                              "")),
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      color: Color(0xFF393939),
+                                      fontWeight: FontWeight.normal),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 30),
+                                child: Text(
+                                  'Special Offer',
+                                  style: GoogleFonts.poppins(
+                                    color: Color(0xFF044BB0),
+                                    fontSize: getProportionateScreenHeight(20),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 220,
+                                child: ListView.builder(
+                                    itemCount: 3,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      //TODO: get from server
+                                      return Offers(context);
+                                    }),
+                              ),
+                              //PDF Button ------------
+                              SizedBox(
+                                height: 30,
+                              ),
+                              providerListener.productsDetailsBrouchers.length >
+                                      0
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 30),
+                                          child: Text(
+                                            getTranslated(context, 'Broucher'),
+                                            style: GoogleFonts.poppins(
+                                              color: Color(0xFF044BB0),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 13,
+                                        ),
+                                        Container(
+                                          height: ((providerListener
+                                                      .productsDetailsBrouchers
+                                                      .length)
+                                                  .toDouble()) *
+                                              100,
+                                          width: SizeConfig.screenWidth,
+                                          child: MediaQuery.removePadding(
+                                            context: context,
+                                            removeTop: true,
+                                            removeBottom: true,
+                                            child: ListView.builder(
+                                                itemCount: providerListener
+                                                    .productsDetailsBrouchers
+                                                    .length,
+                                                scrollDirection: Axis.vertical,
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                itemBuilder: (context, index) {
+                                                  return PDFButton(
+                                                    onWholePressed: () {
+                                                      push(
+                                                          context,
+                                                          pdfviewer(
+                                                              providerListener
+                                                                  .productsDetailsBrouchers[
+                                                                      index]
+                                                                  .title,
+                                                              providerListener
+                                                                  .productsDetailsBrouchers[
+                                                                      index]
+                                                                  .media_url));
+                                                    },
+                                                    onDownloadPressed: () {
+                                                      print("Download Pdf");
+                                                      setState(() {
+                                                        download_link =
+                                                            providerListener
+                                                                .productsDetailsBrouchers[
+                                                                    index]
+                                                                .media_url;
+                                                      });
+
+                                                      universalLoader.style(
+                                                          message:
+                                                              'Downloading file...',
+                                                          backgroundColor:
+                                                              Colors.white,
+                                                          progressWidget:
+                                                              CircularProgressIndicator(
+                                                            strokeWidth: 10,
+                                                            backgroundColor: Color(
+                                                                COLOR_PRIMARY),
+                                                            valueColor:
+                                                                AlwaysStoppedAnimation<
+                                                                        Color>(
+                                                                    Color(
+                                                                        COLOR_BACKGROUND)),
+                                                          ),
+                                                          elevation: 10.0,
+                                                          insetAnimCurve: Curves
+                                                              .easeInOutSine,
+                                                          progress: 0.0,
+                                                          maxProgress: 100.0,
+                                                          progressTextStyle:
+                                                              TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize:
+                                                                      13.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                          messageTextStyle: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 19.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600));
+
+                                                      _download();
+                                                    },
+                                                    onPdfPressed: () {
+                                                      print("View Pdf");
+                                                      push(
+                                                          context,
+                                                          pdfviewer(
+                                                              providerListener
+                                                                  .productsDetailsBrouchers[
+                                                                      index]
+                                                                  .title,
+                                                              providerListener
+                                                                  .productsDetailsBrouchers[
+                                                                      index]
+                                                                  .media_url));
+                                                    },
+                                                    broucherOBJ: providerListener
+                                                            .productsDetailsBrouchers[
+                                                        index],
+                                                  );
+                                                }),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : SizedBox(
+                                      height: 1,
+                                    ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 30),
+                                child: CompanyLink(
+                                  title: providerListener
+                                          .productsDetails.organisation_name ??
+                                      "",
+                                  imagePath: providerListener
+                                          .productsDetails.image_bigthumb_url ??
+                                      "",
+                                  onPressed: () {
+                                    push(
+                                        context,
+                                        CompanyDetails(providerListener
+                                            .productsDetails.user_id));
+                                    print(
+                                        "Company link Pressed : To Company Profile");
+                                  },
+                                ),
+                              ),
+                              //-----More from the company
+                              SizedBox(
+                                height: 31,
+                              ),
+                              providerListener
+                                          .productsListFromSameCompany.length >
+                                      0
+                                  ? Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 30),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 300,
+                                            child: Text(
+                                              getTranslated(
+                                                      context, 'Simmilar') +
+                                                  "More from " +
+                                                  (providerListener
+                                                          .productsDetails
+                                                          .organisation_name ??
+                                                      ""),
+                                              maxLines: 2,
+                                              style: GoogleFonts.poppins(
+                                                color: Color(0xFF044BB0),
+                                                fontSize:
+                                                    getProportionateScreenHeight(
+                                                        20),
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          //Change it with different SVG
+                                          GestureDetector(
+                                            onTap: () {},
+                                            child: Icon(
+                                              Icons.play_circle_fill_outlined,
+                                              size: 25,
+                                              color: Colors.grey,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  : SizedBox(
+                                      height: 1,
+                                    ),
+                              providerListener
+                                          .productsListFromSameCompany.length >
+                                      0
+                                  ? Container(
+                                      height: 260,
+                                      child: ListView.builder(
+                                          itemCount: providerListener
+                                              .productsListFromSameCompany
+                                              .length,
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder: (context, index) {
+                                            return MoreProds(
+                                              name: providerListener
+                                                      .productsListFromSameCompany[
+                                                          index]
+                                                      .title_english ??
+                                                  "",
+                                              desc: parseHtmlString(providerListener
+                                                      .productsListFromSameCompany[
+                                                          index]
+                                                      .desc_english) ??
+                                                  "",
+                                              imgPath: providerListener
+                                                      .productsListFromSameCompany[
+                                                          index]
+                                                      .bigthumb_url ??
+                                                  "",
+                                              onPressed: () {
+                                                pushReplacement(
+                                                    context,
+                                                    DetailedProducts(
+                                                        providerListener
+                                                            .productsListFromSameCompany[
+                                                                index]
+                                                            .id,
+                                                        providerListener
+                                                            .productsListFromSameCompany[
+                                                                index]
+                                                            .user_id));
+                                              },
+                                            );
+                                          }),
+                                    )
+                                  : SizedBox(
+                                      height: 1,
+                                    ),
+                              SizedBox(
+                                height: 36,
+                              ),
+                              providerListener.productsListofSimilar.length > 0
+                                  ? Container(
+                                      height: (providerListener
+                                                          .productsListofSimilar
+                                                          .length /
+                                                      2)
+                                                  .ceil()
+                                                  .toDouble() *
+                                              265 +
+                                          100,
+                                      width: double.infinity,
+                                      color: Color(0xFFEBEBEB),
+                                      padding: EdgeInsets.only(
+                                          left: 30,
+                                          right: 30,
+                                          top: 24,
+                                          bottom: 0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            getTranslated(
+                                                context, 'simmilar_prod'),
+                                            style: GoogleFonts.poppins(
+                                              color: Color(0xFF383838),
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Container(
+                                            height: (providerListener
+                                                            .productsListofSimilar
+                                                            .length /
+                                                        2)
+                                                    .ceil()
+                                                    .toDouble() *
+                                                232,
+                                            child: MediaQuery.removePadding(
+                                              context: context,
+                                              removeBottom: true,
+                                              child: GridView.count(
+                                                  crossAxisCount: 2,
+                                                  mainAxisSpacing: 20,
+                                                  crossAxisSpacing: 20,
+                                                  physics:
+                                                      NeverScrollableScrollPhysics(),
+                                                  childAspectRatio: 0.8,
+                                                  children: List.generate(
+                                                      providerListener
+                                                          .productsListofSimilar
+                                                          .length, (index) {
+                                                    return GridProds(
+                                                      name: providerListener
+                                                              .productsListofSimilar[
+                                                                  index]
+                                                              .title_english ??
+                                                          "",
+                                                      desc: parseHtmlString(
+                                                              providerListener
+                                                                  .productsListofSimilar[
+                                                                      index]
+                                                                  .desc_english) ??
+                                                          "",
+                                                      imgPath: providerListener
+                                                              .productsListofSimilar[
+                                                                  index]
+                                                              .bigthumb_url ??
+                                                          "",
+                                                      onPressed: () {
+                                                        pushReplacement(
+                                                            context,
+                                                            DetailedProducts(
+                                                                providerListener
+                                                                    .productsListofSimilar[
+                                                                        index]
+                                                                    .id,
+                                                                providerListener
+                                                                    .productsListofSimilar[
+                                                                        index]
+                                                                    .user_id));
+                                                      },
+                                                    );
+                                                  })),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 70,
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  : SizedBox(
+                                      height: 1,
+                                    ),
+                              SizedBox(
+                                height: getProportionateScreenHeight(80),
+                              )
+                            ],
+                          )
+                        : SizedBox(
+                            height: 1,
+                          )),*/

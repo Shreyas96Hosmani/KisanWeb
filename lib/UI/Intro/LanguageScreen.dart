@@ -47,160 +47,142 @@ class _LanguageScreenState extends State<LanguageScreen> {
     }
 
     buildLanguagaeWidget(BuildContext context) {
-      return Padding(
-        padding: EdgeInsets.only(top: screenHeight / 3),
-        child: Container(
-          height: screenHeight,
-          width: screenWidth,
-          decoration: BoxDecoration(
-              color: Color(constants.COLOR_WHITE),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              )),
-          child: Stack(
-            children: [
-              Positioned(
-                top: screenHeight / 20,
-                left: 0,
-                right: 0,
-                child: Container(
-                  alignment: Alignment.topCenter,
-                  child: Text(
-                    getTranslated(context, 'language_select_text'),
-                    textScaleFactor: 1,
-                    style: GoogleFonts.poppins(
-                      fontSize: 21,
+      return Container(
+        height: getProportionateScreenHeight(727),
+        width: getProportionateScreenWidth(486),
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+            color: Color(constants.COLOR_WHITE),
+            borderRadius: BorderRadius.circular(25)),
+        child: Column(
+          children: [
+            Container(
+              alignment: Alignment.topCenter,
+              child: Text(
+                getTranslated(context, 'language_select_text'),
+                textScaleFactor: 1,
+                style: GoogleFonts.poppins(
+                  fontSize: 21,
+                ),
+              ),
+            ),
+            SizedBox(height: getProportionateScreenHeight(60),),
+            Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      Locale _locale = await setLocale('mr');
+                      MyApp.setLocale(context, _locale);
+
+                      if (widget.id == 1) {
+                        push(context, SplashPageViewBuilder());
+                      } else {
+                        pop(context);
+                      }
+                    },
+                    child: Container(
+                      height: 60,
+                      width: screenWidth / 2,
+                      decoration: BoxDecoration(
+                          color: Color(0xffF4F4F4),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15))),
+                      child: Center(
+                        child: Text(
+                          "मराठी",
+                          textScaleFactor: 1,
+                          style: GoogleFonts.poppins(
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              Positioned(
-                top: screenHeight / 5,
-                left: 0,
-                right: 0,
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () async {
-                          Locale _locale = await setLocale('mr');
-                          MyApp.setLocale(context, _locale);
-
-                          if (widget.id == 1) {
-                            push(context, SplashPageViewBuilder());
-                          } else {
-                            pop(context);
-                          }
-                        },
-                        child: Container(
-                          height: 60,
-                          width: screenWidth / 2,
-                          decoration: BoxDecoration(
-                              color: Color(0xffF4F4F4),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          child: Center(
-                            child: Text(
-                              "मराठी",
-                              textScaleFactor: 1,
-                              style: GoogleFonts.poppins(
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          Locale _locale = await setLocale('hi');
-                          MyApp.setLocale(context, _locale);
-                          if (widget.id == 1) {
-                            push(context, SocialAuth());
-                          } else {
-                            pop(context);
-                          }
-                        },
-                        child: Container(
-                          height: 60,
-                          width: screenWidth / 2,
-                          decoration: BoxDecoration(
-                              color: Color(0xffF4F4F4),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          child: Center(
-                            child: Text(
-                              "हिन्दी",
-                              textScaleFactor: 1,
-                              style: GoogleFonts.poppins(
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          Locale _locale = await setLocale('en');
-                          MyApp.setLocale(context, _locale);
-
-                          if (widget.id == 1) {
-                            push(context, SocialAuth());
-                            //push(context, SplashPageViewBuilder());
-                          } else {
-                            pop(context);
-                          }
-                        },
-                        child: Container(
-                          height: 60,
-                          width: screenWidth / 2,
-                          decoration: BoxDecoration(
-                              color: Color(0xffF4F4F4),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          child: Center(
-                            child: Text(
-                              "English",
-                              textScaleFactor: 1,
-                              style: GoogleFonts.poppins(
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  SizedBox(
+                    height: 20,
                   ),
-                ),
+                  InkWell(
+                    onTap: () async {
+                      Locale _locale = await setLocale('hi');
+                      MyApp.setLocale(context, _locale);
+                      if (widget.id == 1) {
+                        push(context, SocialAuth());
+                      } else {
+                        pop(context);
+                      }
+                    },
+                    child: Container(
+                      height: 60,
+                      width: screenWidth / 2,
+                      decoration: BoxDecoration(
+                          color: Color(0xffF4F4F4),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15))),
+                      child: Center(
+                        child: Text(
+                          "हिन्दी",
+                          textScaleFactor: 1,
+                          style: GoogleFonts.poppins(
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      Locale _locale = await setLocale('en');
+                      MyApp.setLocale(context, _locale);
+
+                      if (widget.id == 1) {
+                        push(context, SocialAuth());
+                        //push(context, SplashPageViewBuilder());
+                      } else {
+                        pop(context);
+                      }
+                    },
+                    child: Container(
+                      height: 60,
+                      width: screenWidth / 2,
+                      decoration: BoxDecoration(
+                          color: Color(0xffF4F4F4),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15))),
+                      child: Center(
+                        child: Text(
+                          "English",
+                          textScaleFactor: 1,
+                          style: GoogleFonts.poppins(
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     }
 
     return Scaffold(
       backgroundColor: Color(constants.COLOR_BACKGROUND),
-      body: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: buildTopWidget(context),
-          ),
-          buildLanguagaeWidget(context),
-        ],
-      ),
+      body: Container(
+          child: Center(
+            child: Container(
+                width: getProportionateScreenWidth(486),
+                height: getProportionateScreenHeight(727),
+                child: buildLanguagaeWidget(context)),
+          )),
     );
   }
 }

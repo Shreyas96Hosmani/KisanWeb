@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+
 //import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -147,207 +148,52 @@ class _SocialAuthState extends State<SocialAuth> {
     }
 
     buildLanguagaeWidget(BuildContext context) {
-      return Padding(
-        padding: EdgeInsets.only(top: screenHeight / 6),
-        child: Container(
-          height: screenHeight,
-          width: screenWidth,
-          padding:
-              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
-          decoration: BoxDecoration(
-              color: Color(constants.COLOR_WHITE),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              )),
-          child: Column(
-            children: [
-              SizedBox(
-                height: getProportionateScreenHeight(60),
-              ),
-              Container(
-                alignment: Alignment.topCenter,
-                child: Text(
-                  getTranslated(context, 'welcome') +
-                      "\n" +
-                      getTranslated(context, 'lets_get_you_started'),
-                  textAlign: TextAlign.center,
-                  textScaleFactor: 1,
-                  style: GoogleFonts.poppins(
-                    fontSize: getProportionateScreenHeight(20),
-                    fontWeight: FontWeight.bold,
-                  ),
+      return Container(
+        height: screenHeight,
+        width: screenWidth,
+        padding:
+            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
+        decoration: BoxDecoration(
+            color: Color(constants.COLOR_WHITE),
+            borderRadius: BorderRadius.circular(25)),
+        child: Column(
+          children: [
+            Container(
+              alignment: Alignment.topCenter,
+              child: Text(
+                getTranslated(context, 'welcome') +
+                    "\n" +
+                    getTranslated(context, 'lets_get_you_started'),
+                textAlign: TextAlign.center,
+                textScaleFactor: 1,
+                style: GoogleFonts.poppins(
+                  fontSize: getProportionateScreenHeight(20),
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(
-                height: getProportionateScreenHeight(20),
-              ),
-              Container(
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Provider.of<CustomViewModel>(context, listen: false)
-                            .setGoogleData("", "", "")
-                            .then((value) {
-                          push(context, LoginWithOTP());
-                        });
-                      },
-                      child: Container(
-                          height: getProportionateScreenHeight(60),
-                          width: getProportionateScreenWidth(320),
-                          decoration: BoxDecoration(
-                            color: Color(constants.COLOR_BACKGROUND),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 2,
-                              ),
-                              Container(
-                                height: getProportionateScreenHeight(55),
-                                width: getProportionateScreenHeight(55),
-                                color: Colors.white,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.phone_android_rounded,
-                                    color: Color(constants.COLOR_BACKGROUND),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  getTranslated(context, 'enter_using_mobile'),
-                                  textAlign: TextAlign.center,
-                                  textScaleFactor: 1,
-                                  maxLines: 2,
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.white,
-                                    fontSize: getProportionateScreenHeight(18),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: screenWidth / 3,
-                          height: 1,
-                          color: Colors.grey[300],
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          getTranslated(context, 'or'),
-                          style: GoogleFonts.poppins(color: Colors.grey),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Container(
-                          width: screenWidth / 3,
-                          height: 1,
-                          color: Colors.grey[300],
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    InkWell(
-                      onTap: () {
-                       // _handleSignIn();
-                      },
-                      child: Container(
-                          height: getProportionateScreenHeight(60),
-                          width: getProportionateScreenWidth(320),
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 2,
-                              ),
-                              Container(
-                                height: getProportionateScreenHeight(55),
-                                width: getProportionateScreenHeight(55),
-                                color: Colors.white,
-                                child: Center(
-                                  child: Container(
-                                      height: 30,
-                                      width: 30,
-                                      child: Image.asset(images.googleLogo)),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  getTranslated(context, 'sign_up_with_google'),
-                                  textAlign: TextAlign.center,
-                                  textScaleFactor: 1,
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.white,
-                                    fontSize: getProportionateScreenHeight(18),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    /* Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: screenWidth / 3,
-                          height: 1,
-                          color: Colors.grey[300],
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          getTranslated(context, 'or'),
-                          style: GoogleFonts.poppins(color: Colors.grey),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Container(
-                          width: screenWidth / 3,
-                          height: 1,
-                          color: Colors.grey[300],
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                        height: 60,
-                        width: screenWidth / 1.3,
+            ),
+            SizedBox(
+              height: getProportionateScreenHeight(20),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      Provider.of<CustomViewModel>(context, listen: false)
+                          .setGoogleData("", "", "")
+                          .then((value) {
+                        push(context, LoginWithOTP());
+                      });
+                    },
+                    child: Container(
+                        height: getProportionateScreenHeight(60),
+                        width: getProportionateScreenWidth(320),
                         decoration: BoxDecoration(
-                          color: Color(constants.COLOR_BACKGROUND_OPPOSITE),
+                          color: Color(constants.COLOR_BACKGROUND),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -357,54 +203,196 @@ class _SocialAuthState extends State<SocialAuth> {
                               width: 2,
                             ),
                             Container(
-                              height: 55,
-                              width: 55,
+                              height: getProportionateScreenHeight(55),
+                              width: getProportionateScreenHeight(55),
+                              color: Colors.white,
+                              child: Center(
+                                child: Icon(
+                                  Icons.phone_android_rounded,
+                                  color: Color(constants.COLOR_BACKGROUND),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                getTranslated(context, 'enter_using_mobile'),
+                                textAlign: TextAlign.center,
+                                textScaleFactor: 1,
+                                maxLines: 2,
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontSize: getProportionateScreenHeight(18),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: getProportionateScreenWidth(65),
+                        height: 1,
+                        color: Colors.grey[300],
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        getTranslated(context, 'or'),
+                        style: GoogleFonts.poppins(color: Colors.grey),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        width: getProportionateScreenWidth(65),
+                        height: 1,
+                        color: Colors.grey[300],
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      // _handleSignIn();
+                    },
+                    child: Container(
+                        height: getProportionateScreenHeight(60),
+                        width: getProportionateScreenWidth(320),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 2,
+                            ),
+                            Container(
+                              height: getProportionateScreenHeight(55),
+                              width: getProportionateScreenHeight(55),
                               color: Colors.white,
                               child: Center(
                                 child: Container(
                                     height: 30,
                                     width: 30,
-                                    child: Image.asset(
-                                        "assets/images/apple-logo.png")),
+                                    child: Image.asset(images.googleLogo)),
                               ),
                             ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Text(
-                              "Sign up with Apple",
-                              textAlign: TextAlign.center,
-                              textScaleFactor: 1,
-                              style: GoogleFonts.poppins(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
+                            Expanded(
+                              child: Text(
+                                getTranslated(context, 'sign_up_with_google'),
+                                textAlign: TextAlign.center,
+                                textScaleFactor: 1,
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontSize: getProportionateScreenHeight(18),
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                           ],
-                        )),*/
-                  ],
-                ),
+                        )),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  /* Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: screenWidth / 3,
+                        height: 1,
+                        color: Colors.grey[300],
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        getTranslated(context, 'or'),
+                        style: GoogleFonts.poppins(color: Colors.grey),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        width: screenWidth / 3,
+                        height: 1,
+                        color: Colors.grey[300],
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                      height: 60,
+                      width: screenWidth / 1.3,
+                      decoration: BoxDecoration(
+                        color: Color(constants.COLOR_BACKGROUND_OPPOSITE),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 2,
+                          ),
+                          Container(
+                            height: 55,
+                            width: 55,
+                            color: Colors.white,
+                            child: Center(
+                              child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  child: Image.asset(
+                                      "assets/images/apple-logo.png")),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            "Sign up with Apple",
+                            textAlign: TextAlign.center,
+                            textScaleFactor: 1,
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      )),*/
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     }
 
     return Scaffold(
       backgroundColor: Color(0xff08763F),
-      body: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: buildTopWidget(context),
-          ),
-          buildLanguagaeWidget(context),
-        ],
-      ),
+      body: Container(
+          color: Color(0xFFF3FFF0),
+          child: Center(
+              child: Container(
+                  width: getProportionateScreenWidth(486),
+                  height: getProportionateScreenHeight(727),
+                  child: buildLanguagaeWidget(context)))),
     );
   }
 }

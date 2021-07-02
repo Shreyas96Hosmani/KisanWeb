@@ -605,7 +605,7 @@ class _HomeScreenState extends State<HomeScreen> {
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(80),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 204),
+                padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(200)),
                 decoration: BoxDecoration(color: Colors.white, boxShadow: [
                   BoxShadow(
                       color: Color(0xFF00A651).withOpacity(0.3),
@@ -649,7 +649,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),*/
                       Container(
-                        width: 600,
+                        width: getProportionateScreenWidth(600),
+                        height: getProportionateScreenHeight(54),
                         child: TextField(
                           onTap: () {
                             //push(context, SearchScreen());
@@ -659,6 +660,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Icons.arrow_back,
                                 color: Colors.black,
                               ),
+                              contentPadding: EdgeInsets.zero,
                               hintText: "Search a product or company",
                               focusColor: Color(0xFF00A651),
                               filled: true,
@@ -676,7 +678,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Color(0xFF9B9B9B),
                               ),
                               hintStyle: GoogleFonts.poppins(
-                                  fontSize: 18, fontWeight: FontWeight.w500)),
+                                color: Colors.black.withOpacity(0.3),
+                                  fontSize: getProportionateScreenHeight(18), fontWeight: FontWeight.w500)),
                         ),
                       ),
                       Stack(
@@ -727,6 +730,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       GestureDetector(
                         onTap: (){
                           //push(context, Profile());
+                          push(
+                              context,
+                              BasicProfile(
+                                  providerListener.userData.first_name ?? "",
+                                  providerListener.userData.last_name ?? "",
+                                  providerListener.userData.email ?? "",
+                                  providerListener.userprofileData.image_url ?? "",
+                                  providerListener.userprofileData.state,
+                                  providerListener.userprofileData.city));
                         },
                         child: CircleAvatar(
                           radius: 25,

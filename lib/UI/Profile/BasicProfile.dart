@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -398,16 +399,12 @@ class _BasicProfileState extends State<BasicProfile> {
 
     buildTopWidget(BuildContext context) {
       return Container(
-          height: screenHeight / 3,
-          width: screenWidth,
-          decoration: BoxDecoration(
-            color: Color(0xff08763F),
-          ),
+          width: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
+              /*Container(
                 margin: EdgeInsets.only(left: getProportionateScreenWidth(20)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -460,15 +457,12 @@ class _BasicProfileState extends State<BasicProfile> {
                       getTranslated(context, 'your_details'),
                       style: GoogleFonts.poppins(
                           fontSize: 22,
-                          color: Color(COLOR_WHITE),
+                          color: Color(COLOR_BACKGROUND),
                           fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
+              ),*/
               GestureDetector(
                 onTap:
                     () => /*_settingModalBottomSheetOne(context)*/ getImageOne(),
@@ -476,7 +470,7 @@ class _BasicProfileState extends State<BasicProfile> {
                   children: [
                     Container(
                       child: CircleAvatar(
-                        radius: 60,
+                        radius: getProportionateScreenWidth(62),
                         backgroundColor: Colors.transparent,
                         backgroundImage: imageOne == null
                             ? widget.image_url != "" && widget.image_url != null
@@ -511,18 +505,18 @@ class _BasicProfileState extends State<BasicProfile> {
     buildProfileForm(BuildContext context) {
       return SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               height: 30,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  width: screenWidth / 2.5,
+                  width: getProportionateScreenWidth(170),
                   child: Theme(
                     data: ThemeData(primaryColor: Color(0xff08763F)),
                     child: TextFormField(
@@ -548,7 +542,7 @@ class _BasicProfileState extends State<BasicProfile> {
                   ),
                 ),
                 Container(
-                  width: screenWidth / 2.5,
+                  width: getProportionateScreenWidth(170),
                   child: Theme(
                     data: ThemeData(primaryColor: Color(0xff08763F)),
                     child: TextFormField(
@@ -575,61 +569,50 @@ class _BasicProfileState extends State<BasicProfile> {
               ],
             ),
             widget.email != "" && widget.state == null
-                ? Padding(
-                    padding: EdgeInsets.only(
-                        left: screenWidth / 15, right: screenWidth / 15),
-                    child: Center(
-                      child: Container(
-                        child: Theme(
-                          data: ThemeData(primaryColor: Color(0xff08763F)),
-                          child: TextFormField(
-                            enabled: false,
-                            controller: emailController,
-                            decoration: InputDecoration(
-                                hintText: getTranslated(context, 'email'),
-                                hintStyle: GoogleFonts.poppins(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 14,
-                                )),
-                            style: GoogleFonts.poppins(
-                                color: Color(0xff08763F),
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : Padding(
-                    padding: EdgeInsets.only(
-                        left: screenWidth / 15, right: screenWidth / 15),
-                    child: Center(
-                      child: Container(
-                        child: Theme(
-                          data: ThemeData(primaryColor: Color(0xff08763F)),
-                          child: TextFormField(
-                            controller: emailController,
-                            decoration: InputDecoration(
-                                hintText: getTranslated(context, 'email'),
-                                hintStyle: GoogleFonts.poppins(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 14,
-                                )),
-                            style: GoogleFonts.poppins(
-                                color: Color(0xff08763F),
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
+                ? Container(
+              width: double.infinity,
+                  child: Theme(
+                    data: ThemeData(primaryColor: Color(0xff08763F)),
+                    child: TextFormField(
+                      enabled: false,
+                      controller: emailController,
+                      decoration: InputDecoration(
+                          hintText: getTranslated(context, 'email'),
+                          hintStyle: GoogleFonts.poppins(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 14,
+                          )),
+                      style: GoogleFonts.poppins(
+                          color: Color(0xff08763F),
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
+                )
+                : Container(
+              width: double.infinity,
+                  child: Theme(
+                    data: ThemeData(primaryColor: Color(0xff08763F)),
+                    child: TextFormField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                          hintText: getTranslated(context, 'email'),
+                          hintStyle: GoogleFonts.poppins(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 14,
+                          )),
+                      style: GoogleFonts.poppins(
+                          color: Color(0xff08763F),
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
             SizedBox(
               height: 30,
             ),
             Container(
-              margin: EdgeInsets.only(
-                  left: screenWidth / 15, right: screenWidth / 15),
+              width: double.infinity,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -637,7 +620,7 @@ class _BasicProfileState extends State<BasicProfile> {
                   Text(
                     getTranslated(context, 'location_address'),
                     style: GoogleFonts.poppins(
-                      fontSize: 18,
+                      fontSize: getProportionateScreenHeight(18),
                       color: Color(0xff696969),
                     ),
                   ),
@@ -698,8 +681,6 @@ class _BasicProfileState extends State<BasicProfile> {
                     },
                     child: Center(
                       child: Container(
-                        margin: EdgeInsets.only(
-                            left: screenWidth / 15, right: screenWidth / 15),
                         height: 50,
                         decoration: BoxDecoration(
                           color: Color(0xffEBEBEB),
@@ -718,7 +699,7 @@ class _BasicProfileState extends State<BasicProfile> {
                             Text(
                               getTranslated(context, 'use_my_device_location'),
                               style: GoogleFonts.poppins(
-                                fontSize: 18,
+                                fontSize: getProportionateScreenHeight(18),
                                 color: Colors.black,
                               ),
                             ),
@@ -774,7 +755,7 @@ class _BasicProfileState extends State<BasicProfile> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        width: screenWidth / 5,
+                        width: getProportionateScreenWidth(65),
                         height: 1,
                         color: Color(0xff08763F),
                       ),
@@ -789,7 +770,7 @@ class _BasicProfileState extends State<BasicProfile> {
                         width: 10,
                       ),
                       Container(
-                        width: screenWidth / 5,
+                        width: getProportionateScreenWidth(65),
                         height: 1,
                         color: Color(0xff08763F),
                       ),
@@ -963,9 +944,6 @@ class _BasicProfileState extends State<BasicProfile> {
                 fetched == false ? _showListDistrict(context) : print("feched");
               },
             ),
-            SizedBox(
-              height: 30,
-            ),
             Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints.tightFor(
@@ -1008,9 +986,6 @@ class _BasicProfileState extends State<BasicProfile> {
                 ),
               ),
             ),
-            SizedBox(
-              height: getProportionateScreenHeight(90),
-            ),
           ],
         ),
       );
@@ -1018,7 +993,7 @@ class _BasicProfileState extends State<BasicProfile> {
 
     return Scaffold(
       backgroundColor: Color(0xff08763F),
-      body: Stack(
+      body: /*Stack(
         children: [
           Positioned(
             top: 20,
@@ -1039,6 +1014,39 @@ class _BasicProfileState extends State<BasicProfile> {
             ),
           ),
         ],
+      )*/Container(
+        color: Color(0xFFF3FFF0),
+        child: Center(
+          child: Column(
+            children: [
+              SvgPicture.asset("assets/icons/greenKisan_Logo.svg",height: getProportionateScreenHeight(80),),
+              Container(
+                height: getProportionateScreenHeight(881),
+                width: getProportionateScreenWidth(486),
+                padding: EdgeInsets.all(getProportionateScreenWidth(32)),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(11),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 4,
+                      spreadRadius: 1
+                    )
+                  ]
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      buildTopWidget(context),
+                      buildProfileForm(context)
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

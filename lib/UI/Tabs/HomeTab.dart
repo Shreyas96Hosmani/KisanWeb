@@ -26,6 +26,7 @@ import 'package:kisanweb/UI/HomeScreen/HomeScreen.dart';
 import 'package:kisanweb/UI/HomeScreen/Widgets/SubTile.dart';
 import 'package:kisanweb/UI/Intro/InitialScreen.dart';
 import 'package:kisanweb/UI/Profile/BasicProfile.dart';
+import 'package:kisanweb/UI/ViewAll/ViewAllWebinars.dart';
 
 //import 'package:kisanweb/UI/SearchScreen/SearchScreen.dart';
 //import 'package:kisanweb/UI/Subscribe/SubscribeToMembership.dart';
@@ -41,7 +42,7 @@ import 'package:kisanweb/localization/language_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart' as urlLauncher;
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:kisanweb/UI/ViewAll/ViewAllWebinars.dart';
+import 'package:kisanweb/UI/ViewAll/ViewAllWebinars.dart';
 
 SharedPreferences _prefs;
 String languageCode = 'en';
@@ -73,7 +74,8 @@ class _HomeTabState extends State<HomeTab> {
       body: Container(
         color: Colors.white,
         width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 206),
+        padding:
+            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(200)),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -100,7 +102,11 @@ class _HomeTabState extends State<HomeTab> {
                     ),
               //Ads now showing
               providerListener.homeAdsListImages.length > 0
-                  ? ImageSlider()
+                  ? Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xFFF3FFF0),
+                          border: Border.all(color: Color(0xFF88D974))),
+                      child: ImageSlider())
                   : SizedBox(
                       height: 1,
                     ),
@@ -111,6 +117,9 @@ class _HomeTabState extends State<HomeTab> {
                     color: Color(0xFFF3FFF0),
                     border: Border.all(color: Color(0xFF88D974))),
               ),*/
+              SizedBox(
+                height: getProportionateScreenHeight(10),
+              ),
               Container(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +171,8 @@ class _HomeTabState extends State<HomeTab> {
                                         ),
                                       ),
                                       Container(
-                                        height: 300,
+                                        height:
+                                            getProportionateScreenHeight(300),
                                         child: ListView.builder(
                                             itemCount: providerListener
                                                 .featuredproductsList.length,
@@ -265,7 +275,8 @@ class _HomeTabState extends State<HomeTab> {
                                         ),
                                       ),
                                       Container(
-                                        height: 300,
+                                        height:
+                                            getProportionateScreenHeight(300),
                                         child: ListView.builder(
                                             itemCount: providerListener
                                                 .productsList.length,
@@ -369,7 +380,8 @@ class _HomeTabState extends State<HomeTab> {
                                                 if (index == 5) {
                                                   return ViewAllButton(
                                                     OnPressed: () {
-                                                      //push(context, ViewAllWebinars());
+                                                      push(context,
+                                                          ViewAllWebinars());
                                                     },
                                                   );
                                                 }
@@ -605,9 +617,11 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      width: 10,
+                    ),
                     Container(
-                      width: 350,
-                      padding: EdgeInsets.all(20),
+                      width: getProportionateScreenWidth(350),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -1209,9 +1223,11 @@ Widget WebinarTile(BuildContext context, WebinarListParser eventOBJ) {
       }
     },
     child: Container(
-      width: 337,
+      width: getProportionateScreenWidth(337),
       margin: EdgeInsets.only(
-          top: (20), bottom: getProportionateScreenHeight(20), right: 20),
+          top: getProportionateScreenHeight(20),
+          bottom: getProportionateScreenHeight(20),
+          right: getProportionateScreenWidth(20)),
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
           color: Colors.grey[300],
@@ -1239,7 +1255,7 @@ Widget WebinarTile(BuildContext context, WebinarListParser eventOBJ) {
                 left: 0,
                 right: 0,
                 child: Container(
-                  height: 71,
+                  height: getProportionateScreenHeight(71),
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
@@ -1278,8 +1294,8 @@ Widget WebinarTile(BuildContext context, WebinarListParser eventOBJ) {
                   width: 10,
                 ),
                 Container(
-                  width: 60,
-                  height: 60,
+                  width: getProportionateScreenWidth(60),
+                  height: getProportionateScreenWidth(60),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color: Color(0xFFFFEE6C)),
@@ -1312,19 +1328,16 @@ Widget WebinarTile(BuildContext context, WebinarListParser eventOBJ) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Container(
-                        width: 175,
-                        child: Text(
-                          utf8.decode(eventOBJ.title.runes.toList()),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              color: Colors.grey[700],
-                              fontWeight: FontWeight.w700),
-                        ),
+                    Container(
+                      width: getProportionateScreenWidth(175),
+                      child: Text(
+                        utf8.decode(eventOBJ.title.runes.toList()),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.w700),
                       ),
                     ),
                     SizedBox(
@@ -1343,9 +1356,6 @@ Widget WebinarTile(BuildContext context, WebinarListParser eventOBJ) {
                           fontSize: 10, color: Colors.black),
                     ),
                   ],
-                ),
-                SizedBox(
-                  width: 10,
                 ),
                 Container(
                   height: 40,
@@ -1400,7 +1410,7 @@ Widget FeaturesWebinar(BuildContext context, WebinarListParser eventOBJ) {
       push(context, WebinarMainScreen(eventOBJ.id));
     },
     child: Container(
-      width: 337,
+      width: getProportionateScreenWidth(337),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.green[500],
@@ -1569,7 +1579,7 @@ Widget AdTile(BuildContext context, AdsObject adOBJ) {
                 if (adOBJ.link_for == "Event") {
                   push(context, BannerEventPage(adOBJ.linking_id ?? 0));
                 } else if (adOBJ.link_for == "Webinar") {
-                   //push(context, BannerEventPage());
+                  //push(context, BannerEventPage());
                   toastCommon(context, "webinar coming soon");
                 } else if (adOBJ.link_for == "Webinar") {
                   //push(context, BannerEventPage());
@@ -1592,8 +1602,8 @@ Widget AdTile(BuildContext context, AdsObject adOBJ) {
               }
             },
             child: Container(
-              height: 350,
-              width: 350,
+              height: getProportionateScreenWidth(350),
+              width: getProportionateScreenWidth(350),
               decoration: BoxDecoration(
                   color: Colors.grey,
                   image: DecorationImage(
@@ -1653,14 +1663,14 @@ class _FeaturedBrandsState extends State<FeaturedBrands> {
         bottom: getProportionateScreenHeight(10),
         left: getProportionateScreenWidth(10),
       ),
-      width: 100,
+      width: getProportionateScreenWidth(100),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ConstrainedBox(
             constraints: BoxConstraints.tightFor(
-              width: 85,
-              height: 85,
+              width: getProportionateScreenWidth(88),
+              height: getProportionateScreenWidth(88),
             ),
             child: ElevatedButton(
                 onPressed: () {
@@ -1672,7 +1682,8 @@ class _FeaturedBrandsState extends State<FeaturedBrands> {
                   padding: EdgeInsets.all(10),
                   shadowColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25)),
+                      borderRadius: BorderRadius.circular(
+                          getProportionateScreenHeight(25))),
                 ),
                 child: Image.network(
                   widget.image ?? "",
@@ -1716,8 +1727,8 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
     return GestureDetector(
       onTap: widget.onPressed,
       child: Container(
-        width: 124,
-        height: 161,
+        width: getProportionateScreenWidth(124),
+        height: getProportionateScreenHeight(161),
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
             color: Colors.grey[200],
@@ -1729,11 +1740,11 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
             spreadRadius: 1.0,
           )
         ]),
-        margin: EdgeInsets.only(top: 40, bottom: 40, left: 20),
+        margin: EdgeInsets.only(top: 20, bottom: 20, left: 20),
         child: Column(
           children: [
             Expanded(
-                flex: 3,
+                flex: 2,
                 child: Container(
                   decoration: BoxDecoration(
                       color: Colors.green,
@@ -1749,7 +1760,7 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
                 )),
             Expanded(
                 child: Container(
-              width: MediaQuery.of(context).size.width,
+              width: double.infinity,
               padding: EdgeInsets.all(6),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -1789,8 +1800,7 @@ Widget CategoryTiles(BuildContext context, CategoryListParser categoryOBJ) {
     child: Container(
       child: ConstrainedBox(
         constraints: BoxConstraints.tightFor(
-          width: 93,
-          height: 75,
+          width: getProportionateScreenWidth(100),
         ),
         child: ElevatedButton(
           onPressed: () {
@@ -1880,50 +1890,44 @@ class _ImageSliderState extends State<ImageSlider> {
   Widget build(BuildContext context) {
     final providerListener = Provider.of<CustomViewModel>(context);
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      child: Stack(
-        children: [
-          CarouselSlider(
-            options: CarouselOptions(
-                onPageChanged: (index, onTap) {
-                  setState(() {
-                    currentS = index;
-                  });
-                  print(currentS.toString());
-                },
-                height: 200,
-                autoPlay: true,
-                viewportFraction: 3,
-                autoPlayAnimationDuration: Duration(milliseconds: 700)),
-            items: providerListener.homeAdsListImages.map((url) {
-              int index = providerListener.homeAdsListImages.indexOf(url);
-              return Builder(
-                builder: (BuildContext context) {
-                  return GestureDetector(
-                    onTap: () {
-                      if (providerListener.homeAdsList[index].link_type ==
-                          "internal") {
-                        if (providerListener.homeAdsList[index].link_for ==
-                            "Event") {
-                         push(
-                             context,
-                             BannerEventPage(providerListener
-                                     .homeAdsList[index].linking_id ??
-                                 0));
-                        } else if (providerListener
-                                .homeAdsList[index].link_for ==
-                            "Webinar") {
-                           //push(context, BannerEventPage());
-                          toastCommon(context, "webinar coming soon");
-                        } else if (providerListener
-                                .homeAdsList[index].link_for ==
-                            "Webinar") {
-                           //push(context, BannerEventPage());
-                          toastCommon(context, "webinar coming soon");
-                        } else if (providerListener
-                                .homeAdsList[index].link_for ==
-                            "Product") {
+    return Column(
+      children: [
+        CarouselSlider(
+          options: CarouselOptions(
+              onPageChanged: (index, onTap) {
+                setState(() {
+                  currentS = index;
+                });
+                print(currentS.toString());
+              },
+              height: getProportionateScreenHeight(313),
+              autoPlay: true,
+              autoPlayAnimationDuration: Duration(milliseconds: 700)),
+          items: providerListener.homeAdsListImages.map((url) {
+            int index = providerListener.homeAdsListImages.indexOf(url);
+            return Builder(
+              builder: (BuildContext context) {
+                return GestureDetector(
+                  onTap: () {
+                    if (providerListener.homeAdsList[index].link_type ==
+                        "internal") {
+                      if (providerListener.homeAdsList[index].link_for ==
+                          "Event") {
+                        push(
+                            context,
+                            BannerEventPage(providerListener
+                                    .homeAdsList[index].linking_id ??
+                                0));
+                      } else if (providerListener.homeAdsList[index].link_for ==
+                          "Webinar") {
+                        //push(context, BannerEventPage());
+                        toastCommon(context, "webinar coming soon");
+                      } else if (providerListener.homeAdsList[index].link_for ==
+                          "Webinar") {
+                        //push(context, BannerEventPage());
+                        toastCommon(context, "webinar coming soon");
+                      } else if (providerListener.homeAdsList[index].link_for ==
+                          "Product") {
 //                          push(
 //                              context,
 //                              DetailedProducts(
@@ -1931,9 +1935,8 @@ class _ImageSliderState extends State<ImageSlider> {
 //                                      .homeAdsList[index].linking_id,
 //                                  providerListener
 //                                      .homeAdsList[index].organisation_id));
-                        } else if (providerListener
-                                .homeAdsList[index].link_for ==
-                            "Category") {
+                      } else if (providerListener.homeAdsList[index].link_for ==
+                          "Category") {
 //                          push(
 //                              context,
 //                              CategoriesPage(
@@ -1941,75 +1944,74 @@ class _ImageSliderState extends State<ImageSlider> {
 //                                      .pavilion_name_for_category,
 //                                  providerListener
 //                                      .homeAdsList[index].pavilion_id));
-                        } else if (providerListener
-                                .homeAdsList[index].link_for ==
-                            "Brand") {
+                      } else if (providerListener.homeAdsList[index].link_for ==
+                          "Brand") {
 //                          push(
 //                              context,
 //                              CompanyDetails(providerListener
 //                                  .homeAdsList[index].organisation_id));
-                        }
-                      } else if (providerListener
-                              .homeAdsList[index].link_type ==
-                          "external") {
-                        if (providerListener.homeAdsList[index].link_url !=
-                            null)
-                          _launchURL(
-                              providerListener.homeAdsList[index].link_url);
                       }
-                    },
-                    child: Container(
-                      width: 479,
-                      height: 224,
-                      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          image: DecorationImage(
-                              image: NetworkImage(url), fit: BoxFit.cover),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey[200],
-                              offset: const Offset(
-                                2.0,
-                                3.0,
-                              ),
-                              blurRadius: 5.0,
-                              spreadRadius: 2.0,
-                            )
-                          ],
-                          color: Colors.amber),
-                    ),
-                  );
-                },
+                    } else if (providerListener.homeAdsList[index].link_type ==
+                        "external") {
+                      if (providerListener.homeAdsList[index].link_url != null)
+                        _launchURL(
+                            providerListener.homeAdsList[index].link_url);
+                    }
+                  },
+                  child: Container(
+                    width: getProportionateScreenWidth(429),
+                    height: getProportionateScreenHeight(224),
+                    margin: EdgeInsets.symmetric(
+                        horizontal: getProportionateScreenWidth(25),
+                        vertical: getProportionateScreenHeight(24)),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: DecorationImage(
+                            image: NetworkImage(url), fit: BoxFit.cover),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey[200],
+                            offset: const Offset(
+                              2.0,
+                              3.0,
+                            ),
+                            blurRadius: 5.0,
+                            spreadRadius: 2.0,
+                          )
+                        ],
+                        color: Colors.amber),
+                  ),
+                );
+              },
+            );
+          }).toList(),
+        ),
+        SizedBox(
+          height: getProportionateScreenHeight(10),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: providerListener.homeAdsListImages.map((url) {
+              int index = providerListener.homeAdsListImages.indexOf(url);
+              return Container(
+                width: 8.0,
+                height: 8.0,
+                margin: EdgeInsets.symmetric(horizontal: 2.0),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color:
+                      currentS == index ? Colors.grey[700] : Colors.grey[300],
+                ),
               );
             }).toList(),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 180),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: providerListener.homeAdsListImages.map((url) {
-                  int index = providerListener.homeAdsListImages.indexOf(url);
-                  return Container(
-                    width: 8.0,
-                    height: 8.0,
-                    margin:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: currentS == index
-                          ? Colors.grey[700]
-                          : Colors.grey[300],
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+        SizedBox(
+          height: getProportionateScreenHeight(10),
+        ),
+      ],
     );
   }
 }
