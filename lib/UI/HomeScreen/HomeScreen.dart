@@ -26,6 +26,7 @@ import 'package:kisanweb/UI/Intro/splash_one.dart';
 
 //import 'package:kisanweb/UI/NotficationScreen/Notifications.dart';
 import 'package:kisanweb/UI/Profile/BasicProfile.dart';
+import 'package:kisanweb/UI/SearchScreen/SearchScreen.dart';
 
 //import 'package:kisanweb/UI/SearchScreen/SearchScreen.dart';
 //import 'package:kisanweb/UI/Subscribe/SubscribeToMembership.dart';
@@ -649,11 +650,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),*/
                       Container(
-                        width: getProportionateScreenWidth(600),
-                        height: getProportionateScreenHeight(54),
+                        width: 600,
+                        height: 54,
                         child: TextField(
                           onTap: () {
-                            //push(context, SearchScreen());
+                            push(context, SearchScreen());
                           },
                           decoration: InputDecoration(
                               prefixIcon: Icon(
@@ -866,11 +867,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Drawer(
       child: Container(
           color: Color(COLOR_BACKGROUND),
-          padding: EdgeInsets.symmetric(
+          /*padding: EdgeInsets.symmetric(
               horizontal: getProportionateScreenHeight(30),
-              vertical: getProportionateScreenHeight(50)),
+              vertical: getProportionateScreenHeight(50)),*/
           child: Column(
             children: [
+              SizedBox(height: 40,),
               DrawerHeader(context),
               /*Container(
                 height: getProportionateScreenHeight(500),
@@ -894,6 +896,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 text: getTranslated(context, 'home'),
                 onPressed: () {},
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
+              ),
               DrawerSvgItem(
                 icon: "assets/icons/webinarOptIcon.svg",
                 text: "Webinar",
@@ -902,27 +908,40 @@ class _HomeScreenState extends State<HomeScreen> {
                   push(context, LanguageScreen(2));*/
                 },
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
+              ),
               DrawerSvgItem(
                 icon: "assets/icons/shortlisticon.svg",
                 text: "Wishlist",
                 onPressed: () {},
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
+              ),
               DrawerSvgItem(
                 icon: "assets/icons/callHistoryIcon.svg",
                 text: "History",
                 onPressed: () {},
               ),
-              //
+              Container(height: 1.5,color: Colors.white.withOpacity(0.5),),
               DrawerItem(
                 icon: Icons.calendar_today_rounded,
                 text: getTranslated(context, 'my_webinars'),
                 onPressed: () {},
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
+              ),
               DrawerSvgItem(
-                icon: "assets/icons/callHistoryIcon.svg",
-                text: "History",
+                icon: "assets/icons/WhiteSubscribeIcon.svg",
+                text: "My Pass",
                 onPressed: () {},
               ),
+              Container(height: 1.5,color: Colors.white.withOpacity(0.5),),
               /*DrawerItem(
                 icon: Icons.language,
                 text: getTranslated(context, 'language'),
@@ -936,15 +955,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 text: "Settings",
                 onPressed: () {},
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
+              ),
               DrawerItem(
                 icon: Icons.share,
                 text: getTranslated(context, 'invite_friends'),
                 onPressed: () {},
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
+              ),
               DrawerItem(
                 icon: Icons.help,
                 text: "FAQ & Support",
                 onPressed: () {},
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
               ),
               /*DrawerItem(
                 icon: Icons.info,
@@ -955,6 +986,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.description_rounded,
                 text: getTranslated(context, 'termandprivacypolicy'),
                 onPressed: () {},
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
               ),
               // DrawerItem(
               //   icon: Icons.logout,
@@ -1288,30 +1323,23 @@ class DrawerSvgItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
-      child: Column(
-        children: [
-          ListTile(
-              visualDensity: VisualDensity(vertical: -1, horizontal: 0),
-              title: Row(
-                children: <Widget>[
-                  SvgPicture.asset(icon,color: Colors.white,height: 18,),
-                  Padding(
-                    padding: EdgeInsets.only(left: 8.0),
-                    child: Text(
-                      text,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: getProportionateScreenHeight(15),
-                          fontFamily: 'Poppins Medium'),
-                    ),
-                  )
-                ],
-              )),
-          Container(
-            height: getProportionateScreenHeight(1),
-            color: Colors.white.withOpacity(0.5),
-          ),
-        ],
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+        child: ListTile(
+            visualDensity: VisualDensity(vertical: -1, horizontal: 0),
+            title: Row(
+              children: <Widget>[
+                SvgPicture.asset(icon,color: Colors.white,height: getProportionateScreenHeight(25),),
+                SizedBox(width: getProportionateScreenWidth(10),),
+                Text(
+                  text,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: getProportionateScreenHeight(15),
+                      fontFamily: 'Poppins Medium'),
+                )
+              ],
+            )),
       ),
     );
   }
@@ -1333,33 +1361,27 @@ class DrawerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
-      child: Column(
-        children: [
-          ListTile(
-              visualDensity: VisualDensity(vertical: -1, horizontal: 0),
-              title: Row(
-                children: <Widget>[
-                  Icon(
-                    icon,
-                    color: Colors.white,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 8.0),
-                    child: Text(
-                      text,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: getProportionateScreenHeight(15),
-                          fontFamily: 'Poppins Medium'),
-                    ),
-                  )
-                ],
-              )),
-          Container(
-            height: getProportionateScreenHeight(1),
-            color: Colors.white.withOpacity(0.5),
-          ),
-        ],
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+        child: ListTile(
+            visualDensity: VisualDensity(vertical: -1, horizontal: 0),
+            title: Row(
+              children: <Widget>[
+                Icon(
+                  icon,
+                  color: Colors.white,
+                  size: getProportionateScreenHeight(25),
+                ),
+                SizedBox(width: getProportionateScreenWidth(10),),
+                Text(
+                  text,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: getProportionateScreenHeight(15),
+                      fontFamily: 'Poppins Medium'),
+                )
+              ],
+            )),
       ),
     );
   }

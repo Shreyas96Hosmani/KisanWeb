@@ -28,7 +28,7 @@ class LoginWithOTP extends StatefulWidget {
 }
 
 class _LoginWithOTPState extends State<LoginWithOTP> {
-  String countryCode = '+64';
+  String countryCode = '+91';
   String errorMessage = '';
 
   TextEditingController phoneController = TextEditingController();

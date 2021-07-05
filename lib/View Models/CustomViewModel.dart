@@ -254,7 +254,7 @@ class CustomViewModel extends ChangeNotifier {
 
     if (response != "error") {
       print("GetProfileData");
-      var responseDecoded = jsonDecode(response.body);
+      var responseDecoded = jsonDecode(utf8.decode(response.bodyBytes));
       userData = new UserDataParser(
         responseDecoded['email'].toString(),
         responseDecoded['username'].toString(),

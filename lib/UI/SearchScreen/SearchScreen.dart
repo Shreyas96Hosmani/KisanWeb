@@ -97,12 +97,14 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     final providerListener = Provider.of<CustomViewModel>(context);
 
+    print("Category Listist${((providerListener.categoryList.length)/4).ceil()}");
+
     return showSearchMenu == true
         ? Scaffold(
             backgroundColor: Colors.white,
             body: SingleChildScrollView(
                 child: Container(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(699)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -133,40 +135,40 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                   recetSearches != null
                       ? recetSearches.length > 0
-                          ? Container(
-                              height: recetSearches.length * 50.0,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 15),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Color(0xFFF0FFF7)),
-                              child: MediaQuery.removePadding(
-                                removeTop: true,
-                                context: context,
-                                child: ListView.separated(
-                                  itemCount: recetSearches.length,
-                                  separatorBuilder: (context, index) {
-                                    return Divider(
-                                      color: Color(0xFF3DA86F).withOpacity(0.2),
-                                      thickness: 2,
-                                      height: getProportionateScreenHeight(28),
-                                    );
-                                  },
-                                  itemBuilder: (context, index) {
-                                    return RecentSearch(
-                                        context,
-                                        recetSearches[
-                                            recetSearches.length - 1 - index]);
-                                  },
-                                ),
-                              ),
-                            )
-                          : SizedBox(
-                              height: 1,
-                            )
+                      ? Container(
+                    height: recetSearches.length * 50.0,
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 15),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Color(0xFFF0FFF7)),
+                    child: MediaQuery.removePadding(
+                      removeTop: true,
+                      context: context,
+                      child: ListView.separated(
+                        itemCount: recetSearches.length,
+                        separatorBuilder: (context, index) {
+                          return Divider(
+                            color: Color(0xFF3DA86F).withOpacity(0.2),
+                            thickness: 2,
+                            height: getProportionateScreenHeight(28),
+                          );
+                        },
+                        itemBuilder: (context, index) {
+                          return RecentSearch(
+                              context,
+                              recetSearches[
+                              recetSearches.length - 1 - index]);
+                        },
+                      ),
+                    ),
+                  )
                       : SizedBox(
-                          height: 1,
-                        ),
+                    height: 1,
+                  )
+                      : SizedBox(
+                    height: 1,
+                  ),
                   SizedBox(
                     height: 15,
                   ),
@@ -179,82 +181,84 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                   providerListener.categoryList.length > 0
                       ? Container(
-                          height: ((providerListener.categoryList.length)
-                                  .toDouble()) *
-                              30,
-                          child: GridView.count(
-                            shrinkWrap: true,
-                            physics: ClampingScrollPhysics(),
-                            crossAxisCount: 4,
-                            mainAxisSpacing: 20,
-                            children: List.generate(
-                                providerListener.categoryList.length, (index) {
-                              return InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    if (ids.contains(providerListener
-                                        .categoryList[index].id)) {
-                                      ids.remove(providerListener
-                                          .categoryList[index].id);
-                                    } else {
-                                      ids.add(providerListener
-                                          .categoryList[index].id);
-                                    }
-                                  });
-                                },
-                                child: Column(
-                                  children: [
-                                    ids.contains(providerListener
-                                            .categoryList[index].id)
-                                        ? Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 15),
-                                            child: Container(
-                                              padding: EdgeInsets.all(3),
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(50)),
-                                                color: Color(COLOR_BACKGROUND),
-                                              ),
-                                              child: Icon(
-                                                Icons.check,
-                                                size: 10,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          )
-                                        : SizedBox(
-                                            height: 1,
-                                          ),
-                                    Container(
-                                      height: 40,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: NetworkImage(providerListener
-                                                    .categoryList[index]
-                                                    .app_image_url ??
-                                                ""),
-                                            fit: BoxFit.fill),
-                                      ),
+                    height: ((providerListener.categoryList.length)/5).ceil().toDouble() *
+                        100,
+                    child: GridView.count(
+                      crossAxisCount: 5,
+                      mainAxisSpacing: 15,
+                      childAspectRatio: 0.9,
+                      children: List.generate(
+                          providerListener.categoryList.length, (index) {
+                        return InkWell(
+                          onTap: () {
+                            setState(() {
+                              if (ids.contains(providerListener
+                                  .categoryList[index].id)) {
+                                ids.remove(providerListener
+                                    .categoryList[index].id);
+                              } else {
+                                ids.add(providerListener
+                                    .categoryList[index].id);
+                              }
+                            });
+                          },
+                          child: Container(
+                            child: Column(
+                              children: [
+                                ids.contains(providerListener
+                                    .categoryList[index].id)
+                                    ? Padding(
+                                  padding:
+                                  const EdgeInsets.only(left: 15),
+                                  child: Container(
+                                    padding: EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(50)),
+                                      color: Color(COLOR_BACKGROUND),
                                     ),
-                                    Text(
-                                      providerListener.categoryList[index].name,
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 10,
-                                          color: Color(0xFF3B3B3B),
-                                          fontWeight: FontWeight.w500),
+                                    child: Icon(
+                                      Icons.check,
+                                      size: 10,
+                                      color: Colors.white,
                                     ),
-                                  ],
+                                  ),
+                                )
+                                    : SizedBox(
+                                  height: 1,
                                 ),
-                              );
-                            }),
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: NetworkImage(providerListener
+                                            .categoryList[index]
+                                            .app_image_url ??
+                                            ""),
+                                        fit: BoxFit.fill),
+                                  ),
+                                ),
+                                Text(
+                                  providerListener.categoryList[index].name,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 10,
+                                      color: Color(0xFF3B3B3B),
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
                           ),
-                        )
+                        );
+                      }),
+                    ),
+                  )
                       : SizedBox(
-                          height: 1,
-                        ),
+                    height: 1,
+                  ),
                   SizedBox(
                     height: 100,
                   )

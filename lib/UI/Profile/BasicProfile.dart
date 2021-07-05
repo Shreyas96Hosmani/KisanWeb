@@ -1020,7 +1020,7 @@ class _BasicProfileState extends State<BasicProfile> {
             children: [
               SvgPicture.asset("assets/icons/greenKisan_Logo.svg",height: getProportionateScreenHeight(80),),
               Container(
-                height: getProportionateScreenHeight(881),
+                height: 600,
                 width: getProportionateScreenWidth(486),
                 padding: EdgeInsets.all(getProportionateScreenWidth(32)),
                 decoration: BoxDecoration(

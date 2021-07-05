@@ -153,7 +153,7 @@ class _SocialAuthState extends State<SocialAuth> {
         height: screenHeight,
         width: screenWidth,
         padding:
-            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(30)),
+            EdgeInsets.symmetric(horizontal: 30),
         decoration: BoxDecoration(
             color: Color(constants.COLOR_WHITE),
             borderRadius: BorderRadius.circular(25)),
@@ -162,7 +162,7 @@ class _SocialAuthState extends State<SocialAuth> {
           children: [
             SvgPicture.asset("assets/icons/greenKisan_Logo.svg",height: getProportionateScreenHeight(65),),
             SizedBox(
-              height: getProportionateScreenHeight(20),
+              height: (20),
             ),
             Container(
               alignment: Alignment.topCenter,
@@ -396,8 +396,8 @@ class _SocialAuthState extends State<SocialAuth> {
           color: Color(0xFFF3FFF0),
           child: Center(
               child: Container(
-                  width: getProportionateScreenWidth(486),
-                  height: getProportionateScreenHeight(727),
+                  width: 486,
+                  height: 727,
                   child: buildLanguagaeWidget(context)
               )
           )

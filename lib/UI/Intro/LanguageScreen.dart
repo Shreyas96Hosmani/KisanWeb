@@ -179,8 +179,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
       body: Container(
           child: Center(
             child: Container(
-                width: getProportionateScreenWidth(486),
-                height: getProportionateScreenHeight(727),
+                width: 486,
+                height: 727,
                 child: buildLanguagaeWidget(context)),
           )),
     );
