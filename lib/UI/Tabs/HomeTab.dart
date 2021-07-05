@@ -13,6 +13,7 @@ import 'package:kisanweb/Helpers/size_config.dart';
 import 'package:kisanweb/Models/AdsObject.dart';
 import 'package:kisanweb/Models/WebinarListParser.dart';
 import 'package:kisanweb/UI/BannerEvents/event_page.dart';
+import 'package:kisanweb/UI/Categories/categories_page.dart';
 import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
 import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
 
@@ -1804,19 +1805,18 @@ Widget CategoryTiles(BuildContext context, CategoryListParser categoryOBJ) {
         ),
         child: ElevatedButton(
           onPressed: () {
-            //            push(
-//                context,
-//                CategoriesPage(
-//                    languageCode == "en"
-//                        ? categoryOBJ.app_name_english ?? ""
-//                        : languageCode == "hi"
-//                            ? utf8.decode(categoryOBJ.app_name_hindi.runes
-//                                    .toList()) ??
-//                                ""
-//                            : utf8.decode(categoryOBJ.app_name_marathi.runes
-//                                    .toList()) ??
-//                                "",
-//                    categoryOBJ.id));
+            push(context,
+               CategoriesPage(
+                   languageCode == "en"
+                       ? categoryOBJ.app_name_english ?? ""
+                       : languageCode == "hi"
+                           ? utf8.decode(categoryOBJ.app_name_hindi.runes
+                                   .toList()) ??
+                               ""
+                           : utf8.decode(categoryOBJ.app_name_marathi.runes
+                                   .toList()) ??
+                               "",
+                   categoryOBJ.id));
           },
           style: ElevatedButton.styleFrom(
             primary: Colors.white,

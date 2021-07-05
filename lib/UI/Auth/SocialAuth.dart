@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 //import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kisanweb/Helpers/constants.dart' as constants;
@@ -157,7 +158,12 @@ class _SocialAuthState extends State<SocialAuth> {
             color: Color(constants.COLOR_WHITE),
             borderRadius: BorderRadius.circular(25)),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SvgPicture.asset("assets/icons/greenKisan_Logo.svg",height: getProportionateScreenHeight(65),),
+            SizedBox(
+              height: getProportionateScreenHeight(20),
+            ),
             Container(
               alignment: Alignment.topCenter,
               child: Text(
@@ -392,7 +398,10 @@ class _SocialAuthState extends State<SocialAuth> {
               child: Container(
                   width: getProportionateScreenWidth(486),
                   height: getProportionateScreenHeight(727),
-                  child: buildLanguagaeWidget(context)))),
+                  child: buildLanguagaeWidget(context)
+              )
+          )
+      ),
     );
   }
 }

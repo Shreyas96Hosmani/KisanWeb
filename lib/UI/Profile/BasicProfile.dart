@@ -404,7 +404,7 @@ class _BasicProfileState extends State<BasicProfile> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              /*Container(
+              Container(
                 margin: EdgeInsets.only(left: getProportionateScreenWidth(20)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -434,7 +434,7 @@ class _BasicProfileState extends State<BasicProfile> {
                             ),
                           )),
                     ),
-                    SizedBox(
+                    /*SizedBox(
                       width: getProportionateScreenWidth(20),
                     ),
                     Container(
@@ -452,7 +452,7 @@ class _BasicProfileState extends State<BasicProfile> {
                     ),
                     SizedBox(
                       width: getProportionateScreenWidth(20),
-                    ),
+                    ),*/
                     Text(
                       getTranslated(context, 'your_details'),
                       style: GoogleFonts.poppins(
@@ -462,7 +462,7 @@ class _BasicProfileState extends State<BasicProfile> {
                     ),
                   ],
                 ),
-              ),*/
+              ),
               GestureDetector(
                 onTap:
                     () => /*_settingModalBottomSheetOne(context)*/ getImageOne(),
@@ -708,7 +708,6 @@ class _BasicProfileState extends State<BasicProfile> {
                       ),
                     ),
                   ),
-
             /*    fetched == true
                 ? Center(
                     child: Container(
