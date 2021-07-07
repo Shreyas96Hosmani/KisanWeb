@@ -64,7 +64,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 child: Padding(
                   padding: EdgeInsets.only(left: 20, right: 20, top: 20),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       BackButton(),
@@ -106,7 +106,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
                           ],
                         ),
                       ),
-                      ShareButton(),
                     ],
                   ),
                 ),
@@ -152,8 +151,14 @@ class _CategoriesPageState extends State<CategoriesPage> {
     var screenWidth = MediaQuery.of(context).size.width;
     final providerListener = Provider.of<CustomViewModel>(context);
 
-    return ListView.builder(
+    return GridView.builder(
         scrollDirection: Axis.vertical,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 4,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 370/70
+        ),
         primary: false,
         shrinkWrap: true,
         itemCount: providerListener.subcategoryList.length,
@@ -208,6 +213,15 @@ class _CategoriesPageState extends State<CategoriesPage> {
                       ),
                     ),
                     Spacer(),
+                    Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage("${providerListener.subcategoryList[index].image}")
+                        )
+                      ),
+                    ),
                     Icon(
                       Icons.arrow_forward_ios,
                       size: 20,

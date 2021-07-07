@@ -150,8 +150,8 @@ class _SocialAuthState extends State<SocialAuth> {
 
     buildLanguagaeWidget(BuildContext context) {
       return Container(
-        height: screenHeight,
-        width: screenWidth,
+        height: getProportionateScreenHeight(727),
+        width: getProportionateScreenWidth(486),
         padding:
             EdgeInsets.symmetric(horizontal: 30),
         decoration: BoxDecoration(
@@ -396,8 +396,6 @@ class _SocialAuthState extends State<SocialAuth> {
           color: Color(0xFFF3FFF0),
           child: Center(
               child: Container(
-                  width: 486,
-                  height: 727,
                   child: buildLanguagaeWidget(context)
               )
           )

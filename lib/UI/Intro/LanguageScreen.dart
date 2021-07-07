@@ -48,13 +48,14 @@ class _LanguageScreenState extends State<LanguageScreen> {
 
     buildLanguagaeWidget(BuildContext context) {
       return Container(
-        height: getProportionateScreenHeight(727),
-        width: getProportionateScreenWidth(486),
+        height: 500,
+        width: 300,
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
             color: Color(constants.COLOR_WHITE),
             borderRadius: BorderRadius.circular(25)),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               alignment: Alignment.topCenter,
@@ -179,8 +180,6 @@ class _LanguageScreenState extends State<LanguageScreen> {
       body: Container(
           child: Center(
             child: Container(
-                width: 486,
-                height: 727,
                 child: buildLanguagaeWidget(context)),
           )),
     );

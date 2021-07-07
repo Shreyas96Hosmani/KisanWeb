@@ -32,14 +32,14 @@ const API_KEY = "";
 const currencySymbl = "\₹";
 
 //dev mainurl
-/*const apiUrl = "https://id.kisanlab.com";
-const client_id = "8a8379c4-dcd8-4ede-87ee-62e485a19f04";
-const client_secret = "02dbd960-a02d-4f74-b3da-ad332642b2fc";*/
-
-//QA Server
-const apiUrl = "https://id.kisan.co.in/";
+const apiUrl = "https://id.kisanlab.com";
 const client_id = "8a8379c4-dcd8-4ede-87ee-62e485a19f04";
 const client_secret = "02dbd960-a02d-4f74-b3da-ad332642b2fc";
+
+//QA Server
+/*const apiUrl = "https://id.kisan.co.in/";
+const client_id = "8a8379c4-dcd8-4ede-87ee-62e485a19f04";
+const client_secret = "02dbd960-a02d-4f74-b3da-ad332642b2fc";*/
 
 const kisannet =
     "https://kisan-oauth-prod.s3-ap-southeast-1.amazonaws.com/kisannet/kisannet.json";

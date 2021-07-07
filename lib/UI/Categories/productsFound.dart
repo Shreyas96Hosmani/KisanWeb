@@ -77,60 +77,69 @@ class _productsFoundState extends State<productsFound> {
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(100),
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 15),
+                padding: EdgeInsets.symmetric(horizontal: 200),
                 color: Colors.white,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      BackButton(),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        width: getProportionateScreenWidth(240),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.title,
-                              overflow: TextOverflow.clip,
-                              style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              (providerListener.productsCouts.products ?? 0)
-                                      .toString() +
-                                  "  " +
-                                  getTranslated(context, 'products')
-                                      .toString() +
-                                  " | " +
-                                  (providerListener.productsCouts.companies ??
-                                          0)
-                                      .toString() +
-                                  " " +
-                                  getTranslated(context, 'companies')
-                                      .toString(),
-                              style: GoogleFonts.poppins(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    BackButton(),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                      width: getProportionateScreenWidth(240),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.title,
+                            overflow: TextOverflow.clip,
+                            style: GoogleFonts.poppins(
                                 color: Colors.black,
-                                fontSize: 12,
-                              ),
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            (providerListener.productsCouts.products ?? 0)
+                                    .toString() +
+                                "  " +
+                                getTranslated(context, 'products')
+                                    .toString() +
+                                " | " +
+                                (providerListener.productsCouts.companies ??
+                                        0)
+                                    .toString() +
+                                " " +
+                                getTranslated(context, 'companies')
+                                    .toString(),
+                            style: GoogleFonts.poppins(
+                              color: Colors.black,
+                              fontSize: 12,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      ShareButton(),
-                    ],
-                  ),
+                    ),
+                    Spacer(),
+                    Container(
+                      color: Colors.white,
+                      child: ProductFoundButtonNavBar(
+                        selectedTab: _selectedTab,
+                        tabPressed: (num) {
+                          _tabPageController.animateToPage(num,
+                              duration: Duration(
+                                  milliseconds: ANIMATION_DURATION),
+                              curve: Curves.easeOutCubic);
+                        },
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
-            bottomNavigationBar: Container(
+            /*bottomNavigationBar: Container(
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.only(top: 20),
@@ -143,8 +152,9 @@ class _productsFoundState extends State<productsFound> {
                   },
                 ),
               ),
-            ),
+            ),*/
             body: Container(
+              padding: EdgeInsets.symmetric(horizontal: 200),
               child: PageView(
                 controller: _tabPageController,
                 onPageChanged: (num) {
@@ -160,7 +170,7 @@ class _productsFoundState extends State<productsFound> {
                           height: (providerListener
                                   .productsListbycatidsandsearchstring.length /
                               2.ceil() *
-                              200),
+                              210),
                           child: GridView.builder(
                               scrollDirection: Axis.vertical,
                               primary: false,
@@ -169,117 +179,118 @@ class _productsFoundState extends State<productsFound> {
                                   .productsListbycatidsandsearchstring.length,
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 30,
-                                      mainAxisSpacing: 20),
+                                      crossAxisCount: 5,
+                                      crossAxisSpacing: 40,
+                                      childAspectRatio: 0.9,
+                                      mainAxisSpacing: 40),
                               itemBuilder: (BuildContext context, int index) {
-                                return Padding(
-                                    padding: EdgeInsets.all(0.0),
-                                    child: Container(
-                                      width: 150,
-                                      height: 200,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
-                                        color: Colors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Colors.grey[200],
-                                              blurRadius: 1,
-                                              spreadRadius: 1)
-                                        ],
-                                      ),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          push(
-                                              context,
-                                              DetailedProducts(
-                                                  providerListener
-                                                      .productsListbycatidsandsearchstring[
-                                                          index]
-                                                      .id,
-                                                  providerListener
-                                                      .productsListbycatidsandsearchstring[
-                                                          index]
-                                                      .user_id));
-                                        },
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              height: 110,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(10),
-                                                ),
-                                                color: Colors.green[700],
-                                                image: DecorationImage(
-                                                  image: providerListener
-                                                              .productsListbycatidsandsearchstring[
-                                                                  index]
-                                                              .media_url ==
-                                                          null
-                                                      ? AssetImage(
-                                                      "assets/images/product_placeholder.png")
-                                                      : NetworkImage(
-                                                          providerListener
-                                                              .productsListbycatidsandsearchstring[
-                                                                  index]
-                                                              .media_url), fit: BoxFit.cover,
-                                                ),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Colors.grey[200],
-                                                      blurRadius: 1,
-                                                      spreadRadius: 1)
-                                                ],
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10)),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey[200],
+                                          blurRadius: 1,
+                                          spreadRadius: 1)
+                                    ],
+                                  ),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      push(
+                                          context,
+                                          DetailedProducts(
+                                              providerListener
+                                                  .productsListbycatidsandsearchstring[
+                                                      index]
+                                                  .id,
+                                              providerListener
+                                                  .productsListbycatidsandsearchstring[
+                                                      index]
+                                                  .user_id));
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
                                               ),
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.all(5),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    providerListener
-                                                        .productsListbycatidsandsearchstring[
-                                                            index]
-                                                        .title_english,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: GoogleFonts.poppins(
-                                                      color: Colors.black,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    parseHtmlString(providerListener
-                                                        .productsListbycatidsandsearchstring[
-                                                            index]
-                                                        .organisation_name),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: GoogleFonts.poppins(
-                                                      color: Colors.grey[700],
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ],
+                                              color: Colors.green[700],
+                                              image: DecorationImage(
+                                                image: providerListener
+                                                            .productsListbycatidsandsearchstring[
+                                                                index]
+                                                            .media_url ==
+                                                        null
+                                                    ? AssetImage(
+                                                        "assets/images/product_placeholder.png")
+                                                    : NetworkImage(
+                                                        providerListener
+                                                            .productsListbycatidsandsearchstring[
+                                                                index]
+                                                            .media_url),
+                                                fit: BoxFit.cover,
                                               ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.grey[200],
+                                                    blurRadius: 1,
+                                                    spreadRadius: 1)
+                                              ],
                                             ),
-                                          ],
+                                            height: getProportionateScreenHeight(200),
+                                          ),
                                         ),
-                                      ),
-                                    ));
+                                        Container(
+                                          padding: EdgeInsets.all(5),
+                                          height: getProportionateScreenHeight(90),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                providerListener
+                                                    .productsListbycatidsandsearchstring[
+                                                        index]
+                                                    .title_english,
+                                                overflow:
+                                                    TextOverflow.ellipsis,
+                                                style: GoogleFonts.poppins(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight:
+                                                      FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                parseHtmlString(providerListener
+                                                    .productsListbycatidsandsearchstring[
+                                                        index]
+                                                    .organisation_name),
+                                                overflow:
+                                                    TextOverflow.ellipsis,
+                                                style: GoogleFonts.poppins(
+                                                  color: Colors.grey[700],
+                                                  fontSize: 12,
+                                                  fontWeight:
+                                                      FontWeight.w400,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
                               }),
                         )
                       : SizedBox(
@@ -295,10 +306,16 @@ class _productsFoundState extends State<productsFound> {
                                   .toDouble() *
                               120),
                           padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: ListView.builder(
+                          child: GridView.builder(
                               scrollDirection: Axis.vertical,
                               primary: false,
                               shrinkWrap: true,
+                              gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 40,
+                                  childAspectRatio: 466/121,
+                                  mainAxisSpacing: 40),
                               itemCount: providerListener
                                   .companiessListbycatidsandsearchstring.length,
                               itemBuilder: (BuildContext context, int index) {

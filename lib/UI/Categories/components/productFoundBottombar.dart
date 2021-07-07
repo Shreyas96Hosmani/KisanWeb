@@ -33,11 +33,11 @@ class _ProductFoundButtonNavBarState extends State<ProductFoundButtonNavBar> {
     _selectedTabs = widget.selectedTab ?? 0;
 
     return Container(
-        height: getProportionateScreenHeight(65),
-        width: SizeConfig.screenWidth,
+        height: 55,
+        width: 350,
         decoration: BoxDecoration(
             color: Color(COLOR_BACKGROUND),
-            borderRadius: BorderRadius.only(topRight: Radius.circular(15),topLeft: Radius.circular(15),),
+            borderRadius: BorderRadius.circular(40),
             boxShadow: [
               BoxShadow(
                 color: Color(COLOR_ACCENT).withOpacity(0.3),

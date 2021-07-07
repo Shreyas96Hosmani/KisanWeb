@@ -991,17 +991,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
               ),
-              // DrawerItem(
-              //   icon: Icons.logout,
-              //   text: "Logout",
-              //   onPressed: () async {
-              //     //TODO: remove if not needed
-              //     SharedPreferences prefs =
-              //         await SharedPreferences.getInstance();
-              //     await prefs.clear();
-              //     pushReplacement(context, InitialScreen("HomeScreen", 0, 0));
-              //   },
-              // ),
+              DrawerItem(
+                icon: Icons.logout,
+                text: "Logout",
+                onPressed: () async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  await prefs.clear();
+                  pushReplacement(context, InitialScreen("HomeScreen", 0, 0));
+                },
+              ),
             ],
           )),
     );
