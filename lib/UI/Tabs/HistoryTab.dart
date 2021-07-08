@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:kisanweb/Helpers/constants.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
+import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
 import 'package:kisanweb/View%20Models/CustomViewModel.dart';
 import 'package:kisanweb/localization/language_constants.dart';
 import 'package:provider/provider.dart';
@@ -42,19 +43,24 @@ class _CallHistoryState extends State<CallHistory> {
 
     buildList(BuildContext context) {
       return _isloaded == true
-          ? ListView.builder(
+          ? GridView.builder(
               scrollDirection: Axis.vertical,
               primary: false,
+              gridDelegate:
+              SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 10,
+                childAspectRatio: 461/131,
+                mainAxisSpacing: 10),
               shrinkWrap: true,
               itemCount: providerListener.callHistoryList.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
-                  width: screenWidth,
-                  height: 100,
+                  width: 461,
+                  height: 131,
                   padding: EdgeInsets.symmetric(
                       vertical: getProportionateScreenWidth(15),
                       horizontal: getProportionateScreenWidth(10)),
-                  margin: EdgeInsets.only(bottom: 15),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -283,12 +289,20 @@ class _CallHistoryState extends State<CallHistory> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.symmetric(horizontal: 200),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SearchBar(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CustomBackButton(text: "",),
+                  SizedBox(width: 10,),
+                  SearchBar(),
+                ],
+              ),
               buildList(context),
             ],
           ),
@@ -317,46 +331,44 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      keyboardType: TextInputType.text,
-      textInputAction: TextInputAction.done,
-      focusNode: focusSearch,
-      style: GoogleFonts.poppins(
-          fontWeight: FontWeight.w600, color: Colors.black, fontSize: 14),
-      decoration: InputDecoration(
-        prefixIcon: Icon(
-          Icons.search,
-          color: Colors.grey,
-          size: 30,
-        ),
-        hintText: "Your activity",
-        hintStyle: GoogleFonts.poppins(
-            color: Colors.grey[600],
-            fontSize: 18,
-            letterSpacing: 1,
-            fontWeight: FontWeight.w600),
-        //filled: true,
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: const BorderRadius.all(
-            const Radius.circular(10.0),
+    return Container(
+      width: 300,
+      child: TextField(
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.done,
+        focusNode: focusSearch,
+        style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w600, color: Colors.black, fontSize: 14),
+        decoration: InputDecoration(
+          hintText: "Your activity",
+          hintStyle: GoogleFonts.poppins(
+              color: Colors.grey[600],
+              fontSize: 18,
+              letterSpacing: 1,
+              fontWeight: FontWeight.w600),
+          //filled: true,
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: const BorderRadius.all(
+              const Radius.circular(10.0),
+            ),
           ),
-        ),
-        //fillColor: Colors.grey.shade100,
-        suffixIconConstraints: BoxConstraints.tightFor(height: 50),
-        suffixIcon: GestureDetector(
-          onTap: widget.onPressed,
-          child: Padding(
-            padding: EdgeInsetsDirectional.only(end: 10),
-            child: SvgPicture.asset(
-              "assets/icons/searchIcon.svg",
-              color: Colors.grey,
+          //fillColor: Colors.grey.shade100,
+          suffixIconConstraints: BoxConstraints.tightFor(height: 50),
+          suffixIcon: GestureDetector(
+            onTap: widget.onPressed,
+            child: Padding(
+              padding: EdgeInsetsDirectional.only(end: 10),
+              child: SvgPicture.asset(
+                "assets/icons/searchIcon.svg",
+                color: Colors.grey,
+              ),
             ),
           ),
         ),
+        onEditingComplete: () {},
+        controller: widget.textEditingController,
       ),
-      onEditingComplete: () {},
-      controller: widget.textEditingController,
     );
   }
 }

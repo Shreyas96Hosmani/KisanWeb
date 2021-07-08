@@ -150,8 +150,8 @@ class _SocialAuthState extends State<SocialAuth> {
 
     buildLanguagaeWidget(BuildContext context) {
       return Container(
-        height: getProportionateScreenHeight(727),
-        width: getProportionateScreenWidth(486),
+        height: 500,
+        width: 350,
         padding:
             EdgeInsets.symmetric(horizontal: 30),
         decoration: BoxDecoration(
@@ -165,7 +165,6 @@ class _SocialAuthState extends State<SocialAuth> {
               height: (20),
             ),
             Container(
-              alignment: Alignment.topCenter,
               child: Text(
                 getTranslated(context, 'welcome') +
                     "\n" +
@@ -196,8 +195,8 @@ class _SocialAuthState extends State<SocialAuth> {
                       });
                     },
                     child: Container(
-                        height: getProportionateScreenHeight(60),
-                        width: getProportionateScreenWidth(320),
+                        height: (60),
+                        width: (320),
                         decoration: BoxDecoration(
                           color: Color(constants.COLOR_BACKGROUND),
                         ),
@@ -209,8 +208,8 @@ class _SocialAuthState extends State<SocialAuth> {
                               width: 2,
                             ),
                             Container(
-                              height: getProportionateScreenHeight(55),
-                              width: getProportionateScreenHeight(55),
+                              height: (55),
+                              width: (55),
                               color: Colors.white,
                               child: Center(
                                 child: Icon(
@@ -227,7 +226,7 @@ class _SocialAuthState extends State<SocialAuth> {
                                 maxLines: 2,
                                 style: GoogleFonts.poppins(
                                   color: Colors.white,
-                                  fontSize: getProportionateScreenHeight(18),
+                                  fontSize: (18),
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -272,8 +271,8 @@ class _SocialAuthState extends State<SocialAuth> {
                       // _handleSignIn();
                     },
                     child: Container(
-                        height: getProportionateScreenHeight(60),
-                        width: getProportionateScreenWidth(320),
+                        height: (60),
+                        width: (320),
                         decoration: BoxDecoration(
                           color: Colors.blue,
                         ),
@@ -285,8 +284,8 @@ class _SocialAuthState extends State<SocialAuth> {
                               width: 2,
                             ),
                             Container(
-                              height: getProportionateScreenHeight(55),
-                              width: getProportionateScreenHeight(55),
+                              height: (55),
+                              width: (55),
                               color: Colors.white,
                               child: Center(
                                 child: Container(

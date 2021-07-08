@@ -208,8 +208,8 @@ class _EnterOTPState extends State<EnterOTP> {
                 height: 15,
               ),
               Container(
-                width: getProportionateScreenWidth(486),
-                height: getProportionateScreenHeight(727),
+                width:400,
+                height: 600,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
                     color: Colors.white),
@@ -546,7 +546,7 @@ class _EnterOTPState extends State<EnterOTP> {
                         "I didn’t get the code",
                         textAlign: TextAlign.center,
                         style: GoogleFonts.poppins(
-                          fontSize: getProportionateScreenHeight(16),
+                          fontSize: 16,
                           fontWeight: FontWeight.normal,
                           color: Color(0xff696969),
                         ),

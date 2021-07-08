@@ -27,6 +27,7 @@ import 'package:kisanweb/UI/Intro/splash_one.dart';
 //import 'package:kisanweb/UI/NotficationScreen/Notifications.dart';
 import 'package:kisanweb/UI/Profile/BasicProfile.dart';
 import 'package:kisanweb/UI/SearchScreen/SearchScreen.dart';
+import 'package:kisanweb/UI/Subscribe/SubscribeToMembership.dart';
 
 //import 'package:kisanweb/UI/SearchScreen/SearchScreen.dart';
 //import 'package:kisanweb/UI/Subscribe/SubscribeToMembership.dart';
@@ -1080,7 +1081,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ? providerListener.membershipInfo.status != "active"
                   ? InkWell(
                       onTap: () {
-                        //push(context, SubscribeToMembership());
+                        push(context, SubscribeToMembership());
                       },
                       child: Container(
                         width: 282,
@@ -1175,6 +1176,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   : InkWell(
                       onTap: () {
                         //push(context, SubscribeToMembership());
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(35)),
+                                  //this right here
+                                  child: SubscribeToMembership()
+                              );
+                            });
                       },
                       child: Container(
                         width: 282,

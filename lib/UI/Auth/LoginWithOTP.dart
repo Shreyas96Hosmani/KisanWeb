@@ -134,8 +134,8 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                   height: 15,
                 ),
                 Container(
-                  width: getProportionateScreenWidth(486),
-                  height: getProportionateScreenHeight(727),
+                  width: 400,
+                  height: 600,
                   padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
@@ -160,7 +160,7 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                         ),
                       ),
                       SizedBox(
-                        height: getProportionateScreenHeight(32),
+                        height: (32),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -168,7 +168,7 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                           Card(
                             elevation: 1,
                             child: Container(
-                              height: getProportionateScreenHeight(40),
+                              height: 40,
                               child: CountryCodePicker(
                                 onChanged: _onCountryChange,
                                 // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
@@ -211,7 +211,7 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                         ],
                       ),
                       SizedBox(
-                        height: getProportionateScreenHeight(30),
+                        height: 10,
                       ),
                       // Text(
                       //   errorMessage,
@@ -289,7 +289,7 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                                   ),
                                   WidgetSpan(
                                       child: SizedBox(
-                                    width: getProportionateScreenWidth(10),
+                                    width: (10),
                                   )),
                                   WidgetSpan(
                                     child: Image.asset(
@@ -299,7 +299,7 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                                   ),
                                   WidgetSpan(
                                       child: SizedBox(
-                                    width: getProportionateScreenWidth(10),
+                                    width: (10),
                                   )),
                                   TextSpan(
                                     text: getTranslated(context, 'whatsapp'),
@@ -316,12 +316,12 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                         )),
                       ),
                       SizedBox(
-                        height: getProportionateScreenHeight(35),
+                        height: 35,
                       ),
                       ConstrainedBox(
                         constraints: BoxConstraints.tightFor(
-                            width: getProportionateScreenWidth(320),
-                            height: getProportionateScreenHeight(60)),
+                            width: 320,
+                            height: 60),
                         child: ElevatedButton(
                           onPressed: () {
                             if (phoneController.text.toString() == "") {
@@ -361,7 +361,7 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                         ),
                       ),
                       SizedBox(
-                        height: getProportionateScreenHeight(20),
+                        height: 20,
                       ),
                       Text.rich(
                         TextSpan(
@@ -369,7 +369,7 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                                   'by_clicking_on_this_button_you_agree_with_the') +
                               " ",
                           style: TextStyle(
-                              fontSize: getProportionateScreenHeight(12),
+                              fontSize: 12,
                               color: Color(0xffCECECE)),
                           children: <TextSpan>[
                             TextSpan(
@@ -402,7 +402,7 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            width: getProportionateScreenWidth(65),
+                            width: 65,
                             height: 1,
                             color: Colors.grey[300],
                           ),
@@ -417,7 +417,7 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                             width: 10,
                           ),
                           Container(
-                            width: getProportionateScreenWidth(65),
+                            width: 65,
                             height: 1,
                             color: Colors.grey[300],
                           ),
@@ -431,8 +431,8 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                           // _handleSignIn();
                         },
                         child: Container(
-                            height: getProportionateScreenHeight(60),
-                            width: getProportionateScreenWidth(320),
+                            height: 60,
+                            width: 320,
                             decoration: BoxDecoration(
                               color: Colors.blue,
                             ),
@@ -444,8 +444,8 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                                   width: 2,
                                 ),
                                 Container(
-                                  height: getProportionateScreenHeight(55),
-                                  width: getProportionateScreenHeight(55),
+                                  height: 55,
+                                  width: 55,
                                   color: Colors.white,
                                   child: Center(
                                     child: Container(
@@ -461,7 +461,7 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                                     textScaleFactor: 1,
                                     style: GoogleFonts.poppins(
                                       color: Colors.white,
-                                      fontSize: getProportionateScreenHeight(18),
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -496,55 +496,55 @@ class _WAPopupConfirmationState extends State<WAPopupConfirmation> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: getProportionateScreenHeight(418),
-      width: getProportionateScreenWidth(331),
+      height: 418,
+      width: 331,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: getProportionateScreenWidth(45),
-                vertical: getProportionateScreenHeight(18)),
+                horizontal: (45),
+                vertical: (18)),
             child: Column(
               children: [
                 Text(
                   getTranslated(context, 'are_you_sure'),
                   style: GoogleFonts.poppins(
-                      fontSize: getProportionateScreenHeight(22),
+                      fontSize: (22),
                       color: Color(0xFF08763F),
                       fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
-                  height: getProportionateScreenHeight(24),
+                  height: (24),
                 ),
                 Text(
                   getTranslated(context, 'opt_out_message'),
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
-                      fontSize: getProportionateScreenHeight(18),
+                      fontSize: (18),
                       color: Color(0xFF676767),
                       fontWeight: FontWeight.normal),
                 ),
                 SizedBox(
-                  height: getProportionateScreenHeight(24),
+                  height: (24),
                 ),
                 Text(
                   getTranslated(context, 'do_you_really_want_to'),
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
-                      fontSize: getProportionateScreenHeight(18),
+                      fontSize: (18),
                       color: Color(0xFF676767),
                       fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
-                  height: getProportionateScreenHeight(13),
+                  height: (13),
                 ),
                 Container(
-                  height: getProportionateScreenHeight(76),
-                  width: getProportionateScreenWidth(240),
+                  height: (76),
+                  width: (240),
                   padding: EdgeInsets.symmetric(
-                      horizontal: getProportionateScreenWidth(42),
-                      vertical: getProportionateScreenHeight(15)),
+                      horizontal: (42),
+                      vertical: (15)),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       color: Color(0xFFF7F7F7)),
@@ -555,7 +555,7 @@ class _WAPopupConfirmationState extends State<WAPopupConfirmation> {
                       style: GoogleFonts.poppins(
                           color: Color(0xFF676767),
                           fontWeight: FontWeight.normal,
-                          fontSize: getProportionateScreenHeight(15)),
+                          fontSize: (15)),
                     ),
                   ),
                 ),
@@ -568,7 +568,7 @@ class _WAPopupConfirmationState extends State<WAPopupConfirmation> {
               Expanded(
                   child: ConstrainedBox(
                 constraints: BoxConstraints.tightFor(
-                    height: getProportionateScreenHeight(66)),
+                    height: (66)),
                 child: ElevatedButton(
                   onPressed: widget.onCancelPressed,
                   style: ElevatedButton.styleFrom(
@@ -576,7 +576,7 @@ class _WAPopupConfirmationState extends State<WAPopupConfirmation> {
                       onPrimary: Color(0xFF676767),
                       elevation: 0,
                       textStyle: GoogleFonts.poppins(
-                        fontSize: getProportionateScreenHeight(18),
+                        fontSize: (18),
                       )),
                   child: Text(getTranslated(context, 'CANCEL') ?? "Cancel"),
                 ),
@@ -584,7 +584,7 @@ class _WAPopupConfirmationState extends State<WAPopupConfirmation> {
               Expanded(
                   child: ConstrainedBox(
                 constraints: BoxConstraints.tightFor(
-                    height: getProportionateScreenHeight(66)),
+                    height: (66)),
                 child: ElevatedButton(
                   onPressed: () {
                     pop(context);
@@ -595,7 +595,7 @@ class _WAPopupConfirmationState extends State<WAPopupConfirmation> {
                       onPrimary: Color(0xFFFD6060),
                       elevation: 0,
                       textStyle: GoogleFonts.poppins(
-                        fontSize: getProportionateScreenHeight(18),
+                        fontSize: (18),
                       )),
                   child: Text(getTranslated(context, 'yes_confirm')),
                 ),

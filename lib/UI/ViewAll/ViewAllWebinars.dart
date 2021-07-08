@@ -194,7 +194,7 @@ class _ViewAllWebinarsState extends State<ViewAllWebinars> {
                                         size: 25,
                                       ),
                                     ),
-                              SizedBox(
+                              /*SizedBox(
                                 width: 25,
                               ),
                               InkWell(
@@ -220,7 +220,7 @@ class _ViewAllWebinarsState extends State<ViewAllWebinars> {
                                   color: Colors.grey,
                                   size: 25,
                                 ),
-                              )
+                              )*/
                             ],
                           )
                         ],

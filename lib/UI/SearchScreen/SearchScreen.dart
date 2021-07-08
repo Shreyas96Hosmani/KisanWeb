@@ -278,53 +278,25 @@ class _SearchScreenState extends State<SearchScreen> {
           backgroundColor: Colors.white,
           elevation: 0,
           toolbarHeight: 130.0,
-          title: Column(
-            children: [
-              SizedBox(
-                height: 15,
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: SearchBar(context),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-            ],
+          title: Container(
+            padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(200)),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 15,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(5),
+                  child: SearchBar(context),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+              ],
+            ),
           ),
-          bottom: PreferredSize(
-              child: TabBar(
-                  isScrollable: true,
-                  labelPadding: EdgeInsets.only(right: 30, left: 30),
-                  unselectedLabelColor: Colors.grey,
-                  labelColor: Color(COLOR_BACKGROUND),
-                  indicator: BoxDecoration(),
-                  tabs: [
-                    Tab(
-                      child: Text(
-                        getTranslated(context, 'products'),
-                        style: GoogleFonts.poppins(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    Tab(
-                      child: Text(
-                        getTranslated(context, 'companies'),
-                        style: GoogleFonts.poppins(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    /*Tab(
-                      child: Text(
-                        "Offers",
-                        style: GoogleFonts.poppins(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                    ),*/
-                  ]),
-              preferredSize: Size.fromHeight(30.0)),
         ),
-        body: TabBarView(
+        body: /*TabBarView(
           children: <Widget>[
             _isProductLoaded == true
                 ? SearchResultsProducts(context)
@@ -354,7 +326,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ),
                   ),
-            /* _isOffersLoaded == true
+            */
+        /* _isOffersLoaded == true
                 ? SearchResultsOffers(context)
                 : Container(
                     height: SizeConfig.screenHeight,
@@ -367,8 +340,51 @@ class _SearchScreenState extends State<SearchScreen> {
                             Color(COLOR_BACKGROUND)),
                       ),
                     ),
-                  ),*/
+                  ),*//*
           ],
+        )*/
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(200)),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Search Result -",style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF676262),
+                  fontSize: 20
+                ),),
+                _isProductLoaded == true
+                    ? SearchResultsProducts(context)
+                    : Container(
+                  height: SizeConfig.screenHeight,
+                  color: Colors.white,
+                  child: Center(
+                    child: new CircularProgressIndicator(
+                      strokeWidth: 1,
+                      backgroundColor: Color(COLOR_PRIMARY),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Color(COLOR_BACKGROUND)),
+                    ),
+                  ),
+                ),
+                _isCompaniesLoaded == true
+                    ? SearchResultsCompanies(context)
+                    : Container(
+                  height: SizeConfig.screenHeight,
+                  color: Colors.white,
+                  child: Center(
+                    child: new CircularProgressIndicator(
+                      strokeWidth: 1,
+                      backgroundColor: Color(COLOR_PRIMARY),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Color(COLOR_BACKGROUND)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -379,8 +395,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.all(10),
-        color: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -388,39 +402,33 @@ class _SearchScreenState extends State<SearchScreen> {
               height: 10,
             ),
             Text(
-              "Result - " +
+              getTranslated(context, 'products')+ "("+
                   (providerListener
                               .productsListbycatidsandsearchstring.length ??
                           0)
-                      .toString() +
-                  " " +
-                  getTranslated(context, 'products'),
+                      .toString() + ")",
               style: GoogleFonts.poppins(
-                  fontSize: 16,
-                  color: Color(0xFF3B3B3B),
-                  fontWeight: FontWeight.w500),
+                  fontSize: 20,
+                  color: Color(0xFF00A651),
+                  fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: 10,
             ),
             providerListener.productsListbycatidsandsearchstring.length > 0
                 ? Container(
-                    height: getProportionateScreenHeight(600),
-                    child: GridView.count(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 20,
-                        crossAxisSpacing: 20,
-                        childAspectRatio: (150 / 180),
-                        children: List.generate(
-                            providerListener.productsListbycatidsandsearchstring
-                                .length, (index) {
+                    height: getProportionateScreenHeight(300),
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: providerListener.productsListbycatidsandsearchstring.length,
+                        itemBuilder: (context,index){
                           return GridProds(
                             name: providerListener
                                 .productsListbycatidsandsearchstring[index]
                                 .title_english,
                             desc: parseHtmlString(providerListener
-                                    .productsListbycatidsandsearchstring[index]
-                                    .desc_english ??
+                                .productsListbycatidsandsearchstring[index]
+                                .desc_english ??
                                 ""),
                             imgPath: providerListener
                                 .productsListbycatidsandsearchstring[index]
@@ -431,15 +439,15 @@ class _SearchScreenState extends State<SearchScreen> {
                                   DetailedProducts(
                                       providerListener
                                           .productsListbycatidsandsearchstring[
-                                              index]
+                                      index]
                                           .id,
                                       providerListener
                                           .productsListbycatidsandsearchstring[
-                                              index]
+                                      index]
                                           .user_id));
                             },
                           );
-                        })),
+            }),
                   )
                 : SizedBox(
                     height: 10,
@@ -457,47 +465,46 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return SingleChildScrollView(
       child: Container(
-        color: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 20),
-              child: Text(
-                "Result - " +
-                    (providerListener
-                                .companiessListbycatidsandsearchstring.length ??
-                            0)
-                        .toString() +
-                    " " +
-                    getTranslated(context, 'companies'),
-                style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    color: Color(0xFF3B3B3B),
-                    fontWeight: FontWeight.w500),
-              ),
+            Text(
+              getTranslated(context, 'companies')+" ("+
+                  (providerListener
+                              .companiessListbycatidsandsearchstring.length ??
+                          0)
+                      .toString()+")",
+              style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  color: Color(0xFF00A651),
+                  fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: 25,
             ),
             providerListener.companiessListbycatidsandsearchstring.length > 0
                 ? Container(
-                    height: providerListener.companiessListbycatidsandsearchstring.length.toDouble()* 120,
-                    child: ListView.builder(
+                    height: ((providerListener.companiessListbycatidsandsearchstring.length/4).ceil().toDouble())* 120,
+                    child: GridView.builder(
                         scrollDirection: Axis.vertical,
                         primary: false,
                         shrinkWrap: true,
+                        gridDelegate:
+                        SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            crossAxisSpacing: 10,
+                            childAspectRatio: 364/90,
+                            mainAxisSpacing: 10),
                         itemCount: providerListener
                             .companiessListbycatidsandsearchstring.length,
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
                             child: Container(
-                              width: screenWidth,
-                              height: 100,
-                              margin: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                              width: 364,
+                              height: 90,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius:
@@ -515,8 +522,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                 children: [
                                   Container(
                                     height: 100,
-                                    width: 125,
-                                    padding: EdgeInsets.all(14),
+                                    width: 100,
+                                    padding: EdgeInsets.all(10),
                                     decoration: BoxDecoration(
                                       /* image: DecorationImage(
                                           image: NetworkImage(providerListener
@@ -542,13 +549,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                   ),
                                   Column(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                        MainAxisAlignment.
+                                    center,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Container(
-                                        width:
-                                            getProportionateScreenWidth(220),
                                         child: Text(
                                           providerListener
                                               .companiessListbycatidsandsearchstring[
@@ -853,6 +859,86 @@ class _SearchScreenState extends State<SearchScreen> {
                   fontSize: 14,
                   fontWeight: FontWeight.w400),
             )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class GridProds extends StatelessWidget {
+  final Function onPressed;
+  final String imgPath, name, desc;
+
+  GridProds({this.onPressed, this.imgPath, this.name, this.desc});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        height: 189,
+        width: 170,
+        margin: EdgeInsets.all(20),
+        decoration:BoxDecoration(boxShadow: [
+          BoxShadow(
+            color: Colors.grey[200],
+            offset: const Offset(
+              1.0,
+              1.0,
+            ),
+            blurRadius: 10.0,
+            spreadRadius: 2.0,
+          )
+        ]),
+
+        child: Column(
+          children: [
+            Expanded(
+                flex: 2,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      image: DecorationImage(
+                          image: imgPath == null || imgPath == ""
+                              ? AssetImage(
+                              "assets/images/product_placeholder.png")
+                              : NetworkImage(imgPath ?? ""),
+                          fit: BoxFit.cover),
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(15),
+                          topLeft: Radius.circular(15))),
+                )),
+            Expanded(
+                child: Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[700]),
+                      ),
+                      Text(
+                        parseHtmlString(desc),
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(fontSize: 10),
+                      ),
+                    ],
+                  ),
+                ))
           ],
         ),
       ),

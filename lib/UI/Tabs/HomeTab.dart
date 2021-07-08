@@ -16,23 +16,9 @@ import 'package:kisanweb/UI/BannerEvents/event_page.dart';
 import 'package:kisanweb/UI/Categories/categories_page.dart';
 import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
 import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
-
-//import 'package:kisanweb/UI/BannerEvents/event_page.dart';
-//import 'package:kisanweb/UI/Categories/categories_page.dart';
-//import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
-//import 'package:kisanweb/UI/DemosAndLaunches/DemoLaunch.dart';
-//import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
-//import 'package:kisanweb/UI/DetailedScreens/VideoScreen.dart';
-import 'package:kisanweb/UI/HomeScreen/HomeScreen.dart';
 import 'package:kisanweb/UI/HomeScreen/Widgets/SubTile.dart';
-import 'package:kisanweb/UI/Intro/InitialScreen.dart';
-import 'package:kisanweb/UI/Profile/BasicProfile.dart';
+import 'package:kisanweb/UI/Subscribe/SubscribeToMembership.dart';
 import 'package:kisanweb/UI/ViewAll/ViewAllWebinars.dart';
-
-//import 'package:kisanweb/UI/SearchScreen/SearchScreen.dart';
-//import 'package:kisanweb/UI/Subscribe/SubscribeToMembership.dart';
-//import 'package:kisanweb/UI/NotficationScreen/Notifications.dart';
-//import 'package:kisanweb/UI/Offers/offer_page.dart';
 import 'package:kisanweb/UI/Webinars/webinar_main_screen.dart';
 import 'package:kisanweb/View%20Models/CustomViewModel.dart';
 import 'package:kisanweb/Models/DemoListParser.dart';
@@ -43,7 +29,6 @@ import 'package:kisanweb/localization/language_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart' as urlLauncher;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:kisanweb/UI/ViewAll/ViewAllWebinars.dart';
 
 SharedPreferences _prefs;
 String languageCode = 'en';
@@ -85,6 +70,17 @@ class _HomeTabState extends State<HomeTab> {
                       ? InkWell(
                           onTap: () {
                             //push(context, SubscribeToMembership());
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(35)),
+                                    //this right here
+                                    child: SubscribeToMembership()
+                                  );
+                                });
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20, right: 20),
@@ -224,8 +220,7 @@ class _HomeTabState extends State<HomeTab> {
                                         ),
                                       ),
                                       Container(
-                                        height:
-                                            getProportionateScreenHeight(170),
+                                        height: 170,
                                         color: Colors.white,
                                         child: ListView.builder(
                                             itemCount: providerListener
@@ -1697,7 +1692,7 @@ class _FeaturedBrandsState extends State<FeaturedBrands> {
           Text(
             widget.organisation_name,
             textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
+            overflow: TextOverflow.fade,
             style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey[600]),
           )
         ],
