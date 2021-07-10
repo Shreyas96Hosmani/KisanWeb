@@ -126,6 +126,8 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
         child: Center(
           child: Container(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgPicture.asset("assets/icons/white_kisan_logo.svg",
                   width: 190,

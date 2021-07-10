@@ -145,7 +145,7 @@ class _SubTileGreenState extends State<SubTileGreen> {
     return _isloaded == true
         ? Container(
             //padding: EdgeInsets.symmetric(vertical: 9,horizontal: 12),
-            width: getProportionateScreenWidth(378),
+            width: MediaQuery.of(context).size.width,//getProportionateScreenWidth(378),
             height: getProportionateScreenHeight(70),
             decoration: BoxDecoration(
                 color: Color(0xFF00A651),

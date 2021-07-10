@@ -200,6 +200,8 @@ class _EnterOTPState extends State<EnterOTP> {
         color: Color(0xFF3FFF0),
         child: Center(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset("assets/icons/white_kisan_logo.svg",
                 width: 190,
