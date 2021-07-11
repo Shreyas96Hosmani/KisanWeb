@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kisanweb/Helpers/constants.dart';
 import 'package:kisanweb/Helpers/helper.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
+import 'package:kisanweb/UI/Subscribe/SubscribeToMembership.dart';
 //import 'package:kisanweb/UI/Subscribe/SubscribeToMembership.dart';
 import 'package:kisanweb/View%20Models/CustomViewModel.dart';
 import 'package:kisanweb/localization/language_constants.dart';
@@ -74,6 +75,17 @@ class _SubTileState extends State<SubTile> {
                 child: ElevatedButton(
                     onPressed: () {
                       //push(context, SubscribeToMembership());
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(35)),
+                                //this right here
+                                child: SubscribeToMembership()
+                            );
+                          });
                     },
                     style: ElevatedButton.styleFrom(
                         primary: Colors.white,

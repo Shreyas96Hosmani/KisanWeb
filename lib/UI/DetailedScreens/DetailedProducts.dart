@@ -483,8 +483,8 @@ class _DetailedProductsState extends State<DetailedProducts> {
                                 width: 20,
                               ),
                               Container(
-                                width: getProportionateScreenWidth(550),
-                                height: getProportionateScreenWidth(550),
+                                width: getProportionateScreenWidth(400),
+                                height: getProportionateScreenWidth(400),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
                                     border:
@@ -1014,7 +1014,14 @@ class _DetailedProductsState extends State<DetailedProducts> {
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(topRight: Radius.circular(15),topLeft: Radius.circular(15)),
-                        color: Colors.white
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 10,
+                              spreadRadius: 4
+                          )
+                        ]
                     ),
                     height: getProportionateScreenHeight(106),
                     margin: EdgeInsets.only(left: getProportionateScreenWidth(842),right: getProportionateScreenWidth(200)),
@@ -1187,7 +1194,7 @@ class _DetailedProductsState extends State<DetailedProducts> {
                                                                       child: SubscribeToMembership()
                                                                   );
                                                                 });
-                                                            connectProductCall(
+                                                            /*connectProductCall(
                                                                 providerListener
                                                                     .userprofileData
                                                                     .user,
@@ -1202,7 +1209,7 @@ class _DetailedProductsState extends State<DetailedProducts> {
                                                                         .representativeList[
                                                                             index]
                                                                         .mobile ??
-                                                                    "");
+                                                                    "");*/
                                                           }
                                                         },
                                                         onWhatAppPressed:
@@ -1350,6 +1357,9 @@ class _DetailedProductsState extends State<DetailedProducts> {
                                               SizedBox(
                                                 height: 7,
                                               ),
+
+                                              //Please check the Prefs of memeber ship coz the Subscribe dialog is not appearing
+
                                               CallMeButton(
                                                 onPressed: () {
                                                   if ((prefs.getInt(
@@ -1360,8 +1370,7 @@ class _DetailedProductsState extends State<DetailedProducts> {
                                                                   'membership_status') ??
                                                               "") !=
                                                           "active") {
-                push(context,
-                                                        SubscribeToMembership());
+                                                    /*push(context,SubscribeToMembership());*/
                                                     showDialog(
                                                         context: context,
                                                         builder: (BuildContext context) {
@@ -2035,25 +2044,25 @@ class RequestSentDialog extends StatelessWidget {
       width: getProportionateScreenWidth(639),
       child: Stack(
         children: [
-          Align(
-            alignment: Alignment.center,
-            child: Container(
-              child: Column(
-                children: [
-                  Text("Call back request sent successfully.",style: GoogleFonts.poppins(
-                    fontSize: getProportionateScreenHeight(29),
-                    color: Color(0xFF008940)
-                  ),),
-                  SizedBox(
-                    height: getProportionateScreenHeight(28),
-                  ),
-                  Icon(
-                    Icons.check_circle_outline,
-                    size: getProportionateScreenWidth(176),
-                    color: Color(0xff008940),
-                  ),
-                ],
-              ),
+          Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Call back request sent successfully.",
+                  style: GoogleFonts.poppins(
+                      fontSize: getProportionateScreenHeight(29),
+                      color: Color(0xFF008940)),
+                ),
+                SizedBox(
+                  height: getProportionateScreenHeight(28),
+                ),
+                Icon(
+                  Icons.check_circle_outline,
+                  size: getProportionateScreenWidth(176),
+                  color: Color(0xff008940),
+                ),
+              ],
             ),
           ),
           Align(
