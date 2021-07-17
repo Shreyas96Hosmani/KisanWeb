@@ -4,6 +4,8 @@ import 'package:kisanweb/Helpers/constants.dart' as constants;
 import 'package:kisanweb/Helpers/constants.dart';
 import 'package:kisanweb/Helpers/helper.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
+import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
+import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
 //import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
 //import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
 import 'package:kisanweb/UI/Tabs/HomeTab.dart';
@@ -73,8 +75,8 @@ class _ShortListedTabState extends State<ShortListedTab> {
     buildFilterContainer(BuildContext context) {
       return Center(
         child: Container(
-          width: screenWidth / 1.3,
-          height: 50,
+          width: getProportionateScreenWidth(400),
+          height: getProportionateScreenHeight(70),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(50)),
               color: Color(0xffF5F5F5),
@@ -91,7 +93,7 @@ class _ShortListedTabState extends State<ShortListedTab> {
                 },
                 child: Container(
                   //width: screenWidth / 1.3 / 3.02,
-                  width: screenWidth / 1.3 / 2,
+                  width: getProportionateScreenWidth(198),
                   height: 50,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -157,7 +159,7 @@ class _ShortListedTabState extends State<ShortListedTab> {
                 },
                 child: Container(
                   // width: screenWidth / 1.3 / 3.02,
-                  width: screenWidth / 1.3 / 2 - 3,
+                  width: getProportionateScreenWidth(198),
                   height: 50,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -196,90 +198,91 @@ class _ShortListedTabState extends State<ShortListedTab> {
               shrinkWrap: true,
               itemCount: providerListener.favproductsList.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, crossAxisSpacing: 0, mainAxisSpacing: 10,childAspectRatio: 0.9),
+                  crossAxisCount: 5, crossAxisSpacing: 0, mainAxisSpacing: 10,childAspectRatio: 0.9),
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: EdgeInsets.all(10.0),
                   child: Container(
-                    width: getProportionateScreenWidth(174),
-                    height: getProportionateScreenHeight(211),
+                    width: getProportionateScreenWidth(272),
+                    height: getProportionateScreenHeight(328),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
                       color: Colors.white,
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.grey[200],
-                            blurRadius: 1,
-                            spreadRadius: 1)
+                            color: Colors.grey[300],
+                            blurRadius: 7,
+                            spreadRadius: 4)
                       ],
                     ),
                     child: GestureDetector(
                       onTap: () {
-//                        push(
-//                            context,
-//                            DetailedProducts(
-//                                providerListener.favproductsList[index].id,
-//                                providerListener
-//                                    .favproductsList[index].user_id));
+                       push(
+                           context,
+                           DetailedProducts(
+                               providerListener.favproductsList[index].id,
+                               providerListener
+                                   .favproductsList[index].user_id));
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                ),
+                                color: Colors.white,
+                                image: DecorationImage(
+                                    image: NetworkImage(providerListener
+                                            .favproductsList[index]
+                                            .bigthumb_url ??
+                                        ""),
+                                    fit: BoxFit.cover),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey[200],
+                                      blurRadius: 1,
+                                      spreadRadius: 1)
+                                ],
+                              ),
+                            ),
+                          ),
                           Container(
-                            height: getProportionateScreenHeight(125),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                              ),
-                              color: Colors.white,
-                              image: DecorationImage(
-                                  image: NetworkImage(providerListener
-                                          .favproductsList[index]
-                                          .bigthumb_url ??
-                                      ""),
-                                  fit: BoxFit.cover),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey[200],
-                                    blurRadius: 1,
-                                    spreadRadius: 1)
+                            height: getProportionateScreenHeight(100),
+                            padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(19)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  color: Colors.white,
+                                  child: Text(
+                                    parseHtmlString(providerListener
+                                        .favproductsList[index].title_english),
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  color: Colors.white,
+                                  child: Text(
+                                    parseHtmlString(providerListener
+                                        .favproductsList[index].organisation_name),
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.grey[700],
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
                               ],
-                            ),
-                          ),
-                          Flexible(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 7, left: 10),
-                              child: Container(
-                                color: Colors.white,
-                                child: Text(
-                                  parseHtmlString(providerListener
-                                      .favproductsList[index].title_english),
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Container(
-                                color: Colors.white,
-                                child: Text(
-                                  parseHtmlString(providerListener
-                                      .favproductsList[index].organisation_name),
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.grey[700],
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ),
                             ),
                           ),
                         ],
@@ -424,110 +427,109 @@ class _ShortListedTabState extends State<ShortListedTab> {
       final providerListener = Provider.of<CustomViewModel>(context);
 
       return _isCompaniesLoaded == true
-          ? ListView.builder(
+          ? GridView.builder(
               scrollDirection: Axis.vertical,
               primary: false,
               shrinkWrap: true,
               itemCount: providerListener.favcompaniesList.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10,childAspectRatio: 466/121),
               itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: Container(
-                    width: screenWidth,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey[200],
-                            blurRadius: 1,
-                            spreadRadius: 1)
-                      ],
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-//                        push(
-//                            context,
-//                            CompanyDetails(providerListener
-//                                .favcompaniesList[index].user_id));
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 100,
-                            width: 125,
-                            padding: EdgeInsets.all(17),
-                            decoration: BoxDecoration(
-                              /*image: DecorationImage(
-                                  image: NetworkImage(providerListener
-                                          .favcompaniesList[index]
-                                          .image_bigthumb_url ??
-                                      ""),
-                                  fit: BoxFit.cover),*/
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
+                return Container(
+                  height: getProportionateScreenHeight(121),
+                  margin: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey[200],
+                          blurRadius: 1,
+                          spreadRadius: 1)
+                    ],
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                       push(
+                           context,
+                           CompanyDetails(providerListener
+                               .favcompaniesList[index].user_id));
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 100,
+                          width: 125,
+                          padding: EdgeInsets.all(17),
+                          decoration: BoxDecoration(
+                            /*image: DecorationImage(
+                                image: NetworkImage(providerListener
+                                        .favcompaniesList[index]
+                                        .image_bigthumb_url ??
+                                    ""),
+                                fit: BoxFit.cover),*/
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                            ),
+                            color: Colors.white,
+                          ),
+                          child: Image.network(providerListener
+                              .favcompaniesList[index]
+                              .image_bigthumb_url ??
+                              "",fit: BoxFit.contain,),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Container(
+                          width: 200,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                providerListener.favcompaniesList[index]
+                                    .organisation_name,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                style: GoogleFonts.poppins(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
                               ),
-                              color: Colors.white,
-                            ),
-                            child: Image.network(providerListener
-                                .favcompaniesList[index]
-                                .image_bigthumb_url ??
-                                "",fit: BoxFit.contain,),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            width: 200,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  providerListener.favcompaniesList[index]
-                                      .organisation_name,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.image,
+                                    size: 15,
+                                    color: Colors.grey,
                                   ),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.image,
-                                      size: 15,
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    providerListener
+                                            .favcompaniesList[index].products
+                                            .toString() +
+                                        " products",
+                                    style: GoogleFonts.poppins(
                                       color: Colors.grey,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
                                     ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      providerListener
-                                              .favcompaniesList[index].products
-                                              .toString() +
-                                          " products",
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 );
@@ -565,21 +567,24 @@ class _ShortListedTabState extends State<ShortListedTab> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            buildFilterContainer(context),
-            SizedBox(
-              height: 50,
-            ),
-            Align(
-                alignment: Alignment.center,
-                child: SingleChildScrollView(child: buildViews(context))),
-          ],
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(200)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              buildFilterContainer(context),
+              SizedBox(
+                height: 50,
+              ),
+              Align(
+                  alignment: Alignment.center,
+                  child: SingleChildScrollView(child: buildViews(context))),
+            ],
+          ),
         ),
       ),
     );

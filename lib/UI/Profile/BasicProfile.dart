@@ -407,7 +407,7 @@ class _BasicProfileState extends State<BasicProfile> {
               Container(
                 margin: EdgeInsets.only(left: getProportionateScreenWidth(20)),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ConstrainedBox(

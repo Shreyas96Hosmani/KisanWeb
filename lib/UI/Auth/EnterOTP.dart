@@ -87,7 +87,8 @@ class _EnterOTPState extends State<EnterOTP> {
 
   Future<void> _verifyOTPAfterGoogleAUth() async {
     Provider.of<CustomViewModel>(context, listen: false).verifyOTPAfterGoogleAUth(
-        /*oneController.text +
+        /*
+        oneController.text +
             twoController.text +
             threeController.text +
             fourController.text +
@@ -579,7 +580,8 @@ class _EnterOTPState extends State<EnterOTP> {
                               backgroundColor: Colors.white,
                               textColor: Colors.red[800],
                             );
-                          } else {
+                          }
+                          else {
                             universalLoader.show();
                             if (providerListener.googleEmail != "") {
                               _verifyOTPAfterGoogleAUth();

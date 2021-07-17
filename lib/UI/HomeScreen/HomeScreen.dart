@@ -815,7 +815,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     Expanded(
-                      child: PageView(
+                      child: PageView(physics: NeverScrollableScrollPhysics(),
                         controller: _tabPageController,
                         onPageChanged: (num) {
                           setState(() {
@@ -889,43 +889,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),*/
-              SizedBox(
-                height: getProportionateScreenHeight(10),
-              ),
-              DrawerSvgItem(
-                icon: "assets/icons/home.svg",
-                text: getTranslated(context, 'home'),
-                onPressed: () {},
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
-              ),
-              DrawerSvgItem(
-                icon: "assets/icons/webinarOptIcon.svg",
-                text: "Webinar",
-                onPressed: () {
-                  /*pop(context);
-                  push(context, LanguageScreen(2));*/
+              BottomTabs(
+                selectedTab: _selectedTab,
+                tabPressed: (num) {
+                  _tabPageController.animateToPage(num,
+                      duration: Duration(milliseconds: ANIMATION_DURATION),
+                      curve: Curves.easeOutCubic);
                 },
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
-              ),
-              DrawerSvgItem(
-                icon: "assets/icons/shortlisticon.svg",
-                text: "Wishlist",
-                onPressed: () {},
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
-              ),
-              DrawerSvgItem(
-                icon: "assets/icons/callHistoryIcon.svg",
-                text: "History",
-                onPressed: () {},
+              SizedBox(
+                height: getProportionateScreenHeight(10),
               ),
               Container(height: 1.5,color: Colors.white.withOpacity(0.5),),
               DrawerItem(
@@ -943,14 +916,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () {},
               ),
               Container(height: 1.5,color: Colors.white.withOpacity(0.5),),
-              /*DrawerItem(
-                icon: Icons.language,
-                text: getTranslated(context, 'language'),
-                onPressed: () {
-                  pop(context);
-                  push(context, LanguageScreen(2));
-                },
-              ),*/
               DrawerItem(
                 icon: Icons.settings,
                 text: "Settings",

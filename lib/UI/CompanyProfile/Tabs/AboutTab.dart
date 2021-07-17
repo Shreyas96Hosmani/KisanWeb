@@ -450,7 +450,7 @@ class _AboutTabState extends State<AboutTab> {
                       padding: EdgeInsets.only(top: 20),
                       height: ((providerListener.companyDetailsBrouchers.length)
                               .toDouble()) *
-                          100 + 100,
+                          95,
                       decoration: BoxDecoration(
                           border: Border.all(color: Color(0xFFDEDEDE)),
                           borderRadius: BorderRadius.circular(15)),

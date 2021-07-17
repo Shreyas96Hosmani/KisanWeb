@@ -17,6 +17,7 @@ import 'package:kisanweb/UI/Categories/categories_page.dart';
 import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
 import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
 import 'package:kisanweb/UI/HomeScreen/Widgets/SubTile.dart';
+import 'package:kisanweb/UI/NotficationScreen/Notifications.dart';
 import 'package:kisanweb/UI/Subscribe/SubscribeToMembership.dart';
 import 'package:kisanweb/UI/ViewAll/ViewAllWebinars.dart';
 import 'package:kisanweb/UI/Webinars/webinar_main_screen.dart';
@@ -531,7 +532,7 @@ class _HomeTabState extends State<HomeTab> {
                             providerListener.notificationsList.length > 0
                                 ? InkWell(
                                     onTap: () {
-                                      //push(context, NotificationScreen());
+                                      push(context, NotificationScreen());
                                     },
                                     child: Container(
                                       padding:

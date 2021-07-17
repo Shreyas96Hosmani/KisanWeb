@@ -298,7 +298,7 @@ class _CallHistoryState extends State<CallHistory> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CustomBackButton(text: "",),
+                  //CustomBackButton(text: "",),
                   SizedBox(width: 10,),
                   SearchBar(),
                 ],

@@ -182,24 +182,7 @@ class _BottomTabsState extends State<BottomTabs> {
     _selectedTabs = widget.selectedTab ?? 0;
 
     return Container(
-        height: getProportionateScreenHeight(65),
-        width: getProportionateScreenWidth(370),
-        margin: EdgeInsets.only(
-            left: getProportionateScreenWidth(20),
-            right: getProportionateScreenWidth(20),
-            bottom: getProportionateScreenWidth(20)),
-        decoration: BoxDecoration(
-            color: Color(COLOR_BACKGROUND),
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Color(COLOR_ACCENT).withOpacity(0.3),
-                blurRadius: 30,
-                spreadRadius: 1,
-              )
-            ]),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: Column(
           children: [
             BottomTabBtn(
               svgPath: "assets/icons/home.svg",
@@ -208,6 +191,10 @@ class _BottomTabsState extends State<BottomTabs> {
               onPressed: () {
                 widget.tabPressed(0);
               },
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
             ),
             BottomTabBtn(
               svgPath: "assets/icons/webinarOptIcon.svg",
@@ -218,6 +205,10 @@ class _BottomTabsState extends State<BottomTabs> {
                 widget.tabPressed(1);
               },
             ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
+            ),
             BottomTabBtn(
               svgPath: "assets/icons/shortlisticon.svg",
               optName: "Shortlisted",
@@ -225,6 +216,10 @@ class _BottomTabsState extends State<BottomTabs> {
               onPressed: () {
                 widget.tabPressed(2);
               },
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
             ),
             BottomTabBtn(
               svgPath: "assets/icons/callHistoryIcon.svg",
@@ -291,24 +286,26 @@ class BottomTabBtn extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        child: Row(
-          children: [
-            SvgPicture.asset(
-              svgPath,
-              color: _selected ? Colors.white : Colors.white.withOpacity(0.5),
-              width: getProportionateScreenWidth(20),
-            ),
-            SizedBox(
-              width: getProportionateScreenWidth(8),
-            ),
-            Text(
-              _selected ? optName : "",
-              style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w600,
-                  fontSize: getProportionateScreenHeight(15),
-                  color: Colors.white),
-            )
-          ],
+        padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+        child: ListTile(
+          visualDensity: VisualDensity(vertical: -1, horizontal: 0),
+          title: Row(
+            children: [
+              SvgPicture.asset(
+                svgPath,
+                color: _selected ? Colors.white : Colors.white.withOpacity(0.5),
+                height: getProportionateScreenHeight(25),
+              ),
+              SizedBox(width: getProportionateScreenWidth(10),),
+              Text(
+                optName,
+                style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.normal,
+                    fontSize: getProportionateScreenHeight(15),
+                    color: Colors.white),
+              )
+            ],
+          ),
         ),
       ),
     );
