@@ -4229,7 +4229,7 @@ class GridProds extends StatelessWidget {
             spreadRadius: 2.0,
           )
         ]),
-        margin: EdgeInsets.only(top: 20, bottom: 20, left: 30),
+        //margin: EdgeInsets.only(top: 20, bottom: 20, left: 30),
         child: Column(
           children: [
             Expanded(

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kisanweb/Helpers/size_config.dart';
 import 'package:kisanweb/localization/language_constants.dart';
 
 class CompanyTabs extends StatefulWidget {
@@ -70,6 +71,46 @@ class CompanyTabBtn extends StatelessWidget {
     bool _selected = selected ?? false;
 
     return GestureDetector(
+        onTap: onPressed,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(10),vertical: getProportionateScreenHeight(10)),
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                          color: _selected ? Colors.white : Colors.transparent,
+                          width: 2
+                      )
+                  )
+              ),
+              child: Text(
+                optName,
+                style: GoogleFonts.poppins(
+                    fontWeight: _selected ? FontWeight.bold : FontWeight.normal,
+                    fontSize: 14,
+                    color: _selected
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.5)),
+              ),
+            ),
+          ],
+        ));
+  }
+}
+
+/*class CompanyTabBtn extends StatelessWidget {
+  final bool selected;
+  final Function onPressed;
+  final String optName;
+
+  CompanyTabBtn({this.selected, this.onPressed, this.optName});
+
+  @override
+  Widget build(BuildContext context) {
+    bool _selected = selected ?? false;
+
+    return GestureDetector(
       onTap: onPressed,
       child: Container(
         child: Text(
@@ -82,4 +123,4 @@ class CompanyTabBtn extends StatelessWidget {
       ),
     );
   }
-}
+}*/

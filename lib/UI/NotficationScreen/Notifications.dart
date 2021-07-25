@@ -4,6 +4,7 @@ import 'package:kisanweb/Helpers/constants.dart';
 import 'package:kisanweb/Helpers/helper.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
 import 'package:kisanweb/Models/NotificationsListParser.dart';
+import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
 import 'package:kisanweb/UI/BannerEvents/event_page.dart';
 import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
 import 'package:kisanweb/UI/NotficationScreen/CutomNotificationDetails.dart';
@@ -74,7 +75,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
             body: Container(
               width: double.infinity,
-              padding: EdgeInsets.only(left:  getProportionateScreenWidth(717), top: 20, right:  getProportionateScreenWidth(717)),
+              padding: EdgeInsets.only(left: ResponsiveWidget.isSmallScreen(context)
+                      ? 20
+                      : getProportionateScreenWidth(717), top: 20, right:  ResponsiveWidget.isSmallScreen(context) ? 20 : getProportionateScreenWidth(717)),
               child: ListView.builder(
                   itemCount: providerListener.notificationsList.length,
                   scrollDirection: Axis.vertical,

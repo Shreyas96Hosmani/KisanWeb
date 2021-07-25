@@ -28,3 +28,16 @@ double getProportionateScreenWidth(double inputWidth) {
   // 375 is the layout width that designer use
   return (inputWidth / 1920.0) * screenWidth;
 }
+
+double getProportionateMobileScreenHeight(double inputHeight) {
+  double screenHeight = SizeConfig.screenHeight;
+  // 812 is the layout height that designer use
+  return (inputHeight / 894.0) * screenHeight;
+}
+
+// Get the proportionate height as per screen size
+double getProportionateMobileScreenWidth(double inputWidth) {
+  double screenWidth = SizeConfig.screenWidth;
+  // 375 is the layout width that designer use
+  return (inputWidth / 414.0) * screenWidth;
+}

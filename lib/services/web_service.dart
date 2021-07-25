@@ -1992,7 +1992,8 @@ class WebService {
       String language,
       String min_scheduled_date,
       String max_scheduled_date,
-      String category) async {
+      String category,
+      int pageCount) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     try {
@@ -2002,13 +2003,49 @@ class WebService {
         "source": "web/app",
         "account_type": 1,
         "user_id": user_id,
-        "type":"published,live,completed",
+        "type": "published,live",
         "search_string": search_string,
-        "page": 1,
+        "page": pageCount,
         "language": language,
         "min_scheduled_date": min_scheduled_date,
         "max_scheduled_date": max_scheduled_date,
-        "category": category.length>0?category:null,
+        "category": category.length > 0 ? category : null,
+      };
+
+      var body = json.encode(data);
+
+      final response = await http.post(Uri.parse(eventlist),
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + prefs.getString("token"),
+          },
+          body: body);
+
+      if (response.statusCode == 200) {
+        return response;
+      } else {
+        return "error";
+      }
+    } catch (Exception) {
+      print("exception" + Exception.toString());
+    }
+  }
+
+
+  Future GetMyWebinarList(String user_id, int pageCount) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    try {
+      Map data = {
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "source": "android",
+        "account_type": 1,
+        "my_account": 1,
+        "user_id": user_id,
+        "type": "published,live,completed",
+        "search_string": "",
+        "page": pageCount
       };
 
       var body = json.encode(data);

@@ -21,6 +21,7 @@ import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
 //import 'package:kisanweb/UI/BannerEvents/event_page.dart';
 //import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
 import 'package:kisanweb/UI/HomeScreen/Widgets/bottom_tabs.dart';
+import 'package:kisanweb/UI/HomeScreen/Widgets/bottom_tabs_mobile.dart';
 import 'package:kisanweb/UI/Intro/InitialScreen.dart';
 import 'package:kisanweb/UI/Intro/LanguageScreen.dart';
 import 'package:kisanweb/UI/Intro/splash_one.dart';
@@ -863,7 +864,90 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),*/
-            body: WillPopScope(
+            body: ResponsiveWidget.isSmallScreen(context) ?Stack(
+              children: [
+                WillPopScope(
+                  onWillPop: () => showDialog(
+                    context: context,
+                    builder: (context) => new AlertDialog(
+                      title: new Text(getTranslated(context, 'are_you_sure')),
+                      content: new Text('Do you want to exit the App'),
+                      actions: <Widget>[
+                        new GestureDetector(
+                          onTap: () => Navigator.of(context).pop(false),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(getTranslated(context, 'no')),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        new GestureDetector(
+                          onTap: () => exit(0),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(getTranslated(context, 'yes_confirm')),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  child:Container(
+                    color: Colors.white,
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: PageView(
+                            controller: _tabPageController,
+                            onPageChanged: (num) {
+                              setState(() {
+                                _selectedTab = num;
+                              });
+                            },
+                            children: [
+                              HomeTab(),
+                              ViewAllWebinars(
+                                  "tab",
+                                  false,
+                                  providerListener.userprofileData.user
+                                      .toString()),
+                              ShortListedTab(),
+                              CallHistory(),
+                              /*Center(
+                            child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                child: Text(
+                                  'Coming soon',
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),*/
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ) ,
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: BottomTabsMobile(
+                        selectedTab: _selectedTab,
+                        tabPressed: (num) {
+                          _tabPageController.animateToPage(num,
+                              duration:
+                              Duration(milliseconds: ANIMATION_DURATION),
+                              curve: Curves.easeOutCubic);
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ) : WillPopScope(
               onWillPop: () => showDialog(
                 context: context,
                 builder: (context) => new AlertDialog(
@@ -888,7 +972,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              child: Container(
+              child:Container(
                 color: Colors.white,
                 width: double.infinity,
                 child: Column(
@@ -923,8 +1007,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-              ),
-            ),
+              ) ,
+            ) ,
           )
         : Container(
             height: SizeConfig.screenHeight,
@@ -944,12 +1028,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Drawer(
       child: Container(
           color: Color(COLOR_BACKGROUND),
-          /*padding: EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
               horizontal: getProportionateScreenHeight(30),
-              vertical: getProportionateScreenHeight(50)),*/
+              vertical: getProportionateScreenHeight(50)),
           child: Column(
             children: [
-              SizedBox(height: 40,),
               DrawerHeader(context),
               /*Container(
                 height: getProportionateScreenHeight(500),
@@ -965,7 +1048,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),*/
-              BottomTabs(
+              ResponsiveWidget.isSmallScreen(context) ? Container() : BottomTabs(
                 selectedTab: _selectedTab,
                 tabPressed: (num) {
                   _tabPageController.animateToPage(num,
@@ -1053,7 +1136,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       child: Column(
         children: [
-          /*Row(
+          ResponsiveWidget.isSmallScreen(context) ? Row(
             children: [
               CircleAvatar(
                 radius: 25,
@@ -1114,10 +1197,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               )
             ],
-          ),
+          ) : Container(),
           SizedBox(
             height: getProportionateScreenHeight(20),
-          ),*/
+          ),
           providerListener.membershipInfo != null
               ? providerListener.membershipInfo.status != "active"
                   ? InkWell(

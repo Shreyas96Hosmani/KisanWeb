@@ -315,7 +315,24 @@ class _CompanyDetailsState extends State<CompanyDetails> {
         ? Scaffold(
             backgroundColor: Colors.white,
             extendBodyBehindAppBar: true,
-            body: ResponsiveWidget.isSmallScreen(context) ? Stack(children: [
+            appBar: ResponsiveWidget.isSmallScreen(context) ? PreferredSize(
+              preferredSize: Size.fromHeight(90),
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 15),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      BackButton(),
+                      ShareButton(),
+                    ],
+                  ),
+                ),
+              ),
+            ) : null,
+            body: ResponsiveWidget.isSmallScreen(context) ?
+            Stack(children: [
               Container(
                 width: double.infinity,
                 child: SingleChildScrollView(
@@ -1070,7 +1087,8 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                 ],
               )
                   : SizedBox(height: 1),
-            ]) : Stack(children: [
+            ]) :
+            Stack(children: [
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 150),
                 child: SingleChildScrollView(
@@ -2257,13 +2275,13 @@ class RepInformation extends StatelessWidget {
                     : AssetImage('assets/images/google.jpg'),
               ),
               SizedBox(
-                width: getProportionateScreenWidth(15),
+                width: getProportionateMobileScreenWidth(15),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: getProportionateScreenWidth(200),
+                    width: getProportionateMobileScreenWidth(200),
                     child: Text(
                       representativeOBJ.first_name +
                           " " +
@@ -2349,9 +2367,9 @@ class RepInformation extends StatelessWidget {
                         child: Icon(
                           Icons.call,
                           color: Colors.green,
-                          size: getProportionateScreenWidth(17),
+                          size: getProportionateMobileScreenHeight(17),
                         ),
-                        radius: getProportionateScreenWidth(15),
+                        radius: getProportionateMobileScreenWidth(15),
                       ),
                     )
                   : SizedBox(
@@ -2376,23 +2394,23 @@ class RepInformation extends StatelessWidget {
                         child: representativeOBJ.status == "accepted"
                             ? Image.asset(
                                 "assets/images/whatsapp.png",
-                                height: getProportionateScreenWidth(15),
+                                height: getProportionateMobileScreenWidth(15),
                               )
                             : representativeOBJ.status == "not initiated"
                                 ? Image.asset(
                                     "assets/images/whatsappGrey.png",
-                                    height: getProportionateScreenWidth(15),
+                                    height: getProportionateMobileScreenWidth(15),
                                   )
                                 : representativeOBJ.status == "initiated"
                                     ? Image.asset(
                                         "assets/images/whatsappYellow.png",
-                                        height: getProportionateScreenWidth(15),
+                                        height: getProportionateMobileScreenWidth(15),
                                       )
                                     : Image.asset(
                                         "assets/images/whatsappGrey.png",
-                                        height: getProportionateScreenWidth(15),
+                                        height: getProportionateMobileScreenWidth(15),
                                       ),
-                        radius: getProportionateScreenWidth(15),
+                        radius: getProportionateMobileScreenWidth(15),
                       ),
                     )
                   : SizedBox(

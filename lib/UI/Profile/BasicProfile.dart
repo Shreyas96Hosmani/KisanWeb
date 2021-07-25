@@ -14,6 +14,7 @@ import 'package:image_pickers/image_pickers.dart';
 import 'package:kisanweb/Helpers/constants.dart' as constants;
 import 'package:kisanweb/Helpers/constants.dart';
 import 'package:kisanweb/Helpers/helper.dart';
+import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
 //import 'package:kisanweb/UI/Auth/SuccessOTP.dart';
 import 'package:kisanweb/UI/HomeScreen/HomeScreen.dart';
 import 'package:kisanweb/UI/HomeScreen/Widgets/bottom_tabs.dart';
@@ -32,6 +33,7 @@ import 'package:kisanweb/Models/GetDetailsFromPin.dart';
 File imageOne;
 bool fetched = false;
 Image fromPicker;
+bool isChecked = false;
 
 class BasicProfile extends StatefulWidget {
   String first_name, last_name, email, image_url, state, city;
@@ -300,6 +302,12 @@ class _BasicProfileState extends State<BasicProfile> {
     });
   }
 
+  bool isEmailValid(String email) {
+    Pattern pattern = r'^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    return regex.hasMatch(email);
+  }
+
   /*
   void _settingModalBottomSheetOne(context) {
     showModalBottomSheet(
@@ -428,13 +436,13 @@ class _BasicProfileState extends State<BasicProfile> {
               Container(
                 margin: EdgeInsets.only(left: getProportionateScreenWidth(20)),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment:ResponsiveWidget.isSmallScreen(context) ? MainAxisAlignment.start : MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ConstrainedBox(
                       constraints: BoxConstraints.tightFor(
-                        height: getProportionateScreenWidth(50),
-                        width: getProportionateScreenWidth(50),
+                        height: ResponsiveWidget.isSmallScreen(context) ? getProportionateMobileScreenWidth(50) :getProportionateScreenWidth(50),
+                        width: ResponsiveWidget.isSmallScreen(context) ? getProportionateMobileScreenWidth(50) :getProportionateScreenWidth(50),
                       ),
                       child: ElevatedButton(
                           onPressed: () {
@@ -455,32 +463,43 @@ class _BasicProfileState extends State<BasicProfile> {
                             ),
                           )),
                     ),
-                    /*SizedBox(
-                      width: getProportionateScreenWidth(20),
-                    ),
-                    Container(
-                      height: getProportionateScreenWidth(50),
-                      width: getProportionateScreenWidth(50),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(50)),
-                        color: Color(0xff1F8F4E),
-                      ),
-                      child: Center(
-                          child: Icon(
-                        Icons.person,
-                        color: Color(COLOR_WHITE),
-                      )),
-                    ),
                     SizedBox(
-                      width: getProportionateScreenWidth(20),
-                    ),*/
-                    Text(
-                      getTranslated(context, 'your_details'),
-                      style: GoogleFonts.poppins(
-                          fontSize: 22,
-                          color: Color(COLOR_BACKGROUND),
-                          fontWeight: FontWeight.w600),
+                      width: getProportionateMobileScreenWidth(20),
                     ),
+                    ResponsiveWidget.isSmallScreen(context) ? Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: ResponsiveWidget.isSmallScreen(context) ? getProportionateMobileScreenWidth(50) :getProportionateScreenWidth(50),
+                          width: ResponsiveWidget.isSmallScreen(context) ? getProportionateMobileScreenWidth(50) :getProportionateScreenWidth(50),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                            color: Color(0xff1F8F4E),
+                          ),
+                          child: Center(
+                              child: Icon(
+                                Icons.person,
+                                color: Color(COLOR_WHITE),
+                              )),
+                        ),
+                        SizedBox(
+                          width: getProportionateMobileScreenWidth(20),
+                        ),
+                        Text(
+                          getTranslated(context, 'your_details'),
+                          style: GoogleFonts.poppins(
+                              fontSize: 22,
+                              color: ResponsiveWidget.isSmallScreen(context) ? Colors.white : Color(COLOR_BACKGROUND),
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ) : Text(
+                        getTranslated(context, 'your_details'),
+                        style: GoogleFonts.poppins(
+                        fontSize: 22,
+                        color: ResponsiveWidget.isSmallScreen(context) ? Colors.white : Color(COLOR_BACKGROUND),
+                        fontWeight: FontWeight.w600),
+                        ),
                   ],
                 ),
               ),
@@ -491,7 +510,7 @@ class _BasicProfileState extends State<BasicProfile> {
                   children: [
                     Container(
                       child: CircleAvatar(
-                        radius: getProportionateScreenWidth(62),
+                        radius: ResponsiveWidget.isSmallScreen(context) ? getProportionateMobileScreenWidth(62) : getProportionateScreenWidth(62),
                         backgroundColor: Colors.transparent,
                         backgroundImage: _pickedImages.isEmpty
                             ? AssetImage('assets/images/defaultProfile.png')
@@ -524,75 +543,96 @@ class _BasicProfileState extends State<BasicProfile> {
     buildProfileForm(BuildContext context) {
       return SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               height: 30,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: getProportionateScreenWidth(170),
-                  child: Theme(
-                    data: ThemeData(primaryColor: Color(0xff08763F)),
-                    child: TextFormField(
-                      controller: firstNameController,
-                      maxLength: 30,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z\u0090-\u097F]')),
-                        FilteringTextInputFormatter.deny(RegExp('[\u00A9,\u00AE,\u00A3]'))
-                      ],
-                      decoration: InputDecoration(
-                          hintText: getTranslated(context, 'first_name_new'),
-                          counterText: "",
-                          hintStyle: GoogleFonts.poppins(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w300,
-                            letterSpacing: 1,
-                            fontSize: 14,
-                          )),
-                      style: GoogleFonts.poppins(
-                          color: Color(0xff08763F),
-                          fontWeight: FontWeight.bold),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Container(
+                      child: Theme(
+                        data: ThemeData(primaryColor: Color(0xff08763F)),
+                        child: TextFormField(
+                          controller: firstNameController,
+                          maxLength: 30,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp('[a-zA-Z\u0090-\u097F,\u0020]')),
+                            FilteringTextInputFormatter.deny(
+                                RegExp('[\u00A9,\u00AE,\u00A3]'))
+                          ],
+                          decoration: InputDecoration(
+                              hintText: getTranslated(context, 'first_name_new'),
+                              counterText: "",
+                              hintStyle: GoogleFonts.poppins(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w300,
+                                letterSpacing: 1,
+                                fontSize: 14,
+                              )),
+                          style: GoogleFonts.poppins(
+                              color: Color(0xff08763F),
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  width: getProportionateScreenWidth(170),
-                  child: Theme(
-                    data: ThemeData(primaryColor: Color(0xff08763F)),
-                    child: TextFormField(
-                      controller: lastNameController,
-                      maxLength: 30,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z\u0090-\u097F]')),
-                        FilteringTextInputFormatter.deny(RegExp('[\u00A9,\u00AE,\u00A3]'))
-                      ],
-                      decoration: InputDecoration(
-                          hintText: getTranslated(context, 'last_name_new'),
-                          counterText: "",
-                          hintStyle: GoogleFonts.poppins(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w300,
-                            fontSize: 14,
-                          )),
-                      style: GoogleFonts.poppins(
-                          color: Color(0xff08763F),
-                          fontWeight: FontWeight.bold),
+                  SizedBox(width: 10,),
+                  Expanded(
+                    child: Container(
+                      child: Theme(
+                        data: ThemeData(primaryColor: Color(0xff08763F)),
+                        child: TextFormField(
+                          controller: lastNameController,
+                          maxLength: 30,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp('[a-zA-Z\u0090-\u097F]')),
+                            FilteringTextInputFormatter.deny(
+                                RegExp('[\u00A9,\u00AE,\u00A3]'))
+                          ],
+                          decoration: InputDecoration(
+                              hintText: getTranslated(context, 'last_name_new'),
+                              counterText: "",
+                              hintStyle: GoogleFonts.poppins(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w300,
+                                fontSize: 14,
+                              )),
+                          style: GoogleFonts.poppins(
+                              color: Color(0xff08763F),
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             widget.email != "" && widget.state == null
-                ? Container(
-              width: double.infinity,
+                ? Padding(
+              padding: EdgeInsets.only(
+                  left: 20, right: 20),
+              child: Expanded(
+                child: Container(
                   child: Theme(
                     data: ThemeData(primaryColor: Color(0xff08763F)),
                     child: TextFormField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(
+                            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                            r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                            r"{0,253}[a-zA-Z0-9])?)*$")),
+                        FilteringTextInputFormatter.deny(RegExp(
+                            '(\u00A9,\u00AE,\u00A3,[\u0090-\u097F])'))
+                      ],
                       enabled: false,
                       controller: emailController,
                       decoration: InputDecoration(
@@ -607,13 +647,29 @@ class _BasicProfileState extends State<BasicProfile> {
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                )
-                : Container(
-              width: double.infinity,
+                ),
+              ),
+            )
+                : Padding(
+              padding: EdgeInsets.only(
+                  left: 20, right: 20),
+              child: Center(
+                child: Container(
                   child: Theme(
                     data: ThemeData(primaryColor: Color(0xff08763F)),
                     child: TextFormField(
                       controller: emailController,
+                      inputFormatters: [
+                        /*FilteringTextInputFormatter.allow(RegExp(
+                                  r"^[a-zA-Z0-9.a-zA-Z0-9.-_]+@[a-zA-Z0-9]+\.[a-zA-Z]+")),*/
+                        FilteringTextInputFormatter.deny(
+                            RegExp('[\u0021-\u002C\u003A-\u003F\u0090-\u097F,\u002F]'))
+                      ],
+                      validator: (email){
+                        if (isEmailValid(email)) return null;
+                        else
+                          return 'Enter a valid email address';
+                      },
                       decoration: InputDecoration(
                           hintText: getTranslated(context, 'email'),
                           hintStyle: GoogleFonts.poppins(
@@ -627,106 +683,114 @@ class _BasicProfileState extends State<BasicProfile> {
                     ),
                   ),
                 ),
+              ),
+            ),
             SizedBox(
               height: 30,
             ),
-//            Container(
-//              width: double.infinity,
-//              child: Row(
-//                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                crossAxisAlignment: CrossAxisAlignment.center,
-//                children: [
-//                  Text(
-//                    getTranslated(context, 'location_address'),
-//                    style: GoogleFonts.poppins(
-//                      fontSize: getProportionateScreenHeight(18),
-//                      color: Color(0xff696969),
-//                    ),
-//                  ),
-//                  fetched == true
-//                      ? InkWell(
-//                          child: Container(
-//                            height: 40,
-//                            width: 40,
-//                            decoration: BoxDecoration(
-//                                borderRadius:
-//                                    BorderRadius.all(Radius.circular(50)),
-//                                border: Border.all(color: Color(0xffCCCCCC))),
-//                            child: Center(
-//                              child: Icon(
-//                                Icons.edit,
-//                                color: Color(0xff696969),
-//                              ),
-//                            ),
-//                          ),
-//                          onTap: () {
-//                            setState(() {
-//                              fetched = false;
-//                              filtersState = -1;
-//                              filtersDistrict = -1;
-//                              city = null;
-//                              state = null;
-//                            });
-//                          },
-//                        )
-//                      : Container(),
-//                ],
-//              ),
-//            ),
-//            fetched == true
-//                ? Container()
-//                : SizedBox(
-//                    height: 30,
-//                  ),
-//            fetched == true
-//                ? Container()
-//                : InkWell(
-//                    onTap: () async {
-//                      _permissionGranted = await location.hasPermission();
-//                      if (_permissionGranted == PermissionStatus.denied) {
-//                        _permissionGranted = await location.requestPermission();
-//                        if (_permissionGranted != PermissionStatus.granted) {
-//                          toastCommon(context,
-//                              getTranslated(context, 'location_permission'));
-//                          permisson.openAppSettings();
-//                        } else if (_permissionGranted ==
-//                            PermissionStatus.granted) {
-//                          showAlertDialog(context);
-//                        }
-//                      } else if (_permissionGranted ==
-//                          PermissionStatus.granted) {
-//                        showAlertDialog(context);
-//                      }
-//                    },
-//                    child: Center(
-//                      child: Container(
-//                        height: 50,
-//                        decoration: BoxDecoration(
-//                          color: Color(0xffEBEBEB),
-//                        ),
-//                        child: Row(
-//                          mainAxisAlignment: MainAxisAlignment.center,
-//                          crossAxisAlignment: CrossAxisAlignment.center,
-//                          children: [
-//                            Icon(
-//                              Icons.location_searching,
-//                              color: Colors.black,
-//                            ),
-//                            SizedBox(
-//                              width: 10,
-//                            ),
-//                            Text(
-//                              getTranslated(context, 'use_my_device_location'),
-//                              style: GoogleFonts.poppins(
-//                                fontSize: getProportionateScreenHeight(18),
-//                                color: Colors.black,
-//                              ),
-//                            ),
-//                          ],
-//                        ),
-//                      ),
-//                    ),
-//                  ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    getTranslated(context, 'location_address'),
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      color: Color(0xff696969),
+                    ),
+                  ),
+                  fetched == true
+                      ? InkWell(
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(50)),
+                          border: Border.all(color: Color(0xffCCCCCC))),
+                      child: Center(
+                        child: Icon(
+                          Icons.edit,
+                          color: Color(0xff696969),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        fetched = false;
+                        filtersState = -1;
+                        filtersDistrict = -1;
+                        city = null;
+                        state = null;
+                      });
+                    },
+                  )
+                      : Container(),
+                ],
+              ),
+            ),
+            fetched == true
+                ? Container()
+                : SizedBox(
+              height: 30,
+            ),
+            fetched == true
+                ? Container()
+                : InkWell(
+              onTap: () async {
+                _permissionGranted = await location.hasPermission();
+                if (_permissionGranted == PermissionStatus.denied) {
+                  toastCommon(context,
+                      getTranslated(context, 'location_permission'));
+                  permisson.openAppSettings();
+                  _permissionGranted = await location.requestPermission();
+                  if (_permissionGranted != PermissionStatus.granted) {
+                    toastCommon(context,
+                        getTranslated(context, 'location_permission'));
+                    permisson.openAppSettings();
+                  } else if (_permissionGranted ==
+                      PermissionStatus.granted) {
+                    showAlertDialog(context);
+                  }
+                } else if (_permissionGranted ==
+                    PermissionStatus.granted) {
+                  showAlertDialog(context);
+                }
+              },
+              child: Center(
+                child: Container(
+                  margin: EdgeInsets.only(
+                      left: screenWidth / 15, right: screenWidth / 15),
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Color(0xffEBEBEB),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.location_searching,
+                        color: Colors.black,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        getTranslated(context, 'use_my_device_location'),
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
             /*    fetched == true
                 ? Center(
                     child: Container(
@@ -760,86 +824,86 @@ class _BasicProfileState extends State<BasicProfile> {
                     ),
                   )
                 : Container(),*/
-//            fetched == false
-//                ? SizedBox(
-//                    height: 20,
-//                  )
-//                : SizedBox(
-//                    height: 1,
-//                  ),
-//            fetched == false
-//                ? Row(
-//                    mainAxisAlignment: MainAxisAlignment.center,
-//                    crossAxisAlignment: CrossAxisAlignment.center,
-//                    children: [
-//                      Container(
-//                        width: getProportionateScreenWidth(65),
-//                        height: 1,
-//                        color: Color(0xff08763F),
-//                      ),
-//                      SizedBox(
-//                        width: 10,
-//                      ),
-//                      Text(
-//                        getTranslated(context, 'or'),
-//                        style: GoogleFonts.poppins(color: Color(0xff08763F)),
-//                      ),
-//                      SizedBox(
-//                        width: 10,
-//                      ),
-//                      Container(
-//                        width: getProportionateScreenWidth(65),
-//                        height: 1,
-//                        color: Color(0xff08763F),
-//                      ),
-//                    ],
-//                  )
-//                : SizedBox(
-//                    height: 1,
-//                  ),
-//            fetched == false
-//                ? SizedBox(
-//                    height: 20,
-//                  ) :
-                 SizedBox(
-                    height: 10,
-                  ),
-//            fetched == false
-//                ? Center(
-//                    child: Text(
-//                      getTranslated(context, 'enter_manually'),
-//                      style: GoogleFonts.poppins(
-//                        color: Colors.black,
-//                        fontSize: 14,
-//                      ),
-//                    ),
-//                  )
-//                : SizedBox(
-//                    height: 10,
-//                  ),
-//            SizedBox(
-//              height: 3,
-//            ),
-//            fetched == false
-//                ? Center(
-//                    child: Text(
-//                      getTranslated(context, 'applicable_for_india_only'),
-//                      style: GoogleFonts.poppins(
-//                        color: Color(0xffBCBCBC),
-//                        fontSize: 10,
-//                      ),
-//                    ),
-//                  )
-//                : SizedBox(
-//                    height: 1,
-//                  ),
-//            fetched == false
-//                ? SizedBox(
-//                    height: 10,
-//                  )
-//                : SizedBox(
-//                    height: 1,
-//                  ),
+            fetched == false
+                ? SizedBox(
+              height: 20,
+            )
+                : SizedBox(
+              height: 1,
+            ),
+            fetched == false
+                ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: screenWidth / 5,
+                  height: 1,
+                  color: Color(0xff08763F),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  getTranslated(context, 'or'),
+                  style: GoogleFonts.poppins(color: Color(0xff08763F)),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  width: screenWidth / 5,
+                  height: 1,
+                  color: Color(0xff08763F),
+                ),
+              ],
+            )
+                : SizedBox(
+              height: 1,
+            ),
+            fetched == false
+                ? SizedBox(
+              height: 20,
+            )
+                : SizedBox(
+              height: 1,
+            ),
+            fetched == false
+                ? Center(
+              child: Text(
+                getTranslated(context, 'enter_manually'),
+                style: GoogleFonts.poppins(
+                  color: Colors.black,
+                  fontSize: 14,
+                ),
+              ),
+            )
+                : SizedBox(
+              height: 1,
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            fetched == false
+                ? Center(
+              child: Text(
+                getTranslated(context, 'applicable_for_india_only'),
+                style: GoogleFonts.poppins(
+                  color: Color(0xffBCBCBC),
+                  fontSize: 10,
+                ),
+              ),
+            )
+                : SizedBox(
+              height: 1,
+            ),
+            fetched == false
+                ? SizedBox(
+              height: 10,
+            )
+                : SizedBox(
+              height: 1,
+            ),
             InkWell(
               child: Container(
                 padding: EdgeInsets.all(10.0),
@@ -856,7 +920,7 @@ class _BasicProfileState extends State<BasicProfile> {
                       width: double.infinity,
                       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                       padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                      EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -866,33 +930,33 @@ class _BasicProfileState extends State<BasicProfile> {
                             children: [
                               fetched == true
                                   ? Text(
-                                      state,
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.black,
-                                        fontSize: 16.0,
-                                      ),
-                                    )
+                                state,
+                                style: GoogleFonts.poppins(
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                ),
+                              )
                                   : Text(
-                                      filtersState == -1
-                                          ? "Select State"
-                                          : StatesListTitles.elementAt(
-                                              filtersState),
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.black,
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
+                                filtersState == -1
+                                    ? "Select State"
+                                    : StatesListTitles.elementAt(
+                                    filtersState),
+                                style: GoogleFonts.poppins(
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                ),
+                              ),
                             ],
                           ),
                           fetched == true
                               ? SizedBox(
-                                  width: 1,
-                                )
+                            width: 1,
+                          )
                               : Icon(
-                                  Icons.arrow_drop_down_sharp,
-                                  color: Colors.grey.shade600,
-                                  size: 25,
-                                ),
+                            Icons.arrow_drop_down_sharp,
+                            color: Colors.grey.shade600,
+                            size: 25,
+                          ),
                         ],
                       )),
                 ),
@@ -917,7 +981,7 @@ class _BasicProfileState extends State<BasicProfile> {
                       width: double.infinity,
                       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                       padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                      EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -927,33 +991,33 @@ class _BasicProfileState extends State<BasicProfile> {
                             children: [
                               fetched == true
                                   ? Text(
-                                      city,
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.black,
-                                        fontSize: 16.0,
-                                      ),
-                                    )
+                                city,
+                                style: GoogleFonts.poppins(
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                ),
+                              )
                                   : Text(
-                                      filtersDistrict == -1
-                                          ? "Select District"
-                                          : DistrictList.elementAt(
-                                              filtersDistrict),
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.black,
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
+                                filtersDistrict == -1
+                                    ? "Select District"
+                                    : DistrictList.elementAt(
+                                    filtersDistrict),
+                                style: GoogleFonts.poppins(
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                ),
+                              ),
                             ],
                           ),
                           fetched == true
                               ? SizedBox(
-                                  width: 1,
-                                )
+                            width: 1,
+                          )
                               : Icon(
-                                  Icons.arrow_drop_down_sharp,
-                                  color: Colors.grey.shade600,
-                                  size: 25,
-                                ),
+                            Icons.arrow_drop_down_sharp,
+                            color: Colors.grey.shade600,
+                            size: 25,
+                          ),
                         ],
                       )),
                 ),
@@ -962,10 +1026,21 @@ class _BasicProfileState extends State<BasicProfile> {
                 fetched == false ? _showListDistrict(context) : print("feched");
               },
             ),
+            SizedBox(
+              height: 30,
+            ),
+            widget.city != null
+                ? ProfileWAButton(context, screenWidth)
+                : SizedBox(
+              height: 1,
+            ),
+            SizedBox(
+              height: 30,
+            ),
             Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints.tightFor(
-                    width: getProportionateScreenWidth(258), height: 55),
+                    width: getProportionateMobileScreenWidth(258), height: 55),
                 child: ElevatedButton(
                   onPressed: () {
                     if (firstNameController.text.length > 0 &&
@@ -979,8 +1054,8 @@ class _BasicProfileState extends State<BasicProfile> {
                         city != "") {
                       widget.city == null
                           ? widget.image_url == ""
-                              ? Register()
-                              : RegisterGoogle()
+                          ? Register()
+                          : RegisterGoogle()
                           : UpdateProfileData();
                     } else {
                       toastCommon(context,
@@ -1012,29 +1087,30 @@ class _BasicProfileState extends State<BasicProfile> {
     return Scaffold(
       backgroundColor: Color(0xff08763F),
       body:
-
-      /*Stack(
-        children: [
-          Positioned(
-            top: 20,
-            left: 0,
-            right: 0,
-            child: buildTopWidget(context),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: screenHeight / 3 + 20),
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(35),
-                      topLeft: Radius.circular(35)),
-                  color: Colors.white),
-              child: buildProfileForm(context),
-            ),
-          ),
-        ],
-      )*/Container(
+          ResponsiveWidget.isSmallScreen(context) ?
+          Stack(
+              children: [
+                Positioned(
+                  top: 20,
+                  left: 0,
+                  right: 0,
+                  child: buildTopWidget(context),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: screenHeight / 3 + 20),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(35),
+                            topLeft: Radius.circular(35)),
+                        color: Colors.white),
+                    child: buildProfileForm(context),
+                  ),
+                ),
+              ],
+            )
+          :Container(
         color: Color(0xFFF3FFF0),
         child: Center(
           child: Column(
@@ -1045,7 +1121,7 @@ class _BasicProfileState extends State<BasicProfile> {
               SizedBox(height: getProportionateScreenHeight(30)),
               Container(
                 height: 600,
-                width: getProportionateScreenWidth(486),
+                width: 400,
                 padding: EdgeInsets.all(getProportionateScreenWidth(32)),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -1069,6 +1145,84 @@ class _BasicProfileState extends State<BasicProfile> {
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  ProfileWAButton(BuildContext context, double screenWidth) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          isChecked = !isChecked;
+        });
+      },
+      child: Container(
+        margin:
+        EdgeInsets.only(left: 20, right:20),
+        height: getProportionateScreenHeight(92),
+        decoration: BoxDecoration(
+          color: isChecked ? Color(0xFFEBFFEB) : Color(0xFFF4F4F4),
+          border: Border.all(
+              width: 2,
+              color: isChecked ? Color(0xFF008940) : Color(0xFFE5E5E5)),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: InkWell(
+          onTap: () {
+            setState(() {
+              isChecked = !isChecked;
+            });
+          },
+          child: Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Checkbox(
+                      activeColor: Color(constants.COLOR_BACKGROUND),
+                      checkColor: Colors.white,
+                      value: isChecked,
+                      onChanged: (value) {
+                        setState(() {
+                          isChecked = !isChecked;
+                        });
+                      }),
+                  Flexible(
+                    child: Text.rich(
+                      TextSpan(children: [
+                        TextSpan(
+                          text:
+                          getTranslated(context, 'receive_otp_amp_updates_on'),
+                        ),
+                        WidgetSpan(
+                            child: SizedBox(
+                              width: getProportionateScreenWidth(10),
+                            )),
+                        WidgetSpan(
+                          child: Image.asset(
+                            "assets/images/whatsapp.png",
+                            width: 20,
+                          ),
+                        ),
+                        WidgetSpan(
+                            child: SizedBox(
+                              width: getProportionateScreenWidth(10),
+                            )),
+                        TextSpan(
+                          text: getTranslated(context, 'whatsapp'),
+                          style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
+                        ),
+                      ]),
+                      maxLines: 2,
+                      textAlign: TextAlign.start,
+                      style: GoogleFonts.poppins(
+                          color: isChecked ? Color(0xFF08763F) : Color(0xFF454545),
+                          fontSize: 18),
+                      overflow: TextOverflow.visible,
+                    ),
+                  ),
+                ],
+              )),
         ),
       ),
     );

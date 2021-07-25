@@ -412,8 +412,8 @@ class _AboutTabState extends State<AboutTab> {
           padding: EdgeInsets.symmetric(vertical: 30),
           height: 500 +
               ((providerListener.companyDetailsBrouchers.length).toDouble() *
-                  90) +
-              100,
+                  100) +
+              200,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

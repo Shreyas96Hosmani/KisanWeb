@@ -44,6 +44,12 @@ class CustomViewModel extends ChangeNotifier {
   String googleLName;
   String googleImageUrl;
 
+  bool canLoadMoreWebinar = true;
+  bool canLoadMoreMyWebinar =  true;
+  bool canLoadMoreProducts = true;
+  bool canLoadMoreCompanies = true;
+  bool canLoadMoreCalls = true;
+
   Future setGoogleData(
       String email, String displayname, String photoUrl) async {
     googleEmail = email;
@@ -76,6 +82,8 @@ class CustomViewModel extends ChangeNotifier {
   List<DemoListParser> demosList = [];
   List<LaunchListParser> launchList = [];
   List<WebinarListParser> eventList = [];
+  List<WebinarListParser> MyWebinarList = [];
+
   List<WebinarListParser> featuredeventList = [];
   List<CategoryListParser> categoryList = [];
   List<CompaniesListParser> companiesList = [];
@@ -2622,7 +2630,8 @@ class CustomViewModel extends ChangeNotifier {
         language,
         min_scheduled_date,
         max_scheduled_date,
-        category);
+        category,
+        1);
 
     if (response != "error") {
       this.webinarListViewAll.clear();
@@ -2678,6 +2687,60 @@ class CustomViewModel extends ChangeNotifier {
     }
   }
 
+  Future AppendWebinarList(
+      String search_string,
+      String language,
+      String min_scheduled_date,
+      String max_scheduled_date,
+      String category,
+      int pageCount) async {
+    this.canLoadMoreWebinar = true;
+
+    final response = await WebService().GetWebinarList(
+        userprofileData.user.toString(),
+        search_string,
+        language,
+        min_scheduled_date,
+        max_scheduled_date,
+        category,
+        pageCount);
+
+    if (response != "error") {
+      var responseDecoded = jsonDecode(response.body);
+      var responseDecodedSuccess = responseDecoded['success'];
+      var responseDecodedMsg = responseDecoded['message'].toString();
+
+      if (responseDecodedSuccess == "false") {
+        notifyListeners();
+        return responseDecodedMsg;
+      } else if (responseDecodedSuccess == "true") {
+        print("response" + responseDecodedMsg.toString());
+
+        final data = responseDecoded['data'];
+
+        int temp = webinarListViewAll.length;
+        for (Map i in data) {
+          webinarListViewAll.add(WebinarListParser.fromJson(i));
+        }
+        if (temp == webinarListViewAll.length || webinarListViewAll.length-temp<10) {
+          this.canLoadMoreWebinar = false;
+          notifyListeners();
+          return "No more items";
+        } else {
+          notifyListeners();
+          return "success";
+        }
+      } else {
+        notifyListeners();
+        return "error";
+      }
+    } else {
+      print("***error");
+      notifyListeners();
+      return "error";
+    }
+  }
+
   Future GetEventFilters() async {
     final response = await WebService().GetEventFilters();
 
@@ -2706,6 +2769,89 @@ class CustomViewModel extends ChangeNotifier {
 
         for (Map i in category_list) {
           filterCategoryList.add(FilterCategoryListParser.fromJson(i));
+        }
+
+        notifyListeners();
+        return "success";
+      } else {
+        notifyListeners();
+        return "error";
+      }
+    } else {
+      print("***error");
+      notifyListeners();
+      return "error";
+    }
+  }
+
+  Future GetMyWebinarList(String user_id) async {
+    this.canLoadMoreMyWebinar = true;
+    final response = await WebService().GetMyWebinarList(user_id, 1);
+
+    if (response != "error") {
+      this.MyWebinarList.clear();
+      var responseDecoded = jsonDecode(response.body);
+      var responseDecodedSuccess = responseDecoded['success'];
+      var responseDecodedMsg = responseDecoded['message'].toString();
+
+      if (responseDecodedSuccess == "false") {
+        notifyListeners();
+        return responseDecodedMsg;
+      } else if (responseDecodedSuccess == "true") {
+        print("response" + responseDecodedMsg.toString());
+
+        final data = responseDecoded['data'];
+
+        for (Map i in data) {
+          MyWebinarList.add(WebinarListParser.fromJson(i));
+        }
+
+        if (MyWebinarList.length == 0 || MyWebinarList.length <10) {
+          this.canLoadMoreMyWebinar = false;
+        }
+
+        notifyListeners();
+        return "success";
+      } else {
+        notifyListeners();
+        return "error";
+      }
+    } else {
+      print("***error");
+      notifyListeners();
+      return "error";
+    }
+  }
+
+  Future AppendMyWebinarList(String user_id, int pageCount) async {
+    this.canLoadMoreMyWebinar = true;
+
+    final response = await WebService().GetMyWebinarList(user_id, pageCount);
+
+    if (response != "error") {
+      var responseDecoded = jsonDecode(response.body);
+      var responseDecodedSuccess = responseDecoded['success'];
+      var responseDecodedMsg = responseDecoded['message'].toString();
+
+      if (responseDecodedSuccess == "false") {
+        notifyListeners();
+        return responseDecodedMsg;
+      } else if (responseDecodedSuccess == "true") {
+        print("response" + responseDecodedMsg.toString());
+
+        final data = responseDecoded['data'];
+
+        int temp = MyWebinarList.length;
+        for (Map i in data) {
+          MyWebinarList.add(WebinarListParser.fromJson(i));
+        }
+        if (temp == MyWebinarList.length || MyWebinarList.length-temp<10) {
+          this.canLoadMoreMyWebinar = false;
+          notifyListeners();
+          return "No more items";
+        } else {
+          notifyListeners();
+          return "success";
         }
 
         notifyListeners();
