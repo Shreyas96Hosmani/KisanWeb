@@ -14,12 +14,15 @@ import 'package:kisanweb/Helpers/helper.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
 import 'package:kisanweb/Models/DetailedBrouchersParser.dart';
 import 'package:kisanweb/Models/RepresentativeListParser.dart';
+import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
+import 'package:kisanweb/UI/Categories/productsFound.dart';
 import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
 import 'package:kisanweb/UI/CompanyProfile/ViewPhotoScreen.dart';
 import 'package:kisanweb/UI/DetailedScreens/VideoScreen.dart';
 import 'package:kisanweb/UI/DetailedScreens/pdfViewer.dart';
 import 'package:kisanweb/UI/Subscribe/SubscribeToMembership.dart';
 import 'package:kisanweb/UI/Tabs/HomeTab.dart';
+import 'package:kisanweb/UI/Widgets/readmore.dart';
 import 'package:kisanweb/View%20Models/CustomViewModel.dart';
 import 'package:kisanweb/localization/language_constants.dart';
 
@@ -427,7 +430,1400 @@ class _DetailedProductsState extends State<DetailedProducts> {
     return _isloaded == true
         ? Scaffold(
             extendBodyBehindAppBar: true,
-            body: Stack(
+            body: ResponsiveWidget.isSmallScreen(context) ? Stack(
+              children: [
+                SingleChildScrollView(
+                    child: providerListener.productsDetails != null
+                        ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        providerListener.productsDetailsAssetsUrl.length >
+                            0
+                            ? Stack(
+                          children: [
+                            CarouselSlider(
+                              options: CarouselOptions(
+                                  onPageChanged: (index, onTap) {
+                                    setState(() {
+                                      currentS = index;
+                                    });
+                                    print(currentS.toString());
+                                  },
+                                  autoPlay: true,
+                                  height: SizeConfig.screenWidth,
+                                  viewportFraction: 1,
+                                  autoPlayAnimationDuration:
+                                  Duration(milliseconds: 2000)),
+                              items: providerListener
+                                  .productsDetailsAssetsUrl
+                                  .map((url) {
+                                int index = providerListener
+                                    .productsDetailsAssetsUrl
+                                    .indexOf(url);
+                                return Builder(
+                                  builder: (BuildContext context) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        providerListener
+                                            .productsDetailsAssets[
+                                        index]
+                                            .media_type ==
+                                            "youtubevideo"
+                                            ? push(
+                                            context,
+                                            SamplePlayer(
+                                                null,
+                                                providerListener
+                                                    .productsDetailsAssets[
+                                                index]
+                                                    .media_url))
+                                            : push(
+                                            context,
+                                            ViewPhotos(
+                                              url: providerListener
+                                                  .productsDetailsAssets[
+                                              index]
+                                                  .media_url ??
+                                                  "",
+                                            ));
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            width: SizeConfig
+                                                .screenWidth -
+                                                10,
+                                            margin: EdgeInsets
+                                                .symmetric(
+                                                horizontal: 0,
+                                                vertical: 0),
+                                            decoration:
+                                            BoxDecoration(
+                                              color:
+                                              Colors.green[700],
+                                              image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      providerListener
+                                                          .productsDetailsAssets[
+                                                      index]
+                                                          .bigthumb_url ??
+                                                          ""),
+                                                  fit: BoxFit.fill),
+                                            ),
+                                          ),
+                                          providerListener
+                                              .productsDetailsAssets[
+                                          index]
+                                              .media_type ==
+                                              "youtubevideo"
+                                              ? Center(
+                                            child: Opacity(
+                                              opacity: 0.7,
+                                              child: Icon(
+                                                Icons
+                                                    .play_circle_fill,
+                                                color: Colors
+                                                    .white,
+                                                size: 50,
+                                              ),
+                                            ),
+                                          )
+                                              : SizedBox(
+                                            height: 1,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                            Positioned(
+                              top: SizeConfig.screenWidth / 1.1,
+                              left: 0,
+                              right: 0,
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
+                                children: providerListener
+                                    .productsDetailsAssetsUrl
+                                    .map((url) {
+                                  int index = providerListener
+                                      .productsDetailsAssetsUrl
+                                      .indexOf(url);
+                                  return Container(
+                                    width: 30.0,
+                                    height: 5.0,
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 10.0,
+                                        horizontal: 10.0),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.rectangle,
+                                      color: currentS == index
+                                          ? Colors.white
+                                          : Colors.black
+                                          .withOpacity(0.3),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                            Positioned(
+                              right: 10,
+                              top: 35,
+                              child: ConstrainedBox(
+                                constraints:
+                                BoxConstraints.tightFor(
+                                  width: 55,
+                                  height: 55,
+                                ),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors.white
+                                          .withOpacity(0.5),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(
+                                              15))),
+                                  onPressed: () async {
+                                    final RenderBox box =
+                                    context.findRenderObject();
+                                    if (Platform.isAndroid) {
+                                      var response = await http.get(
+                                          Uri.parse((providerListener
+                                              .productsDetails
+                                              .bigthumb_url ??
+                                              "")));
+                                      final documentDirectory =
+                                          (await getExternalStorageDirectory())
+                                              .path;
+                                      File imgFile = new File(
+                                          '$documentDirectory/' +
+                                              providerListener
+                                                  .productsDetails
+                                                  .title_english +
+                                              ".png");
+                                      imgFile.writeAsBytesSync(
+                                          response.bodyBytes);
+
+                                      Share.shareFiles([
+                                        "${documentDirectory}/" +
+                                            providerListener
+                                                .productsDetails
+                                                .title_english +
+                                            ".png"
+                                      ],
+                                          text: "Hi, Check out this product.\n" +
+                                              (providerListener
+                                                  .productsDetails
+                                                  .title_english ??
+                                                  "") +
+                                              " on kisan App\nhttps://kisan.app/");
+                                    } else {
+                                      Share.share(
+                                          "Hi, Check out this product.\n" +
+                                              (providerListener
+                                                  .productsDetails
+                                                  .title_english ??
+                                                  "") +
+                                              " on kisan App\nhttps://kisan.app/",
+                                          subject: (providerListener
+                                              .productsDetails
+                                              .bigthumb_url ??
+                                              ""),
+                                          sharePositionOrigin:
+                                          box.localToGlobal(
+                                              Offset.zero) &
+                                          box.size);
+                                    }
+                                  },
+                                  child: Icon(
+                                    Icons.share,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 10,
+                              top: 35,
+                              child: ConstrainedBox(
+                                constraints:
+                                BoxConstraints.tightFor(
+                                  width: 55,
+                                  height: 55,
+                                ),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors.white
+                                          .withOpacity(0.5),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(
+                                              15))),
+                                  onPressed: () {
+                                    pop(context);
+                                  },
+                                  child: Icon(
+                                    Icons.arrow_back_ios,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                            : SizedBox(
+                          height: 1,
+                        ),
+                        SizedBox(
+                          height: 27,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child: Text(
+                            languageCode == "en"
+                                ? utf8.decode(providerListener
+                                .productsDetails.title_english
+                                .toString()
+                                .runes
+                                .toList() ??
+                                "")
+                                : languageCode == "hi"
+                                ? utf8.decode(providerListener
+                                .productsDetails.title_hindi
+                                .toString()
+                                .runes
+                                .toList() ??
+                                "")
+                                : utf8.decode(providerListener
+                                .productsDetails.title_marathi
+                                .toString()
+                                .runes
+                                .toList() ??
+                                ""),
+                            style: GoogleFonts.poppins(
+                              fontSize: 20,
+                              color: Color(0xFF044BB0),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child: RichText(
+                              text: TextSpan(
+                                  text: currencySymbl,
+                                  style: GoogleFonts.poppins(
+                                    color: Color(0xFF393939),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: " " +
+                                          (providerListener.productsDetails
+                                              .price ??
+                                              0)
+                                              .toString(),
+                                      style: GoogleFonts.poppins(
+                                          color: Color(0xFF393939),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    TextSpan(
+                                        text: " onwards",
+                                        style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 20))
+                                  ])),
+                        ),
+                        SizedBox(
+                          height: 18,
+                        ),
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 30),
+                          child: ReadMoreText(
+                            parseHtmlString(languageCode == "en"
+                                ? utf8.decode(providerListener
+                                .productsDetails.desc_english
+                                .toString()
+                                .runes
+                                .toList() ??
+                                "")
+                                : languageCode == "hi"
+                                ? utf8.decode(providerListener
+                                .productsDetails.desc_hindi
+                                .toString()
+                                .runes
+                                .toList() ??
+                                "")
+                                : utf8.decode(providerListener
+                                .productsDetails.desc_marathi
+                                .toString()
+                                .runes
+                                .toList() ??
+                                "")),
+                            trimLines: 6,
+                            style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black,
+                                fontSize: 14),
+                            colorClickableText: Colors.black,
+                            trimMode: TrimMode.Line,
+                            trimCollapsedText: 'Read more',
+                            trimExpandedText: 'Read less',
+                            lessStyle: TextStyle(
+                                fontSize: 14,
+                                color: Colors.blueAccent,
+                                fontWeight: FontWeight.bold),
+                            moreStyle: TextStyle(
+                                fontSize: 14,
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        /*SizedBox(
+                                height: 30,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 30),
+                                child: Text(
+                                  'Special Offer',
+                                  style: GoogleFonts.poppins(
+                                    color: Color(0xFF044BB0),
+                                    fontSize:
+                                        getProportionateScreenHeight(20),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 220,
+                                child: ListView.builder(
+                                    itemCount: 3,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      //TODO: get from server
+                                      return Offers(context);
+                                    }),
+                              ),*/
+                        //PDF Button ------------
+                        SizedBox(
+                          height: 30,
+                        ),
+                        providerListener.productsDetailsBrouchers.length >
+                            0
+                            ? Column(
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 30),
+                              child: Text(
+                                getTranslated(context, 'Broucher'),
+                                style: GoogleFonts.poppins(
+                                  color: Color(0xFF044BB0),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 13,
+                            ),
+                            Container(
+                              height: ((providerListener
+                                  .productsDetailsBrouchers
+                                  .length)
+                                  .toDouble()) *
+                                  100,
+                              width: SizeConfig.screenWidth,
+                              child: MediaQuery.removePadding(
+                                context: context,
+                                removeTop: true,
+                                removeBottom: true,
+                                child: ListView.builder(
+                                    itemCount: providerListener
+                                        .productsDetailsBrouchers
+                                        .length,
+                                    scrollDirection: Axis.vertical,
+                                    physics:
+                                    NeverScrollableScrollPhysics(),
+                                    itemBuilder: (context, index) {
+                                      return PDFButton(
+                                        onWholePressed: () {
+                                          push(
+                                              context,
+                                              pdfviewer(
+                                                  providerListener
+                                                      .productsDetailsBrouchers[
+                                                  index]
+                                                      .title,
+                                                  providerListener
+                                                      .productsDetailsBrouchers[
+                                                  index]
+                                                      .media_url));
+                                        },
+                                        onDownloadPressed: () {
+                                          print("Download Pdf");
+                                          setState(() {
+                                            download_link =
+                                                providerListener
+                                                    .productsDetailsBrouchers[
+                                                index]
+                                                    .media_url;
+                                          });
+
+                                          universalLoader.style(
+                                              message:
+                                              'Downloading file...',
+                                              backgroundColor:
+                                              Colors.white,
+                                              progressWidget:
+                                              CircularProgressIndicator(
+                                                strokeWidth: 10,
+                                                backgroundColor: Color(
+                                                    COLOR_PRIMARY),
+                                                valueColor:
+                                                AlwaysStoppedAnimation<
+                                                    Color>(
+                                                    Color(
+                                                        COLOR_BACKGROUND)),
+                                              ),
+                                              elevation: 10.0,
+                                              insetAnimCurve: Curves
+                                                  .easeInOutSine,
+                                              progress: 0.0,
+                                              maxProgress: 100.0,
+                                              progressTextStyle:
+                                              TextStyle(
+                                                  color: Colors
+                                                      .black,
+                                                  fontSize:
+                                                  13.0,
+                                                  fontWeight:
+                                                  FontWeight
+                                                      .w400),
+                                              messageTextStyle: TextStyle(
+                                                  color:
+                                                  Colors.black,
+                                                  fontSize: 19.0,
+                                                  fontWeight:
+                                                  FontWeight
+                                                      .w600));
+
+                                          _download();
+                                        },
+                                        onPdfPressed: () {
+                                          print("View Pdf");
+                                          push(
+                                              context,
+                                              pdfviewer(
+                                                  providerListener
+                                                      .productsDetailsBrouchers[
+                                                  index]
+                                                      .title,
+                                                  providerListener
+                                                      .productsDetailsBrouchers[
+                                                  index]
+                                                      .media_url));
+                                        },
+                                        broucherOBJ: providerListener
+                                            .productsDetailsBrouchers[
+                                        index],
+                                      );
+                                    }),
+                              ),
+                            ),
+                          ],
+                        )
+                            : SizedBox(
+                          height: 1,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child: CompanyLink(
+                            title: providerListener
+                                .productsDetails.organisation_name ??
+                                "",
+                            imagePath: providerListener
+                                .productsDetails.image_bigthumb_url ??
+                                "",
+                            onPressed: () {
+                              push(
+                                  context,
+                                  CompanyDetails(providerListener
+                                      .productsDetails.user_id));
+                              print(
+                                  "Company link Pressed : To Company Profile");
+                            },
+                          ),
+                        ),
+                        //-----More from the company
+                        SizedBox(
+                          height: 31,
+                        ),
+                        providerListener
+                            .productsListFromSameCompany.length >
+                            0
+                            ? Padding(
+                          padding:
+                          EdgeInsets.symmetric(horizontal: 30),
+                          child: Row(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                width: 300,
+                                child: Text(
+                                  /* getTranslated(
+                                                      context, 'Simmilar') +*/
+                                  "More from " +
+                                      (providerListener
+                                          .productsDetails
+                                          .organisation_name ??
+                                          ""),
+                                  maxLines: 2,
+                                  style: GoogleFonts.poppins(
+                                    color: Color(0xFF044BB0),
+                                    fontSize:
+                                    getProportionateScreenHeight(
+                                        20),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              //Change it with different SVG
+                              GestureDetector(
+                                  onTap: () {
+                                    //no category ids, only company id
+                                    List<int> ids = [];
+//                                    push(
+//                                        context,
+//                                        productsFound(
+//                                            0,
+//                                            providerListener.productsList[0].organisation_name,
+//                                            ids,
+//                                            widget.company_id));
+                                  },
+                                  child: Container(
+                                    height: 22,
+                                    width: 22,
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey.shade400,
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            50)),
+                                    child: Icon(
+                                      Icons.arrow_forward_ios_sharp,
+                                      size: 14,
+                                      color: Colors.white,
+                                    ),
+                                  ))
+                            ],
+                          ),
+                        )
+                            : SizedBox(
+                          height: 1,
+                        ),
+                        providerListener
+                            .productsListFromSameCompany.length >
+                            0
+                            ? Container(
+                          height: 260,
+                          child: ListView.builder(
+                              itemCount: providerListener
+                                  .productsListFromSameCompany
+                                  .length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return MoreProds(
+                                  name: providerListener
+                                      .productsListFromSameCompany[
+                                  index]
+                                      .title_english ??
+                                      "",
+                                  desc: parseHtmlString(providerListener
+                                      .productsListFromSameCompany[
+                                  index]
+                                      .desc_english) ??
+                                      "",
+                                  imgPath: providerListener
+                                      .productsListFromSameCompany[
+                                  index]
+                                      .bigthumb_url ??
+                                      "",
+                                  onPressed: () {
+                                    pushReplacement(
+                                        context,
+                                        DetailedProducts(
+                                            providerListener
+                                                .productsListFromSameCompany[
+                                            index]
+                                                .id,
+                                            providerListener
+                                                .productsListFromSameCompany[
+                                            index]
+                                                .user_id));
+                                  },
+                                );
+                              }),
+                        )
+                            : SizedBox(
+                          height: 1,
+                        ),
+                        SizedBox(
+                          height: 36,
+                        ),
+                        providerListener.productsListofSimilar.length > 0
+                            ? Container(
+                          height: (providerListener
+                              .productsListofSimilar
+                              .length /
+                              2)
+                              .ceil()
+                              .toDouble() *
+                              265 +
+                              100,
+                          width: double.infinity,
+                          color: Color(0xFFEBEBEB),
+                          padding: EdgeInsets.only(
+                              left: 30,
+                              right: 30,
+                              top: 24,
+                              bottom: 0),
+                          child: Column(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    getTranslated(
+                                        context, 'simmilar_prod'),
+                                    style: GoogleFonts.poppins(
+                                      color: Color(0xFF383838),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                      onTap: () {
+                                        //one category id
+                                        List<int> ids = [];
+                                        ids.add(providerListener
+                                            .productsDetails
+                                            .product_category_id);
+//                                        push(
+//                                            context,
+//                                            productsFound(
+//                                                0,
+//                                                getTranslated(
+//                                                    context,
+//                                                    'simmilar_prod'),
+//                                                ids,
+//                                                0));
+                                      },
+                                      child: Container(
+                                        height: 22,
+                                        width: 22,
+                                        decoration: BoxDecoration(
+                                            color: Colors
+                                                .grey.shade400,
+                                            borderRadius:
+                                            BorderRadius
+                                                .circular(50)),
+                                        child: Icon(
+                                          Icons
+                                              .arrow_forward_ios_sharp,
+                                          size: 14,
+                                          color: Colors.white,
+                                        ),
+                                      ))
+                                ],
+                              ),
+                              Container(
+                                height: (providerListener
+                                    .productsListofSimilar
+                                    .length /
+                                    2)
+                                    .ceil()
+                                    .toDouble() *
+                                    232,
+                                child: MediaQuery.removePadding(
+                                  context: context,
+                                  removeBottom: true,
+                                  child: GridView.count(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 20,
+                                      crossAxisSpacing: 20,
+                                      physics:
+                                      NeverScrollableScrollPhysics(),
+                                      childAspectRatio: 0.8,
+                                      children: List.generate(
+                                          providerListener
+                                              .productsListofSimilar
+                                              .length, (index) {
+                                        return GridProds(
+                                          name: providerListener
+                                              .productsListofSimilar[
+                                          index]
+                                              .title_english ??
+                                              "",
+                                          desc: parseHtmlString(
+                                              providerListener
+                                                  .productsListofSimilar[
+                                              index]
+                                                  .desc_english) ??
+                                              "",
+                                          imgPath: providerListener
+                                              .productsListofSimilar[
+                                          index]
+                                              .bigthumb_url ??
+                                              "",
+                                          onPressed: () {
+                                            pushReplacement(
+                                                context,
+                                                DetailedProducts(
+                                                    providerListener
+                                                        .productsListofSimilar[
+                                                    index]
+                                                        .id,
+                                                    providerListener
+                                                        .productsListofSimilar[
+                                                    index]
+                                                        .user_id));
+                                          },
+                                        );
+                                      })),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 70,
+                              )
+                            ],
+                          ),
+                        )
+                            : SizedBox(
+                          height: 1,
+                        ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(80),
+                        )
+                      ],
+                    )
+                        : SizedBox(
+                      height: 1,
+                    )),
+                //Slide Up Panel Starts from here
+                providerListener.productsDetails != null
+                    ? Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Visibility(
+                      visible: _visible1,
+                      maintainState: true,
+                      maintainAnimation: true,
+                      child: SlidingUpPanel(
+                        controller: _pc1,
+                        maxHeight: 550,
+                        borderRadius: radius,
+                        onPanelOpened: () {
+                          setState(() {
+                            _innerVisible = true;
+                          });
+                        },
+                        onPanelClosed: () {
+                          setState(() {
+                            _innerVisible = false;
+                          });
+                        },
+                        panel: Visibility(
+                          visible: _innerVisible,
+                          child: Column(
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 33, vertical: 10),
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: 76,
+                                          height: 8,
+                                          decoration: BoxDecoration(
+                                              color: Colors.grey.shade400,
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  20)),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 30,
+                                    ),
+                                    Text(
+                                      providerListener.productsDetails
+                                          .title_english ??
+                                          "",
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 13),
+                                    ),
+                                    SizedBox(
+                                      height: 16,
+                                    ),
+                                    Container(
+                                      height: 44,
+                                      child: Text(
+                                        getTranslated(context,
+                                            'contactPopUpInfo') +
+                                            " " +
+                                            providerListener
+                                                .productsDetails
+                                                .organisation_name ??
+                                            "",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    providerListener.representativeList
+                                        .length >
+                                        0
+                                        ? Container(
+                                      height: 300,
+                                      child: ListView.builder(
+                                          itemCount: providerListener
+                                              .representativeList
+                                              .length,
+                                          itemBuilder:
+                                              (context, index) {
+                                            return RepInformation(
+                                              onCallPressed: () {
+                                                if ((prefs.getInt(
+                                                    'paywall') ??
+                                                    0) ==
+                                                    2 &&
+                                                    (prefs.getString(
+                                                        'membership_status') ??
+                                                        "") !=
+                                                        "active") {
+                                                  push(context,
+                                                      SubscribeToMembership());
+                                                } else {
+                                                  connectProductCall(
+                                                      providerListener
+                                                          .userprofileData
+                                                          .user,
+                                                      providerListener
+                                                          .representativeList[
+                                                      index]
+                                                          .user_id,
+                                                      providerListener
+                                                          .productsDetails
+                                                          .id,
+                                                      providerListener
+                                                          .representativeList[
+                                                      index]
+                                                          .mobile ??
+                                                          "");
+                                                }
+                                              },
+                                              onWhatAppPressed:
+                                                  () async {
+                                                setState(() {
+                                                  indexSaveContact =
+                                                      index;
+                                                });
+                                                if ((prefs.getInt(
+                                                    'paywall') ??
+                                                    0) ==
+                                                    2 &&
+                                                    (prefs.getString(
+                                                        'membership_status') ??
+                                                        "") !=
+                                                        "active") {
+                                                  push(context,
+                                                      SubscribeToMembership());
+                                                } else {
+                                                  print(providerListener
+                                                      .representativeList[
+                                                  index]
+                                                      .status);
+                                                  if (providerListener
+                                                      .representativeList[
+                                                  index]
+                                                      .status ==
+                                                      "accepted") {
+                                                    connectProductWhatsApp(
+                                                        providerListener
+                                                            .userprofileData
+                                                            .user,
+                                                        providerListener
+                                                            .representativeList[
+                                                        index]
+                                                            .user_id,
+                                                        providerListener
+                                                            .productsDetails
+                                                            .id,
+                                                        providerListener
+                                                            .representativeList[index]
+                                                            .mobile ??
+                                                            "",
+                                                        0);
+                                                  } else if (providerListener
+                                                      .representativeList[
+                                                  index]
+                                                      .status ==
+                                                      "not initiated") {
+                                                    _pc1.close();
+                                                    setState(() {
+                                                      _visible3 =
+                                                      true;
+                                                      _visible1 =
+                                                      false;
+                                                      _pc3.open();
+                                                    });
+                                                  } else if (providerListener
+                                                      .representativeList[
+                                                  index]
+                                                      .status ==
+                                                      "initiated") {
+                                                    //below condition if contact is not saved in current and request initiated from another device
+                                                    String
+                                                    mobileNumber =
+                                                        providerListener
+                                                            .representativeList[index]
+                                                            .mobile ??
+                                                            "";
+                                                    PermissionStatus
+                                                    permissionStatus =
+                                                    await _getContactPermission();
+                                                    if (permissionStatus ==
+                                                        PermissionStatus
+                                                            .granted) {
+                                                      try {
+                                                        Iterable<
+                                                            Contact>
+                                                        asdf =
+                                                        await ContactsService.getContactsForPhone(
+                                                            mobileNumber);
+
+                                                        if (asdf.length ==
+                                                            0) {
+                                                          _pc1.close();
+                                                          _visible1 =
+                                                          false;
+                                                          setState(
+                                                                  () {
+                                                                _pc3.open();
+                                                                _visible3 =
+                                                                true;
+                                                              });
+                                                        } else {
+                                                          toastCommon(
+                                                              context,
+                                                              getTranslated(context, 'request_ent') ??
+                                                                  "");
+                                                        }
+                                                      } catch (e) {
+                                                        toastCommon(
+                                                            context,
+                                                            getTranslated(
+                                                                context,
+                                                                'no_data_tv'));
+                                                      }
+                                                    } else {
+                                                      _handleInvalidPermissions(
+                                                          permissionStatus);
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              representativeOBJ:
+                                              providerListener
+                                                  .representativeList[
+                                              index],
+                                            );
+                                          }),
+                                    )
+                                        : SizedBox(
+                                      height: 1,
+                                    ),
+                                    SizedBox(
+                                      height: 7,
+                                    ),
+                                    Container(
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            "Get a call from the company",
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 13),
+                                          ),
+                                          SizedBox(
+                                            height: 7,
+                                          ),
+                                          CallMeButton(
+                                            onPressed: () {
+                                              if ((prefs.getInt(
+                                                  'paywall') ??
+                                                  0) ==
+                                                  2 &&
+                                                  (prefs.getString(
+                                                      'membership_status') ??
+                                                      "") !=
+                                                      "active") {
+                                                push(context,
+                                                    SubscribeToMembership());
+                                              } else {
+                                                if (_isChecked == false) {
+                                                  _pc1.close();
+                                                  _visible1 = false;
+                                                  _visible2 = true;
+                                                  setState(() {
+                                                    _pc2.open();
+                                                  });
+                                                } else {
+                                                  Provider.of<CustomViewModel>(
+                                                      context,
+                                                      listen: false)
+                                                      .requestCallMe(
+                                                      providerListener
+                                                          .userprofileData
+                                                          .user,
+                                                      providerListener
+                                                          .productsDetails
+                                                          .user_id,
+                                                      providerListener
+                                                          .productsDetails
+                                                          .id)
+                                                      .then((value) {
+                                                    toastCommon(
+                                                        context,
+                                                        getTranslated(
+                                                            context,
+                                                            'request_ent') ??
+                                                            "");
+                                                  });
+                                                }
+                                              }
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        collapsed: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: getProportionateScreenWidth(25),
+                              vertical: 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: SizeConfig.screenWidth / 5),
+                                child: Text(
+                                  (providerListener.representativeList
+                                      .length ??
+                                      0)
+                                      .toString() +
+                                      " " +
+                                      getTranslated(
+                                          context, 'numberOfOnline')
+                                          .toString(),
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 12),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 7,
+                              ),
+                              Row(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.center,
+                                children: [
+                                  FavButton(
+                                    providerListener: providerListener,
+                                    onPressed: () {},
+                                    favButtonChild: FavoriteButton(
+                                      iconSize: 40,
+                                      valueChanged: (_isFavorite) {
+                                        print(
+                                            'Is Favorite $_isFavorite)');
+                                        Provider.of<
+                                            CustomViewModel>(
+                                            context,
+                                            listen: false)
+                                            .LikeDislikeProduct(
+                                            providerListener
+                                                .userprofileData.user,
+                                            providerListener
+                                                .productsDetails
+                                                .user_id,
+                                            providerListener
+                                                .productsDetails.id);
+                                      },
+                                      isFavorite: (providerListener
+                                          .productsDetails.liked ??
+                                          false),
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  ContactButton(
+                                    onPressed: () {
+                                      _pc1.open();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    providerListener.productsDetails != null
+                        ? Visibility(
+                      maintainState: true,
+                      maintainAnimation: true,
+                      visible: _visible2,
+                      child: CallMeSlide(
+                        radius: radius,
+                        panelController: _pc2,
+                        closePressed: () {
+                          _pc2.close();
+                          _visible2 = false;
+                          _visible1 = true;
+                          setState(() {
+                            _pc1.open();
+                          });
+                        },
+                        isChecked: _isChecked,
+                        checkBoxChanged: (value) {
+                          setState(() {
+                            _isChecked = !_isChecked;
+                            prefs.setBool('_isChecked', value);
+                          });
+                        },
+                      ),
+                    )
+                        : SizedBox(
+                      height: 1,
+                    ),
+                    providerListener.productsDetails != null &&
+                        providerListener.representativeList.length >
+                            0 &&
+                        indexSaveContact != -1
+                        ? Visibility(
+                      maintainState: true,
+                      maintainAnimation: true,
+                      visible: _visible3,
+                      child: SaveContact(
+                        name: (providerListener
+                            .representativeList[
+                        indexSaveContact]
+                            .first_name ??
+                            "") +
+                            " " +
+                            (providerListener
+                                .representativeList[
+                            indexSaveContact]
+                                .last_name ??
+                                ""),
+                        org_name: (providerListener.productsDetails
+                            .organisation_name ??
+                            ""),
+                        image_url: (providerListener
+                            .representativeList[
+                        indexSaveContact]
+                            .image_url ??
+                            ""),
+                        radius: radius,
+                        panelController: _pc3,
+                        closePressed: () {
+                          _pc3.close();
+                          _pc1.open();
+                          setState(() {
+                            _visible3 = false;
+                            _visible1 = true;
+                          });
+                        },
+                        saveContactPressed: () async {
+                          PermissionStatus permissionStatus =
+                          await _getContactPermission();
+                          if (permissionStatus ==
+                              PermissionStatus.granted) {
+                            String mobileNumber = providerListener
+                                .representativeList[
+                            indexSaveContact]
+                                .mobile ??
+                                "";
+
+                            Iterable<Contact> asdf =
+                            await ContactsService
+                                .getContactsForPhone(
+                                mobileNumber);
+
+                            if (asdf.length == 0) {
+                              try {
+                                Contact contact = Contact();
+                                contact.givenName = providerListener
+                                    .representativeList[
+                                indexSaveContact]
+                                    .first_name +
+                                    " " +
+                                    providerListener
+                                        .representativeList[
+                                    indexSaveContact]
+                                        .last_name;
+                                contact.displayName =
+                                    providerListener
+                                        .representativeList[
+                                    indexSaveContact]
+                                        .first_name +
+                                        " " +
+                                        providerListener
+                                            .representativeList[
+                                        indexSaveContact]
+                                            .last_name;
+                                contact.phones = [
+                                  Item(
+                                      label: "mobile",
+                                      value: mobileNumber)
+                                ];
+                                contact.company = providerListener
+                                    .productsDetails
+                                    .organisation_name;
+                                await ContactsService.addContact(
+                                    contact);
+
+                                Iterable<Contact> temp =
+                                await ContactsService
+                                    .getContactsForPhone(
+                                    mobileNumber);
+
+                                if (temp.length > 0) {
+                                  print("******************added");
+                                  //we have save log on server if saved
+                                  connectProductWhatsAppWithSaveButton(
+                                      providerListener
+                                          .userprofileData.user,
+                                      providerListener
+                                          .representativeList[
+                                      indexSaveContact]
+                                          .user_id,
+                                      providerListener
+                                          .productsDetails.id,
+                                      providerListener
+                                          .representativeList[
+                                      indexSaveContact]
+                                          .mobile ??
+                                          "",
+                                      1);
+                                } else {}
+                              } catch (e) {
+                                print(e);
+                              }
+                            } else {
+                              /*we have save log on server even if present in device as user may use other account in same device*/
+                              print("******************present");
+                              connectProductWhatsAppWithSaveButton(
+                                  providerListener
+                                      .userprofileData.user,
+                                  providerListener
+                                      .representativeList[
+                                  indexSaveContact]
+                                      .user_id,
+                                  providerListener
+                                      .productsDetails.id,
+                                  providerListener
+                                      .representativeList[
+                                  indexSaveContact]
+                                      .mobile ??
+                                      "",
+                                  1);
+                            }
+                          } else {
+                            _handleInvalidPermissions(
+                                permissionStatus);
+                          }
+                        },
+                      ),
+                    )
+                        : SizedBox(
+                      height: 1,
+                    ),
+                    providerListener.productsDetails != null &&
+                        providerListener.representativeList.length >
+                            0 &&
+                        indexSaveContact != -1
+                        ? Visibility(
+                      maintainState: true,
+                      maintainAnimation: true,
+                      visible: _visible4,
+                      child: WhatsAppReqSent(
+                        radius: radius,
+                        panelController: _pc4,
+                        closePressed: () {
+                          _pc4.close();
+                          _visible4 = false;
+                          _visible1 = true;
+                          setState(() {
+                            _pc1.open();
+                          });
+                        },
+                        whatsAppPressed: () {
+                          _pc4.close();
+                          _visible4 = false;
+                          _visible1 = true;
+                          setState(() {
+                            _pc1.open();
+                          });
+                        },
+                      ),
+                    )
+                        : SizedBox(
+                      height: 7,
+                    ),
+                  ],
+                )
+                    : SizedBox(height: 1),
+              ],
+            ) :
+            Stack(
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(
@@ -2817,10 +4213,75 @@ class GridProds extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ResponsiveWidget.isSmallScreen(context) ? GestureDetector(
       onTap: onPressed,
       child: Container(
-        height: 189,
+        width: 150,
+        height: 200,
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+            color: Colors.grey[200],
+            offset: const Offset(
+              1.0,
+              1.0,
+            ),
+            blurRadius: 10.0,
+            spreadRadius: 2.0,
+          )
+        ]),
+        margin: EdgeInsets.only(top: 20, bottom: 20, left: 30),
+        child: Column(
+          children: [
+            Expanded(
+                flex: 3,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.green,
+                      image: DecorationImage(
+                          image: NetworkImage(imgPath ?? ""),
+                          fit: BoxFit.cover),
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(15),
+                          topLeft: Radius.circular(15))),
+                )),
+            Expanded(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[700]),
+                      ),
+                      Text(
+                        desc,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          fontSize: 10,
+                        ),
+                      ),
+                    ],
+                  ),
+                ))
+          ],
+        ),
+      ),
+    ) : GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        height: 205,
         width: 170,
         margin: EdgeInsets.only(right: 20),
         decoration: BoxDecoration(boxShadow: [
@@ -2853,7 +4314,7 @@ class GridProds extends StatelessWidget {
                 )),
             Expanded(
                 child: Container(
-              height: 50,
+              height: 60,
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.all(6),
               decoration: BoxDecoration(
@@ -2979,8 +4440,78 @@ class PDFButton extends StatelessWidget {
   final DetailedBrouchersParser broucherOBJ;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) {double screenWidth = MediaQuery.of(context).size.width;
+    return ResponsiveWidget.isSmallScreen(context) ? Container(
+      margin: EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
+      child: ConstrainedBox(
+        constraints: BoxConstraints.tightFor(height: 82),
+        child: ElevatedButton(
+          onPressed: onWholePressed,
+          style: ElevatedButton.styleFrom(
+            primary: Colors.white,
+            elevation: 3,
+            padding: EdgeInsets.all(0),
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 82,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: NetworkImage(broucherOBJ.smallthumb_url ?? ""),
+                        fit: BoxFit.fill),
+                    color: Colors.green,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        bottomLeft: Radius.circular(10))),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: screenWidth / 3,
+                    child: Text(
+                      broucherOBJ.title,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: GoogleFonts.poppins(
+                          color: Color(0xFF363636),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14),
+                    ),
+                  ),
+                  // SizedBox(
+                  //   height: 5,
+                  // ),
+                ],
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              IconButton(
+                onPressed: onPdfPressed,
+                icon: Icon(Icons.picture_as_pdf),
+                color: Colors.grey,
+                iconSize: getProportionateScreenHeight(30),
+              ),
+              IconButton(
+                onPressed: onDownloadPressed,
+                icon: Icon(Icons.download_sharp),
+                color: Colors.grey,
+                iconSize: getProportionateScreenHeight(30),
+              )
+            ],
+          ),
+        ),
+      ),
+    ) : Container(
       margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
       child: ConstrainedBox(
         constraints: BoxConstraints.tightFor(height: 74,width: getProportionateScreenWidth(364)),

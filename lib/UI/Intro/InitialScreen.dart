@@ -1,8 +1,10 @@
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kisanweb/Helpers/images.dart' as images;
 import 'package:kisanweb/Helpers/size_config.dart';
+import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
 //import 'package:kisanweb/UI/BannerEvents/event_page.dart';
 //import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
 import 'package:kisanweb/UI/HomeScreen/HomeScreen.dart';
@@ -48,7 +50,13 @@ class _InitialScreenState extends State<InitialScreen> {
     SizeConfig().init(context);
     return Scaffold(
       backgroundColor: Color(constants.COLOR_BACKGROUND),
-      body: Center(
+      body: ResponsiveWidget.isSmallScreen(context) ? Center(
+        child: SvgPicture.asset(
+          "assets/icons/white_kisan_logo.svg",
+          height: getProportionateScreenHeight(92),
+          width: getProportionateScreenWidth(214),
+        ),
+      ) : Center(
         child: Container(
           child: SvgPicture.asset(
             "assets/icons/white_kisan_logo.svg",

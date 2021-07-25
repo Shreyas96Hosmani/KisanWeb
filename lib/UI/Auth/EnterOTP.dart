@@ -199,417 +199,419 @@ class _EnterOTPState extends State<EnterOTP> {
       backgroundColor: Color(0xff08763F),
       body: Container(
         color: Color(0xFF3FFF0),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset("assets/icons/white_kisan_logo.svg",
-                width: 190,
-                height: 70,),
-              SizedBox(
-                height: 15,
-              ),
-              Container(
-                width:400,
-                height: 600,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    color: Colors.white),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Text(
-                        getTranslated(context, 'enter_mo_no'),
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          color: Color(0xff696969),
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset("assets/icons/white_kisan_logo.svg",
+                  width: 190,
+                  height: 70,),
+                SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  width:400,
+                  height: 600,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      color: Colors.white),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Text(
+                          getTranslated(context, 'enter_mo_no'),
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            color: Color(0xff696969),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Text(
-                        "+91  " +
-                            widget.phoneNo.toString().substring(0, 5) +
-                            "  " +
-                            widget.phoneNo.toString().substring(5),
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.poppins(
-                          letterSpacing: 1,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 22,
-                          color: Color(0xff08763F),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Text(
+                          "+91  " +
+                              widget.phoneNo.toString().substring(0, 5) +
+                              "  " +
+                              widget.phoneNo.toString().substring(5),
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(
+                            letterSpacing: 1,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 22,
+                            color: Color(0xff08763F),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    /*Padding(
-                      padding: const EdgeInsets.only(left: 30, right: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Color(0xffEFEFEF),
-                              border: Border.all(color: Color(0xffE5E5E5)),
-                              borderRadius: BorderRadius.all(Radius.circular(8)),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 20),
-                                child: TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  controller: oneController,
-                                  inputFormatters: [
-                                    new LengthLimitingTextInputFormatter(1),
-                                    // for mobile
-                                  ],
-                                  focusNode: focus1,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold),
-                                  onChanged: (value) {
-                                    if (value.length == 1) {
-                                      focus1.unfocus();
-                                      focus2.requestFocus();
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Color(0xffEFEFEF),
-                              border: Border.all(color: Color(0xffE5E5E5)),
-                              borderRadius: BorderRadius.all(Radius.circular(8)),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 20),
-                                child: TextFormField(
-                                  focusNode: focus2,
-                                  controller: twoController,
-                                  inputFormatters: [
-                                    new LengthLimitingTextInputFormatter(1),
-                                    // for mobile
-                                  ],
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold),
-                                  onChanged: (value) {
-                                    if (value.length == 1) {
-                                      focus2.unfocus();
-                                      focus3.requestFocus();
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Color(0xffEFEFEF),
-                              border: Border.all(color: Color(0xffE5E5E5)),
-                              borderRadius: BorderRadius.all(Radius.circular(8)),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 20),
-                                child: TextFormField(
-                                  focusNode: focus3,
-                                  controller: threeController,
-                                  inputFormatters: [
-                                    new LengthLimitingTextInputFormatter(1),
-                                    // for mobile
-                                  ],
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold),
-                                  onChanged: (value) {
-                                    if (value.length == 1) {
-                                      focus3.unfocus();
-                                      focus4.requestFocus();
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Color(0xffEFEFEF),
-                              border: Border.all(color: Color(0xffE5E5E5)),
-                              borderRadius: BorderRadius.all(Radius.circular(8)),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 20),
-                                child: TextFormField(
-                                  focusNode: focus4,
-                                  controller: fourController,
-                                  inputFormatters: [
-                                    new LengthLimitingTextInputFormatter(1),
-                                    // for mobile
-                                  ],
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold),
-                                  onChanged: (value) {
-                                    if (value.length == 1) {
-                                      focus4.unfocus();
-                                      focus5.requestFocus();
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Color(0xffEFEFEF),
-                              border: Border.all(color: Color(0xffE5E5E5)),
-                              borderRadius: BorderRadius.all(Radius.circular(8)),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 20),
-                                child: TextFormField(
-                                  focusNode: focus5,
-                                  controller: fiveController,
-                                  inputFormatters: [
-                                    new LengthLimitingTextInputFormatter(1),
-                                    // for mobile
-                                  ],
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold),
-                                  onChanged: (value) {
-                                    if (value.length == 1) {
-                                      focus5.unfocus();
-                                      focus6.requestFocus();
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Color(0xffEFEFEF),
-                              border: Border.all(color: Color(0xffE5E5E5)),
-                              borderRadius: BorderRadius.all(Radius.circular(8)),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 20),
-                                child: TextFormField(
-                                  focusNode: focus6,
-                                  controller: sixController,
-                                  inputFormatters: [
-                                    new LengthLimitingTextInputFormatter(1),
-                                    // for mobile
-                                  ],
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold),
-                                  onChanged: (value) {
-                                    if (value.length == 1) {
-                                      focus6.unfocus();
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                      SizedBox(
+                        height: 30,
                       ),
-                    ),*/
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 30),
-                      child: PinCodeTextField(
-                        length: 6,
-                        appContext: context,
-                        animationType: AnimationType.fade,
-                        pastedTextStyle:
-                            GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                        cursorColor: Colors.black,
-                        keyboardType: TextInputType.number,
-                        pinTheme: PinTheme(
-                            shape: PinCodeFieldShape.box,
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            fieldHeight: 50,
-                            fieldWidth: 50,
-                            borderWidth: 2,
-                            inactiveColor: Color(0xffdedede),
-                            selectedColor: Color(0xffdedede),
-                            activeColor: Colors.green),
-                        controller: pinController,
-                        onCompleted: (v) {
-                          pinCode = pinController.text;
-                          print(pinCode);
-                        },
-                        // onTap: () {
-                        //   print("Pressed");
-                        // },
-                        onChanged: (value) {
-                          print(value);
+                      /*Padding(
+                        padding: const EdgeInsets.only(left: 30, right: 30),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: Color(0xffEFEFEF),
+                                border: Border.all(color: Color(0xffE5E5E5)),
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    controller: oneController,
+                                    inputFormatters: [
+                                      new LengthLimitingTextInputFormatter(1),
+                                      // for mobile
+                                    ],
+                                    focusNode: focus1,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold),
+                                    onChanged: (value) {
+                                      if (value.length == 1) {
+                                        focus1.unfocus();
+                                        focus2.requestFocus();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: Color(0xffEFEFEF),
+                                border: Border.all(color: Color(0xffE5E5E5)),
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: TextFormField(
+                                    focusNode: focus2,
+                                    controller: twoController,
+                                    inputFormatters: [
+                                      new LengthLimitingTextInputFormatter(1),
+                                      // for mobile
+                                    ],
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold),
+                                    onChanged: (value) {
+                                      if (value.length == 1) {
+                                        focus2.unfocus();
+                                        focus3.requestFocus();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: Color(0xffEFEFEF),
+                                border: Border.all(color: Color(0xffE5E5E5)),
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: TextFormField(
+                                    focusNode: focus3,
+                                    controller: threeController,
+                                    inputFormatters: [
+                                      new LengthLimitingTextInputFormatter(1),
+                                      // for mobile
+                                    ],
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold),
+                                    onChanged: (value) {
+                                      if (value.length == 1) {
+                                        focus3.unfocus();
+                                        focus4.requestFocus();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: Color(0xffEFEFEF),
+                                border: Border.all(color: Color(0xffE5E5E5)),
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: TextFormField(
+                                    focusNode: focus4,
+                                    controller: fourController,
+                                    inputFormatters: [
+                                      new LengthLimitingTextInputFormatter(1),
+                                      // for mobile
+                                    ],
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold),
+                                    onChanged: (value) {
+                                      if (value.length == 1) {
+                                        focus4.unfocus();
+                                        focus5.requestFocus();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: Color(0xffEFEFEF),
+                                border: Border.all(color: Color(0xffE5E5E5)),
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: TextFormField(
+                                    focusNode: focus5,
+                                    controller: fiveController,
+                                    inputFormatters: [
+                                      new LengthLimitingTextInputFormatter(1),
+                                      // for mobile
+                                    ],
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold),
+                                    onChanged: (value) {
+                                      if (value.length == 1) {
+                                        focus5.unfocus();
+                                        focus6.requestFocus();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: Color(0xffEFEFEF),
+                                border: Border.all(color: Color(0xffE5E5E5)),
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: TextFormField(
+                                    focusNode: focus6,
+                                    controller: sixController,
+                                    inputFormatters: [
+                                      new LengthLimitingTextInputFormatter(1),
+                                      // for mobile
+                                    ],
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.bold),
+                                    onChanged: (value) {
+                                      if (value.length == 1) {
+                                        focus6.unfocus();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),*/
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 30),
+                        child: PinCodeTextField(
+                          length: 6,
+                          appContext: context,
+                          animationType: AnimationType.fade,
+                          pastedTextStyle:
+                              GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                          cursorColor: Colors.black,
+                          keyboardType: TextInputType.number,
+                          pinTheme: PinTheme(
+                              shape: PinCodeFieldShape.box,
+                              borderRadius: BorderRadius.all(Radius.circular(8)),
+                              fieldHeight: 50,
+                              fieldWidth: 50,
+                              borderWidth: 2,
+                              inactiveColor: Color(0xffdedede),
+                              selectedColor: Color(0xffdedede),
+                              activeColor: Colors.green),
+                          controller: pinController,
+                          onCompleted: (v) {
+                            pinCode = pinController.text;
+                            print(pinCode);
+                          },
+                          // onTap: () {
+                          //   print("Pressed");
+                          // },
+                          onChanged: (value) {
+                            print(value);
+                            setState(() {
+                              pinCode = value;
+                            });
+                          },
+                        ),
+                      ),
+                      /*InkWell(
+                        onTap: () {
                           setState(() {
-                            pinCode = value;
+                            startTimings = true;
                           });
                         },
-                      ),
-                    ),
-                    /*InkWell(
-                      onTap: () {
-                        setState(() {
-                          startTimings = true;
-                        });
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          startTimings == true
-                              ? Text(
-                                  "Resend code",
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 14,
-                                    color: Colors.grey[300],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            startTimings == true
+                                ? Text(
+                                    "Resend code",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      color: Colors.grey[300],
+                                    ),
+                                  )
+                                : Text(
+                                    "I didn't get the code",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      color: Color(0xff838383),
+                                    ),
                                   ),
-                                )
-                              : Text(
-                                  "I didn't get the code",
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 14,
-                                    color: Color(0xff838383),
-                                  ),
-                                ),
-                          startTimings == true
-                              ? SizedBox(
-                                  width: 10,
-                                )
-                              : Container(),
-                          startTimings == true
-                              ? buildTimerWidget(context)
-                              : Container(),
-                        ],
-                      ),
-                    ),*/
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Text(
-                        "I didn’t get the code",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                          color: Color(0xff696969),
+                            startTimings == true
+                                ? SizedBox(
+                                    width: 10,
+                                  )
+                                : Container(),
+                            startTimings == true
+                                ? buildTimerWidget(context)
+                                : Container(),
+                          ],
                         ),
-                      ),
-                    ),
-                    Text(
-                      errorMessage,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        color: Colors.red[300],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    ConstrainedBox(
-                      constraints: BoxConstraints.tightFor(
-                          width: 288,
-                          height: 60),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (pinCode.isEmpty ||
-                              pinCode == null ||
-                              pinCode == '') {
-                            Fluttertoast.showToast(
-                              msg: getTranslated(context, 'enter_otp'),
-                              backgroundColor: Colors.white,
-                              textColor: Colors.red[800],
-                            );
-                          }
-                          else {
-                            universalLoader.show();
-                            if (providerListener.googleEmail != "") {
-                              _verifyOTPAfterGoogleAUth();
-                            } else {
-                              _verifyOTP();
-                            }
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Color(0xFFFFE44E),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
+                      ),*/
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Text(
+                          "I didn’t get the code",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                            color: Color(0xff696969),
                           ),
                         ),
-                        child: Text(
-                          getTranslated(context, 'continue_new'),
-                          style: GoogleFonts.poppins(
-                              color: Colors.black,
-                              letterSpacing: 1,
-                              fontSize: 17.0,
-                              fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        errorMessage,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          color: Colors.red[300],
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        height: 25,
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints.tightFor(
+                            width: 288,
+                            height: 60),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (pinCode.isEmpty ||
+                                pinCode == null ||
+                                pinCode == '') {
+                              Fluttertoast.showToast(
+                                msg: getTranslated(context, 'enter_otp'),
+                                backgroundColor: Colors.white,
+                                textColor: Colors.red[800],
+                              );
+                            }
+                            else {
+                              universalLoader.show();
+                              if (providerListener.googleEmail != "") {
+                                _verifyOTPAfterGoogleAUth();
+                              } else {
+                                _verifyOTP();
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Color(0xFFFFE44E),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                          ),
+                          child: Text(
+                            getTranslated(context, 'continue_new'),
+                            style: GoogleFonts.poppins(
+                                color: Colors.black,
+                                letterSpacing: 1,
+                                fontSize: 17.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

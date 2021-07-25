@@ -38,6 +38,11 @@ var now, nowTomorrow, nowLastDay;
 bool _isFilApplied = false;
 
 class ViewAllWebinars extends StatefulWidget {
+  final tab;
+  final _isMyWebinarOpen;
+  final user_id;
+
+  ViewAllWebinars(this.tab, this._isMyWebinarOpen, this.user_id);
   @override
   _ViewAllWebinarsState createState() => _ViewAllWebinarsState();
 }
@@ -394,7 +399,7 @@ class _ViewAllWebinarsState extends State<ViewAllWebinars> {
                       providerListener.webinarListViewAllSearched[index].id));
             },
             child: Container(
-              height: 220,
+              height: 240,
               margin: EdgeInsets.all(getProportionateScreenHeight(10),),
               decoration: BoxDecoration(boxShadow: [
                 BoxShadow(
@@ -456,7 +461,7 @@ class _ViewAllWebinarsState extends State<ViewAllWebinars> {
                   Container(
                     padding: EdgeInsets.all(6),
                     width: double.infinity,
-                    height: 80,
+                    height: 70,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -512,7 +517,7 @@ class _ViewAllWebinarsState extends State<ViewAllWebinars> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              width: getProportionateScreenWidth(200),
+                              width: getProportionateScreenWidth(180),
                               child: Text(
                                 utf8.decode((providerListener
                                             .webinarListViewAllSearched[index]
@@ -520,7 +525,7 @@ class _ViewAllWebinarsState extends State<ViewAllWebinars> {
                                         "")
                                     .runes
                                     .toList()),
-                                maxLines: 2,
+                                maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.poppins(
                                     fontSize: 14,

@@ -16,6 +16,7 @@ import 'package:kisanweb/Helpers/constants.dart';
 import 'package:kisanweb/Helpers/helper.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
 import 'package:kisanweb/Models/NotificationPayload.dart';
+import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
 
 //import 'package:kisanweb/UI/BannerEvents/event_page.dart';
 //import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
@@ -23,6 +24,7 @@ import 'package:kisanweb/UI/HomeScreen/Widgets/bottom_tabs.dart';
 import 'package:kisanweb/UI/Intro/InitialScreen.dart';
 import 'package:kisanweb/UI/Intro/LanguageScreen.dart';
 import 'package:kisanweb/UI/Intro/splash_one.dart';
+import 'package:kisanweb/UI/NotficationScreen/Notifications.dart';
 
 //import 'package:kisanweb/UI/NotficationScreen/Notifications.dart';
 import 'package:kisanweb/UI/Profile/BasicProfile.dart';
@@ -34,6 +36,7 @@ import 'package:kisanweb/UI/Subscribe/SubscribeToMembership.dart';
 import 'package:kisanweb/UI/Tabs/HistoryTab.dart';
 import 'package:kisanweb/UI/Tabs/HomeTab.dart';
 import 'package:kisanweb/UI/Tabs/ShortListedTab.dart';
+import 'package:kisanweb/UI/ViewAll/ViewAllWebinars.dart';
 import 'package:kisanweb/View%20Models/CustomViewModel.dart';
 import 'package:kisanweb/localization/language_constants.dart';
 import 'package:kisanweb/main.dart';
@@ -604,7 +607,82 @@ class _HomeScreenState extends State<HomeScreen> {
     return _isloaded == true
         ? Scaffold(
             key: _scaffoldKey,
-            appBar: PreferredSize(
+            appBar: ResponsiveWidget.isSmallScreen(context) ? _selectedTab == 0
+                ? PreferredSize(
+                preferredSize:
+                Size(MediaQuery.of(context).size.width, 80),
+                child: AppBar(
+                  titleSpacing: 0,
+                  title: Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Container(
+                      child: SvgPicture.asset(
+                        "assets/icons/greenKisan_Logo.svg",
+                        height: getProportionateScreenHeight(47),
+                      ),
+                    ),
+                  ),
+                  backgroundColor: Colors.white,
+                  elevation: 0,
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: IconButton(
+                        icon: SvgPicture.asset(
+                          "assets/icons/searchIcon.svg",
+                          width: 45,
+                        ),
+                        color: Colors.black,
+                        onPressed: () {
+                          push(context, SearchScreen());
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: getProportionateScreenWidth(10),
+                    ),
+                    Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: IconButton(
+                            onPressed: () {
+                                push(context, NotificationScreen());
+                            },
+                            icon: Icon(
+                              Icons.notifications,
+                              size: 30,
+                            ),
+                            color: Colors.black,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 1,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: getProportionateScreenWidth(10),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: IconButton(
+                        onPressed: () {
+                          _scaffoldKey.currentState.openEndDrawer();
+                        },
+                        icon: SvgPicture.asset(
+                          "assets/icons/menuIcon.svg",
+                          width: 45,
+                        ),
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ))
+                : PreferredSize(
+              preferredSize: Size(MediaQuery.of(context).size.width, 0),
+              child: Container(),
+            ) : PreferredSize(
               preferredSize: Size.fromHeight(80),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(200)),
@@ -689,7 +767,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Center(
                             child: IconButton(
                               onPressed: () {
-                                //push(context, NotificationScreen());
+                                push(context, NotificationScreen());
                               },
                               padding: EdgeInsets.zero,
                               icon: Icon(
@@ -769,7 +847,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            drawer: CustomDrawer(context),
+            endDrawer: ResponsiveWidget.isSmallScreen(context) ? CustomDrawer(context) : Container(),
+            drawer: ResponsiveWidget.isSmallScreen(context) ? Container() : CustomDrawer(context),
             /*bottomNavigationBar: Container(
               color: Colors.white,
               child: Padding(
@@ -824,14 +903,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         children: [
                           HomeTab(),
-                          Center(
-                            child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                child: Text(
-                                  'Webinar Coming soon',
-                                  textAlign: TextAlign.center,
-                                )),
-                          ),
+                          ViewAllWebinars(
+                              "tab",
+                              false,
+                              providerListener.userprofileData.user
+                                  .toString()),
                           ShortListedTab(),
                           CallHistory(),
                           /*Center(

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,9 +8,11 @@ import 'package:kisanweb/Helpers/constants.dart';
 import 'package:kisanweb/Helpers/helper.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
 import 'package:kisanweb/Models/WebinarDetails.dart';
+import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
 import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
 import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
 import 'package:kisanweb/UI/DetailedScreens/VideoScreen.dart';
+import 'package:kisanweb/UI/Widgets/readmore.dart';
 import 'package:kisanweb/View%20Models/CustomViewModel.dart';
 import 'package:kisanweb/localization/language_constants.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -22,6 +23,10 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 SharedPreferences prefs;
+
+var meetingId;
+var meetingPwd;
+var meetingUserName;
 
 class WebinarMainScreen extends StatefulWidget {
   final id;
@@ -610,6 +615,569 @@ class _WebinarMainScreenState extends State<WebinarMainScreen> {
                 ),
               ),
             )*/
+                ResponsiveWidget.isSmallScreen(context) ?
+                Stack(
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: double.infinity,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                providerListener.webinarDetails.media_type ==
+                                    "youtubevideo"
+                                    ? push(
+                                    context,
+                                    SamplePlayer(
+                                        null,
+                                        providerListener
+                                            .webinarDetails.media_url))
+                                    : print("imageviewr should be called");
+                              },
+                              child: Container(
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        height: 249,
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 0, vertical: 0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.transparent,
+                                          image: DecorationImage(
+                                              image: NetworkImage(providerListener
+                                                  .webinarDetails.image_path ??
+                                                  ""),
+                                              fit: BoxFit.fitHeight),
+                                        ),
+                                      ),
+                                      providerListener.webinarDetails.media_type ==
+                                          "youtubevideo"
+                                          ? Container(
+                                        height: 249,
+                                        child: Center(
+                                          child: Opacity(
+                                            opacity: 0.7,
+                                            child: Icon(
+                                              Icons.play_circle_fill,
+                                              color: Colors.white,
+                                              size: 70,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                          : SizedBox(
+                                        height: 1,
+                                      ),
+                                    ],
+                                  )),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 20, left: 20, right: 20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      parseHtmlString(utf8.decode(providerListener
+                                          .webinarDetails.title.runes
+                                          .toList()) ??
+                                          ""),
+                                      style: GoogleFonts.poppins(
+                                        color: Color(0xff5C5C5C),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: getProportionateScreenWidth(50),
+                                    height: getProportionateScreenWidth(50),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                                    ),
+                                    child: Image.asset("assets/images/filter/"+providerListener.webinarDetails.language+".png" ?? "", fit: BoxFit.contain),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 20, left: 20, right: 20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                      color: Color(0xffB7B7B7),
+                                    ),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.calendar_today,
+                                        color: Colors.grey[700],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Flexible(
+                                    child: Text(
+                                      DateFormat.MMMMEEEEd()
+                                          .format(DateTime.parse(
+                                          providerListener.webinarDetails
+                                              .scheduled_date ??
+                                              ""))
+                                          .toString() +
+                                          " " +
+                                          DateTime.parse(providerListener
+                                              .webinarDetails
+                                              .scheduled_date ??
+                                              "")
+                                              .year
+                                              .toString() +
+                                          "\n" +
+                                          (DateFormat.jm().format(
+                                              DateFormat("hh:mm:ss").parse(
+                                                  providerListener
+                                                      .webinarDetails
+                                                      .scheduled_time ??
+                                                      "")))
+                                              .toString(),
+                                      style: GoogleFonts.poppins(
+                                        color: Color(0xffB7B7B7),
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 20, left: 20, right: 20),
+                              child: Text(
+                                getTranslated(context, 'about_the_event'),
+                                style: GoogleFonts.poppins(
+                                  color: Color(0xff5C5C5C),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(20),
+                            ),
+                            Padding(
+                              padding:
+                              const EdgeInsets.symmetric(horizontal: 30),
+                              child: ReadMoreText(
+                                parseHtmlString(utf8.decode(providerListener
+                                    .webinarDetails.about.runes
+                                    .toList())),
+                                trimLines: 6,
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.black,
+                                    fontSize: 14),
+                                colorClickableText: Colors.black,
+                                trimMode: TrimMode.Line,
+                                trimCollapsedText: 'Read more',
+                                trimExpandedText: 'Read less',
+                                lessStyle: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.blueAccent,
+                                    fontWeight: FontWeight.bold),
+                                moreStyle: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 20),
+                              child: Container(
+                                color: Colors.white,
+                                child: CompanyLink(
+                                  title: providerListener
+                                      .webinarDetails.organisation_name,
+                                  imagePath: providerListener
+                                      .webinarDetails.image_bigthumb_url,
+                                  onPressed: () {
+                                    push(
+                                        context,
+                                        CompanyDetails(providerListener
+                                            .webinarDetails.user_id));
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    /*Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Visibility(
+                visible: _visible1,
+                maintainState: true,
+                maintainAnimation: true,
+                child: SlidingUpPanel(
+                  controller: _pc1,
+                  isDraggable: true,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  maxHeight: SizeConfig.screenHeight * 0.93,
+                  onPanelClosed: () {
+                    setState(() {
+                      _innerVisible = false;
+                    });
+                  },
+                  onPanelOpened: () {
+                    setState(() {
+                      _innerVisible = true;
+                    });
+                  },
+                  panel: Visibility(
+                    visible: _innerVisible,
+                    child: Container(
+                      padding: EdgeInsets.all(getProportionateScreenHeight(20)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 76,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey.shade400,
+                                    borderRadius: BorderRadius.circular(20)),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: getProportionateScreenHeight(20),
+                          ),
+                          RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                                text:
+                                    "Your mobile number and profile details may be shared with",
+                                style: GoogleFonts.poppins(
+                                    fontSize: 16, color: Colors.black),
+                                children: [
+                                  TextSpan(
+                                      text: " " + "NAME",
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black))
+                                ]),
+                          ),
+                          SizedBox(
+                            height: getProportionateScreenHeight(20),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                radius: 31,
+                                // backgroundImage:
+                                // NetworkImage(providerListener.userprofileData.image_url),
+                              ),
+                              SizedBox(
+                                width: 14,
+                              ),
+                              FaIcon(
+                                FontAwesomeIcons.share,
+                                color: Colors.green,
+                                size: 17,
+                              ),
+                              SizedBox(
+                                width: 14,
+                              ),
+                              CircleAvatar(
+                                radius: 31,
+                                // backgroundImage: NetworkImage(
+                                //     providerListener.productsDetails.smallthumb_url),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: getProportionateScreenHeight(20),
+                          ),
+                          Divider(
+                            color: Color(0xFFBEBEBE),
+                          ),
+                          SizedBox(
+                            height: getProportionateScreenHeight(20),
+                          ),
+                          Text(
+                            "Please answer the following\nQuestions to register for this webinar.",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              color: Color(0xff008940),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "1 - Do you have a Tractor ?",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(fontSize: 16),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 20,
+                                    width: 20,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(50)),
+                                        border: Border.all(color: Colors.grey)),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "Yes",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.poppins(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 20,
+                                    width: 20,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(50)),
+                                        border: Border.all(color: Colors.grey)),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "No",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.poppins(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "2 - What machine do you use for spraying?",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(fontSize: 16),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 20,
+                                    width: 20,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(50)),
+                                        border: Border.all(color: Colors.grey)),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "Knapsack Sprayer.",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.poppins(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 20,
+                                    width: 20,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(50)),
+                                        border: Border.all(color: Colors.grey)),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "Portable Power Sprayer.",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.poppins(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 30,
+                              ),
+                            ],
+                          ),
+                          Spacer(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                "FREE",
+                                style: GoogleFonts.poppins(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+                              ConstrainedBox(
+                                constraints: BoxConstraints.tightFor(
+                                    width: getProportionateScreenWidth(260),
+                                    height: getProportionateScreenHeight(65)),
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      push(context, WebinarSuccess());
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Color(0xFF08763F),
+                                        elevation: 1,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10))),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Submit to Register",
+                                          style: GoogleFonts.poppins(
+                                              letterSpacing: 1,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  collapsed: Container(
+                    height: 90,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            topRight: Radius.circular(15)),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              spreadRadius: 2,
+                              blurRadius: 13)
+                        ]),
+                    child: Row(
+                      children: [
+                        CallButton(
+                          onPressed: () {
+                            */ /*_pc1.close();
+                            _visible1 = false;
+                            _visible2 = true;
+                            setState(() {
+                              _pc2.open();
+                            });*/ /*
+                          },
+                        ),
+                        Spacer(),
+                        RegisterButton(
+                          onPressed: () {
+                           */ /* _pc1.open();
+                            setState(() {
+                              _visible1 = true;
+                            });*/ /*
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              */ /*Visibility(
+                maintainAnimation: true,
+                maintainState: true,
+                visible: _visible2,
+                child: CallMeSlide(
+                  radius: radius,
+                  panelController: _pc2,
+                  closePressed: () {
+                    _pc2.close();
+                    _visible2 = false;
+                    _visible1 = true;
+                    setState(() {
+                      _pc1.close();
+                    });
+                  },
+                  isChecked: _isChecked,
+
+                ),
+              ),*/ /*
+            ],
+          ),*/
+                  ],
+                ) :
                 Container(
               padding: EdgeInsets.symmetric(horizontal: 200),
               child: Column(
@@ -756,7 +1324,19 @@ class _WebinarMainScreenState extends State<WebinarMainScreen> {
                                           "1"
                                       ? providerListener.webinarDetails.status ==
                                               "live"
-                                          ? JoinMeetingButton(onPressed: () {})
+                                          ? JoinMeetingButton(onPressed: () {
+                                            setState(() {
+                                              meetingId = providerListener
+                                                  .webinarDetails.meeting_id.toString();
+                                              meetingPwd = providerListener.webinarDetails
+                                                  .meeting_password.toString();
+                                              meetingUserName = providerListener.userData.first_name +
+                                                  " " +
+                                                  providerListener
+                                                      .userData.last_name.toString();
+                                            });
+                                    UrlLauncher.launch("https://demo.interns.tk/index.php?username=$meetingUserName&&mettingid=$meetingId&&mettingpassword=$meetingPwd");
+                                  })
                                           : DaysToGOButton(
                                               start_date: providerListener
                                                   .webinarDetails.scheduled_date,

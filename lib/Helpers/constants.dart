@@ -2,8 +2,12 @@ library constants;
 
 import 'package:flutter/material.dart';
 
+String lorem =
+    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
+
 const FINISHED_ON_BOARDING = 'finishedOnBoarding';
 const COLOR_ACCENT = 0xFF3d8ddb;
+const HOME_SECONDARY_COLOR = 0xFFEBF2E9;
 const COLOR_PRIMARY_DARK = 0xFF1976D2;
 const COLOR_BACKGROUND = 0xff008940;
 const COLOR_BACKGROUND_OPPOSITE = 0xFF000000;
@@ -53,6 +57,7 @@ const image_upload = apiUrl + "/image_upload/";
 const getdetailsfrompin = apiUrl + "/profiles/getdetailsfrompin/";
 const getadlist = apiUrl + "/administrator/getadlist/";
 const products = apiUrl + "/visitor/products";
+const newly_added_products = apiUrl + "/visitor/newly_added_products";
 const companies = apiUrl + "/visitor/companies";
 const offers = apiUrl + "/visitor/offers";
 const demos = apiUrl + "/visitor/demos";
@@ -79,9 +84,11 @@ const getlanguagekeys = apiUrl + "/visitor/getlanguagekeys?lastfetchtime=";
 const googlelogin = apiUrl + "/api-token-google-auth/";
 const ordercreate = apiUrl + "/samvaad/ordercreate/";
 const verifytransaction = apiUrl + "/samvaad/verifytransaction/";
-const set_unset_notification_consent = apiUrl + "/profiles/set_unset_notification_consent/";
+const set_unset_notification_consent =
+    apiUrl + "/profiles/set_unset_notification_consent/";
 const geteventfilters = apiUrl + "/samvaad/geteventfilters/";
-
+const shuffled_products = apiUrl + "/visitor/shuffled_products";
+const shuffled_companies = apiUrl + "/visitor/shuffled_companies";
 
 List<Map<String, String>> imgSlider = [
   {

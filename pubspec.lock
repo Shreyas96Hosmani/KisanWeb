@@ -289,6 +289,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_image_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_web_image_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -441,6 +448,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  image_picker_web:
+    dependency: "direct main"
+    description:
+      name: image_picker_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.3"
   image_pickers:
     dependency: "direct main"
     description:

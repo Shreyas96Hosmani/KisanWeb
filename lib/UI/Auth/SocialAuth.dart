@@ -268,7 +268,7 @@ class _SocialAuthState extends State<SocialAuth> {
                   ),
                   InkWell(
                     onTap: () {
-                      // _handleSignIn();
+                       //_handleSignIn();
                     },
                     child: Container(
                         height: (60),

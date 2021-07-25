@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kisanweb/Helpers/helper.dart';
+import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
 class ViewPhotos extends StatelessWidget {
 
   final String url;
@@ -27,7 +28,18 @@ class ViewPhotos extends StatelessWidget {
           ),
         ),
       ),
-      body: Container(
+      body: ResponsiveWidget.isSmallScreen(context) ? Container(
+        color: Colors.white,
+        child: Center(
+          child: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(url),fit: BoxFit.fitWidth
+                )
+            ),
+          ),
+        ),
+      ) : Container(
         color: Colors.white,
         child: Center(
           child: Container(

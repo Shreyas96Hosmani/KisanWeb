@@ -1,12 +1,15 @@
 import 'dart:io';
-
+import 'dart:html' as html;
+import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_web_image_picker/flutter_web_image_picker.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 import 'package:image_pickers/image_pickers.dart';
 import 'package:kisanweb/Helpers/constants.dart' as constants;
 import 'package:kisanweb/Helpers/constants.dart';
@@ -28,6 +31,7 @@ import 'package:kisanweb/Models/GetDetailsFromPin.dart';
 
 File imageOne;
 bool fetched = false;
+Image fromPicker;
 
 class BasicProfile extends StatefulWidget {
   String first_name, last_name, email, image_url, state, city;
@@ -62,6 +66,10 @@ class _BasicProfileState extends State<BasicProfile> {
 
   bool permission = true;
   final picker = ImagePicker();
+
+  final _pickedImages = <Image>[];
+  final _pickedVideos = <dynamic>[];
+  Image image;
 
   Future Register() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -266,6 +274,19 @@ class _BasicProfileState extends State<BasicProfile> {
     } on PlatformException {}
   }
 
+  Future getImageFromBrowser() async {
+
+    fromPicker = await ImagePickerWeb.getImage(outputType: ImageType.widget);
+
+    if (fromPicker != null) {
+      setState(() {
+        _pickedImages.clear();
+        _pickedImages.add(fromPicker);
+      });
+    }
+
+  }
+
   Future getImageOneGallery() async {
     Navigator.of(context).pop();
     final pickedFile = await picker.getImage(
@@ -465,18 +486,16 @@ class _BasicProfileState extends State<BasicProfile> {
               ),
               GestureDetector(
                 onTap:
-                    () => /*_settingModalBottomSheetOne(context)*/ getImageOne(),
+                    () =>  /*_settingModalBottomSheetOne(context)*/ getImageFromBrowser(),
                 child: Stack(
                   children: [
                     Container(
                       child: CircleAvatar(
                         radius: getProportionateScreenWidth(62),
                         backgroundColor: Colors.transparent,
-                        backgroundImage: imageOne == null
-                            ? widget.image_url != "" && widget.image_url != null
-                                ? NetworkImage(widget.image_url)
-                                : AssetImage('assets/images/defaultProfile.png')
-                            : FileImage(imageOne),
+                        backgroundImage: _pickedImages.isEmpty
+                            ? AssetImage('assets/images/defaultProfile.png')
+                            : _pickedImages[0].image,
                       ),
                     ),
                     Positioned(
@@ -611,103 +630,103 @@ class _BasicProfileState extends State<BasicProfile> {
             SizedBox(
               height: 30,
             ),
-            Container(
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    getTranslated(context, 'location_address'),
-                    style: GoogleFonts.poppins(
-                      fontSize: getProportionateScreenHeight(18),
-                      color: Color(0xff696969),
-                    ),
-                  ),
-                  fetched == true
-                      ? InkWell(
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
-                                border: Border.all(color: Color(0xffCCCCCC))),
-                            child: Center(
-                              child: Icon(
-                                Icons.edit,
-                                color: Color(0xff696969),
-                              ),
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              fetched = false;
-                              filtersState = -1;
-                              filtersDistrict = -1;
-                              city = null;
-                              state = null;
-                            });
-                          },
-                        )
-                      : Container(),
-                ],
-              ),
-            ),
-            fetched == true
-                ? Container()
-                : SizedBox(
-                    height: 30,
-                  ),
-            fetched == true
-                ? Container()
-                : InkWell(
-                    onTap: () async {
-                      _permissionGranted = await location.hasPermission();
-                      if (_permissionGranted == PermissionStatus.denied) {
-                        _permissionGranted = await location.requestPermission();
-                        if (_permissionGranted != PermissionStatus.granted) {
-                          toastCommon(context,
-                              getTranslated(context, 'location_permission'));
-                          permisson.openAppSettings();
-                        } else if (_permissionGranted ==
-                            PermissionStatus.granted) {
-                          showAlertDialog(context);
-                        }
-                      } else if (_permissionGranted ==
-                          PermissionStatus.granted) {
-                        showAlertDialog(context);
-                      }
-                    },
-                    child: Center(
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Color(0xffEBEBEB),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.location_searching,
-                              color: Colors.black,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              getTranslated(context, 'use_my_device_location'),
-                              style: GoogleFonts.poppins(
-                                fontSize: getProportionateScreenHeight(18),
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+//            Container(
+//              width: double.infinity,
+//              child: Row(
+//                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                crossAxisAlignment: CrossAxisAlignment.center,
+//                children: [
+//                  Text(
+//                    getTranslated(context, 'location_address'),
+//                    style: GoogleFonts.poppins(
+//                      fontSize: getProportionateScreenHeight(18),
+//                      color: Color(0xff696969),
+//                    ),
+//                  ),
+//                  fetched == true
+//                      ? InkWell(
+//                          child: Container(
+//                            height: 40,
+//                            width: 40,
+//                            decoration: BoxDecoration(
+//                                borderRadius:
+//                                    BorderRadius.all(Radius.circular(50)),
+//                                border: Border.all(color: Color(0xffCCCCCC))),
+//                            child: Center(
+//                              child: Icon(
+//                                Icons.edit,
+//                                color: Color(0xff696969),
+//                              ),
+//                            ),
+//                          ),
+//                          onTap: () {
+//                            setState(() {
+//                              fetched = false;
+//                              filtersState = -1;
+//                              filtersDistrict = -1;
+//                              city = null;
+//                              state = null;
+//                            });
+//                          },
+//                        )
+//                      : Container(),
+//                ],
+//              ),
+//            ),
+//            fetched == true
+//                ? Container()
+//                : SizedBox(
+//                    height: 30,
+//                  ),
+//            fetched == true
+//                ? Container()
+//                : InkWell(
+//                    onTap: () async {
+//                      _permissionGranted = await location.hasPermission();
+//                      if (_permissionGranted == PermissionStatus.denied) {
+//                        _permissionGranted = await location.requestPermission();
+//                        if (_permissionGranted != PermissionStatus.granted) {
+//                          toastCommon(context,
+//                              getTranslated(context, 'location_permission'));
+//                          permisson.openAppSettings();
+//                        } else if (_permissionGranted ==
+//                            PermissionStatus.granted) {
+//                          showAlertDialog(context);
+//                        }
+//                      } else if (_permissionGranted ==
+//                          PermissionStatus.granted) {
+//                        showAlertDialog(context);
+//                      }
+//                    },
+//                    child: Center(
+//                      child: Container(
+//                        height: 50,
+//                        decoration: BoxDecoration(
+//                          color: Color(0xffEBEBEB),
+//                        ),
+//                        child: Row(
+//                          mainAxisAlignment: MainAxisAlignment.center,
+//                          crossAxisAlignment: CrossAxisAlignment.center,
+//                          children: [
+//                            Icon(
+//                              Icons.location_searching,
+//                              color: Colors.black,
+//                            ),
+//                            SizedBox(
+//                              width: 10,
+//                            ),
+//                            Text(
+//                              getTranslated(context, 'use_my_device_location'),
+//                              style: GoogleFonts.poppins(
+//                                fontSize: getProportionateScreenHeight(18),
+//                                color: Colors.black,
+//                              ),
+//                            ),
+//                          ],
+//                        ),
+//                      ),
+//                    ),
+//                  ),
             /*    fetched == true
                 ? Center(
                     child: Container(
@@ -741,86 +760,86 @@ class _BasicProfileState extends State<BasicProfile> {
                     ),
                   )
                 : Container(),*/
-            fetched == false
-                ? SizedBox(
-                    height: 20,
-                  )
-                : SizedBox(
-                    height: 1,
-                  ),
-            fetched == false
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: getProportionateScreenWidth(65),
-                        height: 1,
-                        color: Color(0xff08763F),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        getTranslated(context, 'or'),
-                        style: GoogleFonts.poppins(color: Color(0xff08763F)),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        width: getProportionateScreenWidth(65),
-                        height: 1,
-                        color: Color(0xff08763F),
-                      ),
-                    ],
-                  )
-                : SizedBox(
-                    height: 1,
-                  ),
-            fetched == false
-                ? SizedBox(
-                    height: 20,
-                  )
-                : SizedBox(
-                    height: 1,
-                  ),
-            fetched == false
-                ? Center(
-                    child: Text(
-                      getTranslated(context, 'enter_manually'),
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontSize: 14,
-                      ),
-                    ),
-                  )
-                : SizedBox(
-                    height: 1,
-                  ),
-            SizedBox(
-              height: 3,
-            ),
-            fetched == false
-                ? Center(
-                    child: Text(
-                      getTranslated(context, 'applicable_for_india_only'),
-                      style: GoogleFonts.poppins(
-                        color: Color(0xffBCBCBC),
-                        fontSize: 10,
-                      ),
-                    ),
-                  )
-                : SizedBox(
-                    height: 1,
-                  ),
-            fetched == false
-                ? SizedBox(
+//            fetched == false
+//                ? SizedBox(
+//                    height: 20,
+//                  )
+//                : SizedBox(
+//                    height: 1,
+//                  ),
+//            fetched == false
+//                ? Row(
+//                    mainAxisAlignment: MainAxisAlignment.center,
+//                    crossAxisAlignment: CrossAxisAlignment.center,
+//                    children: [
+//                      Container(
+//                        width: getProportionateScreenWidth(65),
+//                        height: 1,
+//                        color: Color(0xff08763F),
+//                      ),
+//                      SizedBox(
+//                        width: 10,
+//                      ),
+//                      Text(
+//                        getTranslated(context, 'or'),
+//                        style: GoogleFonts.poppins(color: Color(0xff08763F)),
+//                      ),
+//                      SizedBox(
+//                        width: 10,
+//                      ),
+//                      Container(
+//                        width: getProportionateScreenWidth(65),
+//                        height: 1,
+//                        color: Color(0xff08763F),
+//                      ),
+//                    ],
+//                  )
+//                : SizedBox(
+//                    height: 1,
+//                  ),
+//            fetched == false
+//                ? SizedBox(
+//                    height: 20,
+//                  ) :
+                 SizedBox(
                     height: 10,
-                  )
-                : SizedBox(
-                    height: 1,
                   ),
+//            fetched == false
+//                ? Center(
+//                    child: Text(
+//                      getTranslated(context, 'enter_manually'),
+//                      style: GoogleFonts.poppins(
+//                        color: Colors.black,
+//                        fontSize: 14,
+//                      ),
+//                    ),
+//                  )
+//                : SizedBox(
+//                    height: 10,
+//                  ),
+//            SizedBox(
+//              height: 3,
+//            ),
+//            fetched == false
+//                ? Center(
+//                    child: Text(
+//                      getTranslated(context, 'applicable_for_india_only'),
+//                      style: GoogleFonts.poppins(
+//                        color: Color(0xffBCBCBC),
+//                        fontSize: 10,
+//                      ),
+//                    ),
+//                  )
+//                : SizedBox(
+//                    height: 1,
+//                  ),
+//            fetched == false
+//                ? SizedBox(
+//                    height: 10,
+//                  )
+//                : SizedBox(
+//                    height: 1,
+//                  ),
             InkWell(
               child: Container(
                 padding: EdgeInsets.all(10.0),
@@ -992,7 +1011,9 @@ class _BasicProfileState extends State<BasicProfile> {
 
     return Scaffold(
       backgroundColor: Color(0xff08763F),
-      body: /*Stack(
+      body:
+
+      /*Stack(
         children: [
           Positioned(
             top: 20,
@@ -1017,8 +1038,11 @@ class _BasicProfileState extends State<BasicProfile> {
         color: Color(0xFFF3FFF0),
         child: Center(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset("assets/icons/greenKisan_Logo.svg",height: getProportionateScreenHeight(80),),
+              SizedBox(height: getProportionateScreenHeight(30)),
               Container(
                 height: 600,
                 width: getProportionateScreenWidth(486),

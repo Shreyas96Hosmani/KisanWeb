@@ -13,10 +13,12 @@ import 'package:kisanweb/Helpers/constants.dart';
 import 'package:kisanweb/Helpers/helper.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
 import 'package:kisanweb/Models/RepresentativeListParser.dart';
+import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
 import 'package:kisanweb/UI/CompanyProfile/Tabs/AboutTab.dart';
 import 'package:kisanweb/UI/CompanyProfile/Tabs/ProductsTab.dart';
 import 'package:kisanweb/UI/CompanyProfile/Tabs/VideoTab.dart';
 import 'package:kisanweb/UI/CompanyProfile/Widgets/CompanyTabs.dart';
+import 'package:kisanweb/UI/DetailedScreens/VideoScreen.dart';
 import 'package:kisanweb/UI/Subscribe/SubscribeToMembership.dart';
 import 'package:kisanweb/View%20Models/CustomViewModel.dart';
 import 'package:kisanweb/localization/language_constants.dart';
@@ -313,7 +315,762 @@ class _CompanyDetailsState extends State<CompanyDetails> {
         ? Scaffold(
             backgroundColor: Colors.white,
             extendBodyBehindAppBar: true,
-            body: Stack(children: [
+            body: ResponsiveWidget.isSmallScreen(context) ? Stack(children: [
+              Container(
+                width: double.infinity,
+                child: SingleChildScrollView(
+                    child: providerListener.companyDetails != null
+                        ? Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            /*  BrandBannerbigthumb_url = null;
+                                  BrandBannermedia_type = null;
+                                  BrandBannermedia_url = null;
+                                  */
+                            (providerListener.BrandBannermedia_type ??
+                                "") ==
+                                "youtubevideo"
+                                ? push(
+                                context,
+                                SamplePlayer(
+                                    null,
+                                    providerListener
+                                        .BrandBannermedia_url ??
+                                        ""))
+                                : print("imageviewr should be called");
+                          },
+                          child: Container(
+                            height: SizeConfig.screenHeight / 3,
+                            color: Colors.green,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 0, vertical: 0),
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey[200],
+                                        offset: const Offset(
+                                          2.0,
+                                          3.0,
+                                        ),
+                                        blurRadius: 5.0,
+                                        spreadRadius: 2.0,
+                                      )
+                                    ],
+                                    color: Colors.green[700],
+                                    image: DecorationImage(
+                                        image: providerListener
+                                            .BrandBannermedia_url !=
+                                            null
+                                            ? NetworkImage(providerListener
+                                            .BrandBannermedia_url ??
+                                            "")
+                                            : AssetImage(
+                                            "assets/images/product_placeholder.png"),
+                                        /* image: NetworkImage(
+                                                  providerListener
+                                                      .companyDetailsAssets[0]
+                                                      .bigthumb_url ??
+                                                      ""),*/
+
+                                        fit: BoxFit.fill),
+                                  ),
+                                ),
+                                (providerListener.BrandBannermedia_type ??
+                                    "") ==
+                                    "youtubevideo"
+                                    ? Center(
+                                  child: Opacity(
+                                    opacity: 0.7,
+                                    child: Icon(
+                                      Icons.play_circle_fill,
+                                      color: Colors.white,
+                                      size: 50,
+                                    ),
+                                  ),
+                                )
+                                    : SizedBox(
+                                  height: 1,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          color: Color(/*0xFF0051BC*/ int.parse(
+                              providerListener
+                                  .companyDetails.image_max_color
+                                  .replaceAll("#", "0xFF"))),
+                          padding: EdgeInsets.only(top: 20,left: 20,right: 20),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 55,
+                                    height: 55,
+                                    padding: EdgeInsets.all(7),
+                                    decoration: BoxDecoration(
+                                      /*image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      providerListener
+                                                              .companyDetails
+                                                              .image_bigthumb_url ??
+                                                          ""),
+                                                  fit: BoxFit.contain),*/
+                                        borderRadius:
+                                        BorderRadius.circular(10),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.black
+                                                  .withOpacity(0.1),
+                                              spreadRadius: 2,
+                                              blurRadius: 10)
+                                        ]),
+                                    child: Image.network(
+                                      providerListener.companyDetails
+                                          .image_bigthumb_url ??
+                                          "",
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 18,
+                                  ),
+                                  Flexible(
+                                    child: Container(
+                                      child: Text(
+                                        providerListener.companyDetails
+                                            .organisation_name ??
+                                            "",
+                                        /*languageCode=="en"?providerListener.companyDetails.organisation_name??"":languageCode=="hi"?providerListener.companyDetails
+                                                  .brandname_hindi??"":providerListener.companyDetails
+                                                  .brandname_marathi??"",*/
+                                        style: GoogleFonts.poppins(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              CompanyTabs(
+                                selectedTab: _selectedTab,
+                                tabPressed: (num) {
+                                  _controller.animateToPage(num,
+                                      duration:
+                                      Duration(milliseconds: 400),
+                                      curve: Curves.easeOutCubic);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        ExpandablePageView(
+                          controller: _controller,
+                          onPageChanged: (num) {
+                            setState(() {
+                              _selectedTab = num;
+                            });
+                          },
+                          children: [
+                            AboutTab(),
+                            ProductsTab(),
+                            VideosTab()
+                          ],
+                        ),
+                        //Slide Up Panel Starts from here
+                      ],
+                    )
+                        : SizedBox(
+                      height: 1,
+                    )),
+              ),
+              //Slide Up Panel Starts from here
+              providerListener.companyDetails != null
+                  ? Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Visibility(
+                    visible: _visible1,
+                    maintainState: true,
+                    maintainAnimation: true,
+                    child: SlidingUpPanel(
+                      controller: _pc1,
+                      minHeight: 105,
+                      maxHeight: 550,
+                      borderRadius: radius,
+                      onPanelOpened: () {
+                        setState(() {
+                          _innerVisible = true;
+                        });
+                      },
+                      onPanelClosed: () {
+                        setState(() {
+                          _innerVisible = false;
+                        });
+                      },
+                      panel: Visibility(
+                        visible: _innerVisible,
+                        child: Column(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 33, vertical: 10),
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 76,
+                                        height: 8,
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey.shade400,
+                                            borderRadius:
+                                            BorderRadius.circular(
+                                                20)),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Text(
+                                    providerListener.companyDetails
+                                        .organisation_name ??
+                                        "",
+                                    style:
+                                    GoogleFonts.poppins(fontSize: 13),
+                                  ),
+                                  SizedBox(
+                                    height: 16,
+                                  ),
+                                  Container(
+                                    height: 44,
+                                    child: Text(
+                                      getTranslated(context,
+                                          'contactPopUpInfo') +
+                                          " " +
+                                          (providerListener.companyDetails
+                                              .organisation_name ??
+                                              ""),
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  providerListener
+                                      .representativeList.length >
+                                      0
+                                      ? Container(
+                                    height: 300,
+                                    child: MediaQuery.removePadding(
+                                      removeTop: true,
+                                      context: context,
+                                      child: ListView.builder(
+                                          itemCount: providerListener
+                                              .representativeList
+                                              .length,
+                                          itemBuilder:
+                                              (context, index) {
+                                            return RepInformation(
+                                              onCallPressed: () {
+                                                if ((prefs.getInt(
+                                                    'paywall') ??
+                                                    0) ==
+                                                    2 &&
+                                                    (prefs.getString(
+                                                        'membership_status') ??
+                                                        "") !=
+                                                        "active") {
+                                                  push(context,
+                                                      SubscribeToMembership());
+                                                } else {
+                                                  connectCompanyCall(
+                                                      providerListener
+                                                          .userprofileData
+                                                          .user,
+                                                      providerListener
+                                                          .representativeList[
+                                                      index]
+                                                          .user_id,
+                                                      company_id,
+                                                      providerListener
+                                                          .representativeList[
+                                                      index]
+                                                          .mobile ??
+                                                          "");
+                                                }
+                                              },
+                                              onWhatAppPressed:
+                                                  () async {
+                                                setState(() {
+                                                  indexSaveContact =
+                                                      index;
+                                                });
+                                                if ((prefs.getInt(
+                                                    'paywall') ??
+                                                    0) ==
+                                                    2 &&
+                                                    (prefs.getString(
+                                                        'membership_status') ??
+                                                        "") !=
+                                                        "active") {
+                                                  push(context,
+                                                      SubscribeToMembership());
+                                                } else {
+                                                  if (providerListener
+                                                      .representativeList[
+                                                  index]
+                                                      .status ==
+                                                      "accepted") {
+                                                    connectCompanyWhatsApp(
+                                                        providerListener
+                                                            .userprofileData
+                                                            .user,
+                                                        providerListener
+                                                            .representativeList[
+                                                        index]
+                                                            .user_id,
+                                                        company_id,
+                                                        providerListener
+                                                            .representativeList[index]
+                                                            .mobile ??
+                                                            "",
+                                                        0);
+                                                  } else if (providerListener
+                                                      .representativeList[
+                                                  index]
+                                                      .status ==
+                                                      "not initiated") {
+                                                    _pc1.close();
+                                                    setState(() {
+                                                      _visible3 =
+                                                      true;
+                                                      _visible1 =
+                                                      false;
+                                                      _pc3.open();
+                                                    });
+                                                  } else if (providerListener
+                                                      .representativeList[
+                                                  index]
+                                                      .status ==
+                                                      "initiated") {
+                                                    //below condition if cotact is not saved in current and request initiated from another device
+                                                    String
+                                                    mobileNumber =
+                                                        providerListener
+                                                            .representativeList[index]
+                                                            .mobile ??
+                                                            "";
+                                                    PermissionStatus
+                                                    permissionStatus =
+                                                    await _getContactPermission();
+                                                    if (permissionStatus ==
+                                                        PermissionStatus
+                                                            .granted) {
+                                                      try {
+                                                        Iterable<
+                                                            Contact>
+                                                        asdf =
+                                                        await ContactsService.getContactsForPhone(
+                                                            mobileNumber);
+
+                                                        if (asdf.length ==
+                                                            0) {
+                                                          _pc1.close();
+                                                          _visible1 =
+                                                          false;
+                                                          setState(
+                                                                  () {
+                                                                _pc3.open();
+                                                                _visible3 =
+                                                                true;
+                                                              });
+                                                        } else {
+                                                          toastCommon(
+                                                              context,
+                                                              getTranslated(context, 'request_ent') ??
+                                                                  "");
+                                                        }
+                                                      } catch (e) {
+                                                        toastCommon(
+                                                            context,
+                                                            getTranslated(
+                                                                context,
+                                                                'no_data_tv'));
+                                                      }
+                                                    } else {
+                                                      _handleInvalidPermissions(
+                                                          permissionStatus);
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              representativeOBJ:
+                                              providerListener
+                                                  .representativeList[
+                                              index],
+                                            );
+                                          }),
+                                    ),
+                                  )
+                                      : SizedBox(
+                                    height: 1,
+                                  ),
+                                  SizedBox(
+                                    height: 7,
+                                  ),
+                                  Container(
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "Get a call from the company",
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 13),
+                                        ),
+                                        SizedBox(
+                                          height: 7,
+                                        ),
+                                        CallMeButton(
+                                          onPressed: () {
+                                            if ((prefs.getInt(
+                                                'paywall') ??
+                                                0) ==
+                                                2 &&
+                                                (prefs.getString(
+                                                    'membership_status') ??
+                                                    "") !=
+                                                    "active") {
+                                              push(context,
+                                                  SubscribeToMembership());
+                                            } else {
+                                              if (_isChecked == false) {
+                                                _pc1.close();
+                                                _visible1 = false;
+                                                _visible2 = true;
+                                                setState(() {
+                                                  _pc2.open();
+                                                });
+                                              } else {
+                                                Provider.of<CustomViewModel>(
+                                                    context,
+                                                    listen: false)
+                                                    .requestCallMe(
+                                                    providerListener
+                                                        .userprofileData
+                                                        .user,
+                                                    company_id,
+                                                    company_id)
+                                                    .then((value) {
+                                                  toastCommon(
+                                                      context,
+                                                      getTranslated(
+                                                          context,
+                                                          'request_ent') ??
+                                                          "");
+                                                });
+                                              }
+                                            }
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      collapsed: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: getProportionateScreenWidth(25),
+                            vertical: 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(
+                                  left: SizeConfig.screenWidth / 5),
+                              child: Text(
+                                (providerListener.representativeList
+                                    .length ??
+                                    0)
+                                    .toString() +
+                                    " " +
+                                    getTranslated(
+                                        context, 'numberOfOnline')
+                                        .toString(),
+                                style: GoogleFonts.poppins(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 12),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            Row(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
+                              children: [
+                                FavButton(
+                                  providerListener: providerListener,
+                                  onPressed: () {},
+                                  favButtonChild: FavoriteButton(
+                                    iconSize: 40,
+                                    valueChanged: (_isFavorite) {
+                                      print('Is Favorite $_isFavorite)');
+                                      Provider.of<CustomViewModel>(
+                                          context,
+                                          listen: false)
+                                          .LikeDislikeCompany(
+                                          providerListener
+                                              .userprofileData.user,
+                                          company_id);
+                                    },
+                                    isFavorite: (providerListener
+                                        .companyDetails.liked ??
+                                        false),
+                                  ),
+                                ),
+                                Spacer(),
+                                ContactButton(
+                                  colorText: int.parse(providerListener
+                                      .companyDetails.image_max_color
+                                      .replaceAll("#", "0xFF")),
+                                  onPressed: () {
+                                    _pc1.open();
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  providerListener.companyDetails != null
+                      ? Visibility(
+                    maintainState: true,
+                    maintainAnimation: true,
+                    visible: _visible2,
+                    child: CallMeSlide(
+                      radius: radius,
+                      panelController: _pc2,
+                      closePressed: () {
+                        _pc2.close();
+                        _visible2 = false;
+                        _visible1 = true;
+                        setState(() {
+                          _pc1.open();
+                        });
+                      },
+                      isChecked: _isChecked,
+                      checkBoxChanged: (value) {
+                        setState(() {
+                          _isChecked = !_isChecked;
+                          prefs.setBool('_isChecked', value);
+                        });
+                      },
+                    ),
+                  )
+                      : SizedBox(
+                    height: 1,
+                  ),
+                  providerListener.companyDetails != null &&
+                      providerListener.representativeList.length >
+                          0 &&
+                      indexSaveContact != -1
+                      ? Visibility(
+                    maintainState: true,
+                    maintainAnimation: true,
+                    visible: _visible3,
+                    child: SaveContact(
+                      name: (providerListener
+                          .representativeList[
+                      indexSaveContact]
+                          .first_name ??
+                          "") +
+                          " " +
+                          (providerListener
+                              .representativeList[
+                          indexSaveContact]
+                              .last_name ??
+                              ""),
+                      org_name: (providerListener
+                          .companyDetails.organisation_name ??
+                          ""),
+                      image_url: (providerListener
+                          .representativeList[indexSaveContact]
+                          .image_url ??
+                          ""),
+                      radius: radius,
+                      panelController: _pc3,
+                      closePressed: () {
+                        _pc3.close();
+                        _visible3 = false;
+                        _visible1 = true;
+                        setState(() {
+                          _pc1.open();
+                        });
+                      },
+                      saveContactPressed: () async {
+                        PermissionStatus permissionStatus =
+                        await _getContactPermission();
+                        if (permissionStatus ==
+                            PermissionStatus.granted) {
+                          String mobileNumber = providerListener
+                              .representativeList[
+                          indexSaveContact]
+                              .mobile ??
+                              "";
+
+                          Iterable<Contact> asdf =
+                          await ContactsService
+                              .getContactsForPhone(
+                              mobileNumber);
+
+                          if (asdf.length == 0) {
+                            try {
+                              Contact contact = Contact();
+                              contact.givenName = providerListener
+                                  .representativeList[
+                              indexSaveContact]
+                                  .first_name +
+                                  " " +
+                                  providerListener
+                                      .representativeList[
+                                  indexSaveContact]
+                                      .last_name;
+                              contact.displayName = providerListener
+                                  .representativeList[
+                              indexSaveContact]
+                                  .first_name +
+                                  " " +
+                                  providerListener
+                                      .representativeList[
+                                  indexSaveContact]
+                                      .last_name;
+                              contact.phones = [
+                                Item(
+                                    label: "mobile",
+                                    value: mobileNumber)
+                              ];
+                              contact.company = providerListener
+                                  .companyDetails.organisation_name;
+                              await ContactsService.addContact(
+                                  contact);
+
+                              Iterable<Contact> temp =
+                              await ContactsService
+                                  .getContactsForPhone(
+                                  mobileNumber);
+
+                              if (temp.length > 0) {
+                                print("******************added");
+                                //we have save log on server if saved
+                                connectCompanyWhatsAppWithSaveButton(
+                                    providerListener
+                                        .userprofileData.user,
+                                    providerListener
+                                        .representativeList[
+                                    indexSaveContact]
+                                        .user_id,
+                                    company_id,
+                                    providerListener
+                                        .representativeList[
+                                    indexSaveContact]
+                                        .mobile ??
+                                        "",
+                                    1);
+                              } else {}
+                            } catch (e) {
+                              print(e);
+                            }
+                          } else {
+                            /*we have save log on server even if present in device as user may use other account in same device*/
+                            print("******************present");
+                            connectCompanyWhatsAppWithSaveButton(
+                                providerListener
+                                    .userprofileData.user,
+                                providerListener
+                                    .representativeList[
+                                indexSaveContact]
+                                    .user_id,
+                                company_id,
+                                providerListener
+                                    .representativeList[
+                                indexSaveContact]
+                                    .mobile ??
+                                    "",
+                                1);
+                          }
+                        } else {
+                          _handleInvalidPermissions(
+                              permissionStatus);
+                        }
+                      },
+                    ),
+                  )
+                      : SizedBox(
+                    height: 1,
+                  ),
+                  providerListener.companyDetails != null &&
+                      providerListener.representativeList.length >
+                          0 &&
+                      indexSaveContact != -1
+                      ? Visibility(
+                    maintainState: true,
+                    maintainAnimation: true,
+                    visible: _visible4,
+                    child: WhatsAppReqSent(
+                      radius: radius,
+                      panelController: _pc4,
+                      closePressed: () {
+                        _pc4.close();
+                        _visible4 = false;
+                        _visible1 = true;
+                        setState(() {
+                          _pc1.open();
+                        });
+                      },
+                      whatsAppPressed: () {
+                        _pc4.close();
+                        _visible4 = false;
+                        _visible1 = true;
+                        setState(() {
+                          _pc1.open();
+                        });
+                      },
+                    ),
+                  )
+                      : SizedBox(
+                    height: 7,
+                  ),
+                ],
+              )
+                  : SizedBox(height: 1),
+            ]) : Stack(children: [
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 150),
                 child: SingleChildScrollView(

@@ -10,11 +10,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kisanweb/Helpers/constants.dart';
 import 'package:kisanweb/Helpers/helper.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
+import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
 import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
 import 'package:kisanweb/UI/CompanyProfile/ViewPhotoScreen.dart';
 import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
 import 'package:kisanweb/UI/DetailedScreens/VideoScreen.dart';
 import 'package:kisanweb/UI/DetailedScreens/pdfViewer.dart';
+import 'package:kisanweb/UI/Widgets/readmore.dart';
 import 'package:kisanweb/View%20Models/CustomViewModel.dart';
 import 'package:kisanweb/localization/language_constants.dart';
 import 'package:open_file/open_file.dart';
@@ -211,7 +213,8 @@ class _AboutTabState extends State<AboutTab> {
     final providerListener = Provider.of<CustomViewModel>(context);
 
     return _isAboutLoaded == true
-        ? /*Container(
+        ?
+    /*Container(
             padding: EdgeInsets.symmetric(vertical: 30),
             height: 500 +
                 ((providerListener.companyDetailsBrouchers.length)*90).ceil().toDouble()+
@@ -405,7 +408,207 @@ class _AboutTabState extends State<AboutTab> {
               ],
             ),
           )*/
-        Container(
+        ResponsiveWidget.isSmallScreen(context) ? Container(
+          padding: EdgeInsets.symmetric(vertical: 30),
+          height: 500 +
+              ((providerListener.companyDetailsBrouchers.length).toDouble() *
+                  90) +
+              100,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: ReadMoreText(
+                  (parseHtmlString(languageCode == "en"
+                      ? utf8.decode(
+                      (providerListener.companyDetails.about ?? "")
+                          .runes
+                          .toList())
+                      : languageCode == "hi"
+                      ? utf8.decode((providerListener
+                      .companyDetails.about_hindi ??
+                      "")
+                      .runes
+                      .toList()) ??
+                      ""
+                      : utf8.decode((providerListener
+                      .companyDetails.about_marathi ??
+                      "")
+                      .runes
+                      .toList()) ??
+                      "")),
+                  trimLines: 6,
+                  style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w300,
+                      color: Colors.black,
+                      fontSize: 14),
+                  colorClickableText: Colors.black,
+                  trimMode: TrimMode.Line,
+                  trimCollapsedText: 'Read more',
+                  trimExpandedText: 'Read less',
+                  lessStyle: TextStyle(fontSize: 14,  color: Colors.blueAccent, fontWeight: FontWeight.bold),
+                  moreStyle:
+                  TextStyle(fontSize: 14,  color: Colors.blueAccent, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              //Images Section
+              providerListener.companyDetailsAssetsUrl.length > 0
+                  ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: HeaderTexts(
+                  title: 'Media',
+                ),
+              )
+                  : SizedBox(
+                height: 1,
+              ),
+              providerListener.companyDetailsAssetsUrl.length > 0
+                  ? Container(
+                height: 122,
+                child: ListView.builder(
+                    itemCount:
+                    providerListener.companyDetailsAssetsUrl.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          providerListener.companyDetailsAssets[index]
+                              .media_type ==
+                              "youtubevideo"
+                              ? push(
+                              context,
+                              SamplePlayer(
+                                  null,
+                                  providerListener
+                                      .companyDetailsAssets[index]
+                                      .media_url))
+                              : push(
+                              context,
+                              ViewPhotos(
+                                url: providerListener
+                                    .companyDetailsAssetsUrl[
+                                index] ??
+                                    "",
+                              ));
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              top: 20, bottom: 20, left: 30),
+                          height: getProportionateScreenWidth(85),
+                          width: getProportionateScreenWidth(350),
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(providerListener
+                                      .companyDetailsAssetsUrl[
+                                  index] ??
+                                      ""),
+                                  fit: BoxFit.fill),
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.green,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 5,
+                                  spreadRadius: 1,
+                                )
+                              ]),
+                        ),
+                      );
+                    }),
+              )
+                  : SizedBox(
+                height: 1,
+              ),
+              SizedBox(
+                height: getProportionateScreenHeight(35),
+              ),
+              //Pdfs section
+              providerListener.companyDetailsBrouchers.length > 0
+                  ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: HeaderTexts(
+                  title: getTranslated(context, 'broucher_txt'),
+                ),
+              )
+                  : SizedBox(
+                height: 1,
+              ),
+              SizedBox(
+                height: getProportionateScreenHeight(15),
+              ),
+              providerListener.companyDetailsBrouchers.length > 0
+                  ? Container(
+                height:
+                ((providerListener.companyDetailsBrouchers.length)
+                    .toDouble()) *
+                    100,
+                width: SizeConfig.screenWidth,
+                child: MediaQuery.removePadding(
+                  removeTop: true,
+                  removeBottom: true,
+                  context: context,
+                  child: ListView.builder(
+                      itemCount: providerListener
+                          .companyDetailsBrouchers.length,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return PDFButton(
+                          onWholePressed: () {
+                            print("View Pdf");
+                            push(
+                                context,
+                                pdfviewer(
+                                    providerListener
+                                        .companyDetailsBrouchers[index]
+                                        .title,
+                                    providerListener
+                                        .companyDetailsBrouchers[index]
+                                        .media_url));
+                          },
+                          onDownloadPressed: () async {
+                            print("Download Pdf");
+                            setState(() {
+                              download_link = providerListener
+                                  .companyDetailsBrouchers[index]
+                                  .media_url;
+                            });
+                            await canLaunch(providerListener
+                                .companyDetailsBrouchers[index]
+                                .media_url
+                                .toString());
+                            _download();
+                          },
+                          onPdfPressed: () {
+                            print("View Pdf");
+
+                            push(
+                                context,
+                                pdfviewer(
+                                    providerListener
+                                        .companyDetailsBrouchers[index]
+                                        .title,
+                                    providerListener
+                                        .companyDetailsBrouchers[index]
+                                        .media_url));
+                          },
+                          broucherOBJ: providerListener
+                              .companyDetailsBrouchers[index],
+                        );
+                      }),
+                ),
+              )
+                  : SizedBox(
+                height: 1,
+              ),
+            ],
+          ),
+        ) : Container(
             padding: EdgeInsets.only(top: 20),
             child: Column(
               children: [
