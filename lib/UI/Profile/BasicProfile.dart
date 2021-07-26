@@ -194,17 +194,17 @@ class _BasicProfileState extends State<BasicProfile> {
 
     Provider.of<CustomViewModel>(context, listen: false)
         .UpdateProfileData(
-      firstNameController.text,
-      lastNameController.text,
-      "otp",
-      emailController.text,
-      "manual",
-      false,
-      city,
-      state,
-      long,
-      lat,
-    )
+        firstNameController.text,
+        lastNameController.text,
+        "otp",
+        emailController.text,
+        "manual",
+        false,
+        city,
+        state,
+        long,
+        lat,
+        isChecked)
         .then((value) {
       setState(() {
         if (value == "error") {

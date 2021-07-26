@@ -2304,16 +2304,17 @@ Widget CategoryTiles(BuildContext context, CategoryListParser categoryOBJ) {
           onPressed: () {
             push(
                 context,
-                CategoriesPage(
+                CategoriesPage(0,
                     languageCode == "en"
                         ? categoryOBJ.app_name_english ?? ""
                         : languageCode == "hi"
-                            ? utf8.decode(categoryOBJ.app_name_hindi.runes
-                                    .toList()) ??
-                                ""
-                            : utf8.decode(categoryOBJ.app_name_marathi.runes
-                                    .toList()) ??
-                                "",
+                        ? utf8.decode(categoryOBJ.app_name_hindi.runes
+                        .toList()) ??
+                        ""
+                        : utf8.decode(categoryOBJ
+                        .app_name_marathi.runes
+                        .toList()) ??
+                        "",
                     categoryOBJ.id));
           },
           style: ElevatedButton.styleFrom(
@@ -3356,10 +3357,8 @@ Widget AdTile2(BuildContext context, AdsObject adOBJ) {
                 } else if (adOBJ.link_for == "Category") {
                   push(
                       context,
-                      CategoriesPage(
-                        0,
-                        adOBJ.pavilion_name_for_category,
-                      ));
+                      CategoriesPage(0, adOBJ.pavilion_name_for_category,
+                          adOBJ.organisation_id));
                 } else if (adOBJ.link_for == "Brand") {
                   push(context, CompanyDetails(adOBJ.organisation_id));
                 }
@@ -3584,18 +3583,18 @@ Widget CategoryTiles2(BuildContext context, CategoryListParser categoryOBJ) {
                 onPressed: () {
                   push(
                       context,
-                      CategoriesPage(
-                        0,
-                        languageCode == "en"
-                            ? categoryOBJ.app_name_english ?? ""
-                            : languageCode == "hi"
-                                ? utf8.decode(categoryOBJ.app_name_hindi.runes
-                                        .toList()) ??
-                                    ""
-                                : utf8.decode(categoryOBJ.app_name_marathi.runes
-                                        .toList()) ??
-                                    "",
-                      ));
+                      CategoriesPage(0,
+                          languageCode == "en"
+                              ? categoryOBJ.app_name_english ?? ""
+                              : languageCode == "hi"
+                              ? utf8.decode(categoryOBJ.app_name_hindi.runes
+                              .toList()) ??
+                              ""
+                              : utf8.decode(categoryOBJ
+                              .app_name_marathi.runes
+                              .toList()) ??
+                              "",
+                          categoryOBJ.id));
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.white,
@@ -3741,11 +3740,11 @@ class _ImageSlider2State extends State<ImageSlider2> {
                             "Category") {
                           push(
                               context,
-                              CategoriesPage(
-                                0,
-                                providerListener.homeAdsList[index]
-                                    .pavilion_name_for_category,
-                              ));
+                              CategoriesPage(0,
+                                  providerListener.homeAdsList[index]
+                                      .pavilion_name_for_category,
+                                  providerListener
+                                      .homeAdsList[index].pavilion_id));
                         } else if (providerListener
                                 .homeAdsList[index].link_for ==
                             "Brand") {

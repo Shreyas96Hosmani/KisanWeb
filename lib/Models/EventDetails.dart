@@ -15,8 +15,13 @@ class EventDetails {
       start_date,
       end_date,
       share_link,
-      event_date_status;
+      event_date_status,
+      quiz_form_url,
+      survey_form_url,
+      poll_form_url;
   int user_id;
+
+  bool is_added_to_calender;
 
   EventDetails(
       this.user_id,
@@ -36,5 +41,9 @@ class EventDetails {
       this.start_date,
       this.end_date,
       this.share_link,
-      this.event_date_status);
+      this.event_date_status,
+      this.quiz_form_url,
+      this.survey_form_url,
+      this.poll_form_url,
+      this.is_added_to_calender);
 }

@@ -1,24 +1,22 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kisanweb/Helpers/constants.dart';
 import 'package:kisanweb/Helpers/helper.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
+import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
 import 'package:kisanweb/UI/Categories/components/productFoundBottombar.dart';
 import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
 import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
-import 'package:kisanweb/UI/SearchScreen/SearchScreen.dart';
-import 'package:kisanweb/UI/Tabs/HomeTab.dart';
 import 'package:kisanweb/View%20Models/CustomViewModel.dart';
 import 'package:kisanweb/localization/language_constants.dart';
 import 'package:provider/provider.dart';
 
 class productsFound extends StatefulWidget {
-  final title, searchString;
+  final event_id, title, company_id;
 
   List<int> ids;
 
-  productsFound(this.title, this.ids, this.searchString);
+  productsFound(this.event_id, this.title, this.ids, this.company_id);
 
   @override
   _productsFoundState createState() => _productsFoundState();
@@ -31,22 +29,76 @@ class _productsFoundState extends State<productsFound> {
   PageController _tabPageController;
   int _selectedTab = 0;
 
+  bool _isSearchBarOpen = false;
+  TextEditingController searchTextController = new TextEditingController();
+
+  FocusNode focusSearch = FocusNode();
+
+  int pageCount = 1;
+  bool isLoading = false;
+
+  int pageCountC = 1;
+  bool isLoadingC = false;
+
   Future<void> initTask() async {
+    setState(() {
+      _isProductLoaded = false;
+    });
     Provider.of<CustomViewModel>(context, listen: false)
-        .GetProductsByCategoryIdsAndSearchString(
-            widget.ids, widget.searchString)
+        .GetProductsByCategoryIdsAndSearchString(0, widget.event_id, widget.ids,
+            searchTextController.text ?? "", widget.company_id)
         .then((value) {
       setState(() {
         _isProductLoaded = true;
       });
 
       Provider.of<CustomViewModel>(context, listen: false)
-          .GetCompaniesByCategoryIdsAndSearchString(
-              widget.ids, widget.searchString)
+          .GetCompaniesByCategoryIdsAndSearchString(0, widget.event_id,
+              widget.ids, searchTextController.text ?? "", widget.company_id)
           .then((value) {
         setState(() {
           _isCompaniesLoaded = true;
         });
+      });
+    });
+  }
+
+  Future<bool> _loadProducts() async {
+    setState(() {
+      isLoading = true;
+      pageCount = pageCount + 1;
+    });
+
+    print("AppendProductsForSearch");
+    Provider.of<CustomViewModel>(context, listen: false)
+        .AppendProductsForSearch(widget.event_id, widget.ids,
+            (searchTextController.text ?? ""), pageCount, widget.company_id)
+        .then((value) {
+      setState(() {
+        isLoading = false;
+        /*if (value == "No more items") {
+          toastCommon(context, "No more items!");
+        }*/
+      });
+    });
+  }
+
+  Future<bool> _loadCompanies() async {
+    setState(() {
+      isLoadingC = true;
+      pageCountC = pageCountC + 1;
+    });
+
+    print("AppendCompaniesForSearch");
+    Provider.of<CustomViewModel>(context, listen: false)
+        .AppendCompaniesForSearch(widget.event_id, widget.ids,
+            (searchTextController.text ?? ""), pageCountC, widget.company_id)
+        .then((value) {
+      setState(() {
+        isLoadingC = false;
+        /*if (value == "No more items") {
+          toastCommon(context, "No more items!");
+        }*/
       });
     });
   }
@@ -74,7 +126,162 @@ class _productsFoundState extends State<productsFound> {
         ? Scaffold(
             backgroundColor: Colors.white,
             extendBodyBehindAppBar: true,
-            appBar: PreferredSize(
+            appBar:ResponsiveWidget.isSmallScreen(context) ?
+            PreferredSize(
+              preferredSize: Size.fromHeight(100),
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 15),
+                color: Colors.white,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+                  child: _isSearchBarOpen == false
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            BackButton(),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Container(
+                              width: getProportionateMobileScreenWidth(240),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.company_id==0?widget.title:_selectedTab==0?widget.title:getTranslated(context, 'companies'),
+                                    overflow: TextOverflow.clip,
+                                    style: GoogleFonts.poppins(
+                                        color: Colors.black,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    (providerListener.productsCouts.products ??
+                                                0)
+                                            .toString() +
+                                        "  " +
+                                        getTranslated(context, 'products')
+                                            .toString() +
+                                        " | " +
+                                        (providerListener
+                                                    .productsCouts.companies ??
+                                                0)
+                                            .toString() +
+                                        " " +
+                                        getTranslated(context, 'companies')
+                                            .toString(),
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Spacer(),
+                            ConstrainedBox(
+                              constraints: BoxConstraints.tightFor(
+                                width: 55,
+                                height: 55,
+                              ),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.white,
+                                    //padding: EdgeInsets.symmetric(horizontal: 20),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15))),
+                                onPressed: () {
+                                  setState(() {
+                                    _isSearchBarOpen = true;
+                                    focusSearch.requestFocus();
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.search,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            Container(
+                              child: TextField(
+                                keyboardType: TextInputType.text,
+                                textInputAction: TextInputAction.done,
+                                focusNode: focusSearch,
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                    fontSize: 14),
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: const BorderRadius.all(
+                                      const Radius.circular(10.0),
+                                    ),
+                                  ),
+                                  fillColor: Colors.grey.shade100,
+                                  prefixIcon: InkWell(
+                                    onTap: () {
+                                      if (_isSearchBarOpen == true) {
+                                        setState(() {
+                                          _isSearchBarOpen = false;
+                                          searchTextController.clear();
+                                        });
+                                        // searchResults("");
+                                        initTask();
+                                      } else {
+                                        pop(context);
+                                      }
+                                    },
+                                    child: Icon(
+                                      Icons.arrow_back,
+                                      color: Colors.grey,
+                                      size: 30,
+                                    ),
+                                  ),
+                                  suffixIconConstraints:
+                                      BoxConstraints.tightFor(height: 50),
+                                  suffixIcon: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        searchTextController.clear();
+                                      });
+                                      //searchResults("");
+                                      // initTask();
+                                    },
+                                    child: Padding(
+                                        padding:
+                                            EdgeInsetsDirectional.only(end: 10),
+                                        child: Icon(
+                                          Icons.clear,
+                                          size: 30,
+                                        )),
+                                  ),
+                                ),
+                                /*onChanged: (value) {
+
+                                },*/
+                                onEditingComplete: () {
+                                  /*searchResults(
+                                      searchTextController.text.toString());*/
+                                  initTask();
+                                  focusSearch.unfocus();
+                                },
+                                controller: searchTextController,
+                              ),
+                            )
+                          ],
+                        ),
+                ),
+              ),
+            ) : PreferredSize(
               preferredSize: Size.fromHeight(100),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 200),
@@ -103,13 +310,13 @@ class _productsFoundState extends State<productsFound> {
                           ),
                           Text(
                             (providerListener.productsCouts.products ?? 0)
-                                    .toString() +
+                                .toString() +
                                 "  " +
                                 getTranslated(context, 'products')
                                     .toString() +
                                 " | " +
                                 (providerListener.productsCouts.companies ??
-                                        0)
+                                    0)
                                     .toString() +
                                 " " +
                                 getTranslated(context, 'companies')
@@ -139,11 +346,50 @@ class _productsFoundState extends State<productsFound> {
                 ),
               ),
             ),
-            /*bottomNavigationBar: Container(
+            floatingActionButton: _selectedTab == 0
+                ? providerListener.canLoadMoreProducts == true
+                    ? Container(
+                        margin: EdgeInsets.only(left: 20),
+                        padding: EdgeInsets.only(bottom: 10.0, right: 10),
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: FloatingActionButton.extended(
+                            onPressed: () {
+                              _loadProducts();
+                            },
+                            backgroundColor: Color(COLOR_BACKGROUND),
+                            label: Text(isLoading == false
+                                ? "Load more"
+                                : "Loading..."),
+                          ),
+                        ),
+                      )
+                    : null
+                : providerListener.canLoadMoreCompanies == true
+                    ? Container(
+                        margin: EdgeInsets.only(left: 20),
+                        padding: EdgeInsets.only(bottom: 10.0, left: 10),
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: FloatingActionButton.extended(
+                            onPressed: () {
+                              _loadCompanies();
+                            },
+                            backgroundColor: Color(COLOR_BACKGROUND),
+                            label: Text(isLoadingC == false
+                                ? "Load more"
+                                : "Loading..."),
+                          ),
+                        ),
+                      )
+                    : null,
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+            bottomNavigationBar: ResponsiveWidget.isSmallScreen(context) ?
+             Container(
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.only(top: 20),
-                child: ProductFoundButtonNavBar(
+                child: ProductFoundMobileButtonNavBar(
                   selectedTab: _selectedTab,
                   tabPressed: (num) {
                     _tabPageController.animateToPage(num,
@@ -152,9 +398,9 @@ class _productsFoundState extends State<productsFound> {
                   },
                 ),
               ),
-            ),*/
+            ) :
+            null,
             body: Container(
-              padding: EdgeInsets.symmetric(horizontal: 200),
               child: PageView(
                 controller: _tabPageController,
                 onPageChanged: (num) {
@@ -165,12 +411,12 @@ class _productsFoundState extends State<productsFound> {
                 children: [
                   providerListener.productsListbycatidsandsearchstring.length >
                           0
-                      ? Container(
+                      ? ResponsiveWidget.isSmallScreen(context) ? Container(
                           padding: const EdgeInsets.only(left: 20, right: 20),
                           height: (providerListener
                                   .productsListbycatidsandsearchstring.length /
                               2.ceil() *
-                              210),
+                              200),
                           child: GridView.builder(
                               scrollDirection: Axis.vertical,
                               primary: false,
@@ -179,120 +425,248 @@ class _productsFoundState extends State<productsFound> {
                                   .productsListbycatidsandsearchstring.length,
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 5,
-                                      crossAxisSpacing: 40,
-                                      childAspectRatio: 0.9,
-                                      mainAxisSpacing: 40),
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 30,
+                                      mainAxisSpacing: 20),
                               itemBuilder: (BuildContext context, int index) {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(10)),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey[200],
-                                          blurRadius: 1,
-                                          spreadRadius: 1)
-                                    ],
-                                  ),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      push(
-                                          context,
-                                          DetailedProducts(
-                                              providerListener
-                                                  .productsListbycatidsandsearchstring[
-                                                      index]
-                                                  .id,
-                                              providerListener
-                                                  .productsListbycatidsandsearchstring[
-                                                      index]
-                                                  .user_id));
-                                    },
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(10),
-                                                topRight: Radius.circular(10),
+                                return Padding(
+                                    padding: EdgeInsets.all(0.0),
+                                    child: Container(
+                                      width: 150,
+                                      height: 200,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.grey[200],
+                                              blurRadius: 1,
+                                              spreadRadius: 1)
+                                        ],
+                                      ),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          push(
+                                              context,
+                                              DetailedProducts(
+                                                  providerListener
+                                                      .productsListbycatidsandsearchstring[
+                                                          index]
+                                                      .id,
+                                                  providerListener
+                                                      .productsListbycatidsandsearchstring[
+                                                          index]
+                                                      .user_id));
+                                        },
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              height: 110,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                ),
+                                                color: Colors.green[700],
+                                                image: DecorationImage(
+                                                  image: providerListener
+                                                              .productsListbycatidsandsearchstring[
+                                                                  index]
+                                                              .media_url ==
+                                                          null
+                                                      ? AssetImage(
+                                                          "assets/images/product_placeholder.png")
+                                                      : NetworkImage(
+                                                          providerListener
+                                                              .productsListbycatidsandsearchstring[
+                                                                  index]
+                                                              .media_url),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.grey[200],
+                                                      blurRadius: 1,
+                                                      spreadRadius: 1)
+                                                ],
                                               ),
-                                              color: Colors.green[700],
-                                              image: DecorationImage(
-                                                image: providerListener
-                                                            .productsListbycatidsandsearchstring[
-                                                                index]
-                                                            .media_url ==
-                                                        null
-                                                    ? AssetImage(
-                                                        "assets/images/product_placeholder.png")
-                                                    : NetworkImage(
-                                                        providerListener
-                                                            .productsListbycatidsandsearchstring[
-                                                                index]
-                                                            .media_url),
-                                                fit: BoxFit.cover,
-                                              ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    color: Colors.grey[200],
-                                                    blurRadius: 1,
-                                                    spreadRadius: 1)
-                                              ],
                                             ),
-                                            height: getProportionateScreenHeight(200),
+                                            Container(
+                                              padding: EdgeInsets.all(5),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    providerListener
+                                                        .productsListbycatidsandsearchstring[
+                                                            index]
+                                                        .title_english,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: GoogleFonts.poppins(
+                                                      color: Colors.black,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    parseHtmlString(providerListener
+                                                        .productsListbycatidsandsearchstring[
+                                                            index]
+                                                        .organisation_name),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: GoogleFonts.poppins(
+                                                      color: Colors.grey[700],
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ));
+                              }),
+                        ) :
+                        Container(
+                    padding: const EdgeInsets.only(left: 200, right: 200),
+                    height: (providerListener
+                        .productsListbycatidsandsearchstring.length /
+                        2.ceil() *
+                        210),
+                    child: GridView.builder(
+                        scrollDirection: Axis.vertical,
+                        primary: false,
+                        shrinkWrap: true,
+                        itemCount: providerListener
+                            .productsListbycatidsandsearchstring.length,
+                        gridDelegate:
+                        SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 5,
+                            crossAxisSpacing: 40,
+                            childAspectRatio: 0.9,
+                            mainAxisSpacing: 40),
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(10)),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey[200],
+                                    blurRadius: 1,
+                                    spreadRadius: 1)
+                              ],
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                push(
+                                    context,
+                                    DetailedProducts(
+                                        providerListener
+                                            .productsListbycatidsandsearchstring[
+                                        index]
+                                            .id,
+                                        providerListener
+                                            .productsListbycatidsandsearchstring[
+                                        index]
+                                            .user_id));
+                              },
+                              child: Column(
+                                mainAxisAlignment:
+                                MainAxisAlignment.start,
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                        ),
+                                        color: Colors.green[700],
+                                        image: DecorationImage(
+                                          image: providerListener
+                                              .productsListbycatidsandsearchstring[
+                                          index]
+                                              .media_url ==
+                                              null
+                                              ? AssetImage(
+                                              "assets/images/product_placeholder.png")
+                                              : NetworkImage(
+                                              providerListener
+                                                  .productsListbycatidsandsearchstring[
+                                              index]
+                                                  .media_url),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.grey[200],
+                                              blurRadius: 1,
+                                              spreadRadius: 1)
+                                        ],
+                                      ),
+                                      height: getProportionateScreenHeight(200),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(5),
+                                    height: getProportionateScreenHeight(90),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          providerListener
+                                              .productsListbycatidsandsearchstring[
+                                          index]
+                                              .title_english,
+                                          overflow:
+                                          TextOverflow.ellipsis,
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.black,
+                                            fontSize: 15,
+                                            fontWeight:
+                                            FontWeight.bold,
                                           ),
                                         ),
-                                        Container(
-                                          padding: EdgeInsets.all(5),
-                                          height: getProportionateScreenHeight(90),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                providerListener
-                                                    .productsListbycatidsandsearchstring[
-                                                        index]
-                                                    .title_english,
-                                                overflow:
-                                                    TextOverflow.ellipsis,
-                                                style: GoogleFonts.poppins(
-                                                  color: Colors.black,
-                                                  fontSize: 15,
-                                                  fontWeight:
-                                                      FontWeight.bold,
-                                                ),
-                                              ),
-                                              Text(
-                                                parseHtmlString(providerListener
-                                                    .productsListbycatidsandsearchstring[
-                                                        index]
-                                                    .organisation_name),
-                                                overflow:
-                                                    TextOverflow.ellipsis,
-                                                style: GoogleFonts.poppins(
-                                                  color: Colors.grey[700],
-                                                  fontSize: 12,
-                                                  fontWeight:
-                                                      FontWeight.w400,
-                                                ),
-                                              ),
-                                            ],
+                                        Text(
+                                          parseHtmlString(providerListener
+                                              .productsListbycatidsandsearchstring[
+                                          index]
+                                              .organisation_name),
+                                          overflow:
+                                          TextOverflow.ellipsis,
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.grey[700],
+                                            fontSize: 12,
+                                            fontWeight:
+                                            FontWeight.w400,
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                );
-                              }),
-                        )
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
+                  )
                       : SizedBox(
                           height: 1,
                         ),
@@ -305,17 +679,12 @@ class _productsFoundState extends State<productsFound> {
                                   .companiessListbycatidsandsearchstring.length
                                   .toDouble() *
                               120),
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: GridView.builder(
+                          padding: ResponsiveWidget.isSmallScreen(context) ? EdgeInsets.symmetric(horizontal: 20) : EdgeInsets.symmetric(horizontal: 200),
+                          child: ResponsiveWidget.isSmallScreen(context) ?
+                          ListView.builder(
                               scrollDirection: Axis.vertical,
                               primary: false,
                               shrinkWrap: true,
-                              gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 40,
-                                  childAspectRatio: 466/121,
-                                  mainAxisSpacing: 40),
                               itemCount: providerListener
                                   .companiessListbycatidsandsearchstring.length,
                               itemBuilder: (BuildContext context, int index) {
@@ -345,7 +714,7 @@ class _productsFoundState extends State<productsFound> {
                                           height:
                                               getProportionateScreenHeight(100),
                                           width:
-                                              getProportionateScreenWidth(115),
+                                              getProportionateMobileScreenWidth(115),
                                           decoration: BoxDecoration(
                                             image: DecorationImage(
                                                 image: NetworkImage(providerListener
@@ -372,7 +741,7 @@ class _productsFoundState extends State<productsFound> {
                                           children: [
                                             Container(
                                               width:
-                                                  getProportionateScreenWidth(
+                                                  getProportionateMobileScreenWidth(
                                                       221),
                                               child: Text(
                                                 providerListener
@@ -430,7 +799,131 @@ class _productsFoundState extends State<productsFound> {
                                             .user_id));
                                   },
                                 );
-                              }),
+                              }) : GridView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  primary: false,
+                                  shrinkWrap: true,
+                                  gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      crossAxisSpacing: 20,
+                                      childAspectRatio: 466/121,
+                                      mainAxisSpacing: 20),
+                                  itemCount: providerListener
+                                      .companiessListbycatidsandsearchstring.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      child: Container(
+                                        width: screenWidth,
+                                        height: getProportionateScreenHeight(100),
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.grey[200],
+                                                blurRadius: 2,
+                                                spreadRadius: 1)
+                                          ],
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              height:
+                                              getProportionateScreenHeight(100),
+                                              width:
+                                              getProportionateScreenWidth(115),
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: NetworkImage(providerListener
+                                                        .companiessListbycatidsandsearchstring[
+                                                    index]
+                                                        .image_bigthumb_url ??
+                                                        ""),
+                                                    fit: BoxFit.cover),
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  bottomLeft: Radius.circular(10),
+                                                ),
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  width:
+                                                  getProportionateScreenWidth(
+                                                      221),
+                                                  child: Text(
+                                                    providerListener
+                                                        .companiessListbycatidsandsearchstring[
+                                                    index]
+                                                        .organisation_name,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 2,
+                                                    style: GoogleFonts.poppins(
+                                                      color: Colors.black,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.image,
+                                                      size: 15,
+                                                      color: Colors.grey,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Text(
+                                                      providerListener
+                                                          .companiessListbycatidsandsearchstring[
+                                                      index]
+                                                          .products
+                                                          .toString(),
+                                                      style: GoogleFonts.poppins(
+                                                        color: Colors.grey,
+                                                        fontWeight: FontWeight.w400,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        push(
+                                            context,
+                                            CompanyDetails(providerListener
+                                                .companiessListbycatidsandsearchstring[
+                                            index]
+                                                .user_id));
+                                      },
+                                    );
+                                  }),
                         )
                       : SizedBox(
                           height: 10,
@@ -479,121 +972,6 @@ class BackButton extends StatelessWidget {
           Icons.arrow_back_ios,
           color: Colors.black,
         ),
-      ),
-    );
-  }
-}
-
-class ShareButton extends StatelessWidget {
-  const ShareButton({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints.tightFor(
-        width: 55,
-        height: 55,
-      ),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            primary: Colors.white,
-            //padding: EdgeInsets.symmetric(horizontal: 20),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15))),
-        onPressed: () {
-          push(context, SearchScreen());
-        },
-        child: Icon(
-          Icons.search,
-          color: Colors.black,
-        ),
-      ),
-    );
-  }
-}
-
-class ImageSlider extends StatefulWidget {
-  @override
-  _ImageSliderState createState() => _ImageSliderState();
-}
-
-class _ImageSliderState extends State<ImageSlider> {
-  @override
-  Widget build(BuildContext context) {
-    final providerListener = Provider.of<CustomViewModel>(context);
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      child: Stack(
-        children: [
-          CarouselSlider(
-            options: CarouselOptions(
-                onPageChanged: (index, onTap) {
-                  setState(() {
-                    currentS = index;
-                  });
-                  print(currentS.toString());
-                },
-                height: 200,
-                autoPlay: true,
-                viewportFraction: 1,
-                autoPlayAnimationDuration: Duration(milliseconds: 700)),
-            items: providerListener.productsImages.map((item) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      width: getProportionateScreenWidth(378),
-                      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          image: DecorationImage(
-                              image: NetworkImage(item), fit: BoxFit.cover),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey[200],
-                              offset: const Offset(
-                                2.0,
-                                3.0,
-                              ),
-                              blurRadius: 5.0,
-                              spreadRadius: 2.0,
-                            )
-                          ],
-                          color: Colors.amber),
-                    ),
-                  );
-                },
-              );
-            }).toList(),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 180),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: providerListener.productsImages.map((url) {
-                  int index = providerListener.productsImages.indexOf(url);
-                  return Container(
-                    width: 8.0,
-                    height: 8.0,
-                    margin:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: currentS == index
-                          ? Colors.grey[700]
-                          : Colors.grey[300],
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

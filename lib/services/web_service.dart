@@ -8,7 +8,7 @@ import 'package:path/path.dart';
 
 class WebService {
   // All items by location Apis
-  Future sendOTP(String phoneNumber, String OPT) async {
+  Future sendOTP(String phoneNumber, bool _isChecked) async {
     try {
       Map data = {
         "client_id": client_id,
@@ -17,8 +17,36 @@ class WebService {
         "source": "android",
         "account_type": 1,
         "mode": "whatsapp",
-        "method": OPT
+        "method": _isChecked == true ? "OPT_IN" : "OPT_OUT"
       };
+
+      var body = json.encode(data);
+      print("body" + body.toString());
+      final response = await http.post(Uri.parse(send_custom_otp_mobile),
+          headers: {"Content-Type": "application/json"}, body: body);
+
+      if (response.statusCode == 200) {
+        return response;
+      } else {
+        throw Exception("Unable to perform request!");
+      }
+    } catch (Exception) {
+      print("exception" + Exception.toString());
+    }
+  }
+
+  Future resendOTP(phoneNo, mode, OPT_IN_OUT) async {
+    try {
+      Map data = {
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "mobile": phoneNo,
+        "source": "android",
+        "account_type": 1,
+        "mode": mode,
+        "method": OPT_IN_OUT
+      };
+
       var body = json.encode(data);
       print("body" + body.toString());
       final response = await http.post(Uri.parse(send_custom_otp_mobile),
@@ -256,7 +284,8 @@ class WebService {
       String city,
       String state,
       String longitude,
-      String latitude) async {
+      String latitude,
+      bool isChecked) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     try {
@@ -274,7 +303,7 @@ class WebService {
           "latitude": latitude
         },
         "notification_consent": {
-          "method": "OPT_IN",
+          "method": isChecked == true ? "OPT_IN" : "OPT_OUT",
           "source": "android",
           "mode": "whatsapp"
         }
@@ -388,13 +417,24 @@ class WebService {
     }
   }
 
-  Future GetAdsForCategorySlider(int pavilion_id) async {
+  Future GetAdsForCategorySlider(int event_id, int pavilion_id) async {
     try {
-      Map data = {
-        "ad_position": "topslider",
-        "ad_screen": "pavilion_details",
-        "pavilionid": pavilion_id.toString()
-      };
+      Map data;
+
+      if (event_id == 0) {
+        data = {
+          "ad_position": "topslider",
+          "ad_screen": "pavilion_details",
+          "pavilionid": pavilion_id.toString()
+        };
+      } else {
+        data = {
+          "ad_position": "topslider",
+          "ad_screen": "pavilion_details",
+          "pavilionid": pavilion_id.toString(),
+          "event_id": event_id
+        };
+      }
 
       var body = json.encode(data);
 
@@ -419,7 +459,7 @@ class WebService {
 
       var body = json.encode(data);
 
-      final response = await http.post(Uri.parse(products),
+      final response = await http.post(Uri.parse(newly_added_products),
           headers: {
             "Content-Type": "application/json",
             'Authorization': 'Bearer ' + prefs.getString("token"),
@@ -436,19 +476,22 @@ class WebService {
     }
   }
 
-  Future GetFeaturedProducts() async {
+  Future GetFeaturedProducts(
+      int shuffled_index1, int shuffled_index2, int max_id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     try {
       Map data = {
-        "order_column": "created_datetime",
-        "order_by": "DESC",
-        "featured": 1
+        "page": 1,
+        "featured": 1,
+        "shuffled_index1": shuffled_index1,
+        "shuffled_index2": shuffled_index2,
+        "max_id": max_id
       };
 
       var body = json.encode(data);
 
-      final response = await http.post(Uri.parse(products),
+      final response = await http.post(Uri.parse(shuffled_products),
           headers: {
             "Content-Type": "application/json",
             'Authorization': 'Bearer ' + prefs.getString("token"),
@@ -490,21 +533,23 @@ class WebService {
     }
   }
 
-  Future GetFeaturedCompanies() async {
+  Future GetFeaturedCompanies(
+      int shuffled_index1, int shuffled_index2, int max_id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     try {
       Map data = {
         "search_string ": "",
         "page": 1,
-        "order_column": "created_on",
-        "order_by": "DESC",
-        "featured": 1
+        "featured": 1,
+        "shuffled_index1": shuffled_index1,
+        "shuffled_index2": shuffled_index2,
+        "max_id": max_id
       };
 
       var body = json.encode(data);
 
-      final response = await http.post(Uri.parse(companies),
+      final response = await http.post(Uri.parse(shuffled_companies),
           headers: {
             "Content-Type": "application/json",
             'Authorization': 'Bearer ' + prefs.getString("token"),
@@ -692,9 +737,15 @@ class WebService {
     }
   }
 
-  Future GetSubCategories(int pavilion_id) async {
+  Future GetSubCategories(int event_id, int pavilion_id) async {
     try {
-      Map data = {"pavilion_id": pavilion_id};
+      Map data;
+
+      if (event_id == 0) {
+        data = {"pavilion_id": pavilion_id};
+      } else {
+        data = {"pavilion_id": pavilion_id, "event_id": event_id};
+      }
 
       var body = json.encode(data);
 
@@ -715,20 +766,63 @@ class WebService {
   }
 
   Future GetProductsByCategoryIdsAndSearchString(
-      List<int> catids, String searchString) async {
+      int isfromSearch,
+      int event_id,
+      List<int> catids,
+      String searchString,
+      int pageCount,
+      int shuffled_index1,
+      int shuffled_index2,
+      int max_id, int user_id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
+    Map data;
     try {
-      Map data = {
-        "category": catids.length > 0 ? catids : null,
-        "search_string": searchString,
-        "order_column": "created_datetime",
-        "order_by": "DESC"
-      };
+      if (isfromSearch == 1) {
+        if (event_id == 0) {
+          data = {
+            "category": catids.length > 0 ? catids : null,
+            "search_string": searchString,
+            "page": pageCount,
+            "user_id": user_id==0?null:user_id
+          };
+        } else {
+          data = {
+            "event_id": event_id,
+            "category": catids.length > 0 ? catids : null,
+            "search_string": searchString,
+            "page": pageCount,
+            "user_id": user_id==0?null:user_id
+          };
+        }
+      } else {
+        if (event_id == 0) {
+          data = {
+            "category": catids.length > 0 ? catids : null,
+            "search_string": searchString,
+            "page": pageCount,
+            "shuffled_index1": shuffled_index1,
+            "shuffled_index2": shuffled_index2,
+            "max_id": max_id,
+            "user_id": user_id==0?null:user_id
+          };
+        } else {
+          data = {
+            "event_id": event_id,
+            "category": catids.length > 0 ? catids : null,
+            "search_string": searchString,
+            "page": pageCount,
+            "shuffled_index1": shuffled_index1,
+            "shuffled_index2": shuffled_index2,
+            "max_id": max_id,
+            "user_id": user_id==0?null:user_id
+          };
+        }
+      }
 
       var body = json.encode(data);
 
-      final response = await http.post(Uri.parse(products),
+      final response = await http.post(
+          Uri.parse(isfromSearch == 1 ? products : shuffled_products),
           headers: {
             "Content-Type": "application/json",
             'Authorization': 'Bearer ' + prefs.getString("token"),
@@ -746,20 +840,65 @@ class WebService {
   }
 
   Future GetCompaniesByCategoryIdsAndSearchString(
-      List<int> catids, String searchString) async {
+      int isfromSearch,
+      int event_id,
+      List<int> catids,
+      String searchString,
+      int pageCount,
+      int shuffled_index1,
+      int shuffled_index2,
+      int max_id,
+      int user_id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map data;
 
     try {
-      Map data = {
-        "category": catids.length > 0 ? catids : null,
-        "search_string ": searchString,
-        "order_column": "created_on",
-        "order_by": "DESC"
-      };
+      if (isfromSearch == 1) {
+        if (event_id == 0) {
+          data = {
+            "category": catids.length > 0 ? catids : null,
+            "search_string": searchString,
+            "page": pageCount,
+            "user_id": user_id==0?null:user_id
+          };
+        } else {
+          data = {
+            "event_id": event_id,
+            "category": catids.length > 0 ? catids : null,
+            "search_string": searchString,
+            "page": pageCount,
+            "user_id": user_id==0?null:user_id
+          };
+        }
+      } else {
+        if (event_id == 0) {
+          data = {
+            "category": catids.length > 0 ? catids : null,
+            "search_string": searchString,
+            "page": pageCount,
+            "shuffled_index1": shuffled_index1,
+            "shuffled_index2": shuffled_index2,
+            "max_id": max_id,
+            "user_id": user_id==0?null:user_id
+          };
+        } else {
+          data = {
+            "event_id": event_id,
+            "category": catids.length > 0 ? catids : null,
+            "search_string": searchString,
+            "page": pageCount,
+            "shuffled_index1": shuffled_index1,
+            "shuffled_index2": shuffled_index2,
+            "max_id": max_id,
+            "user_id": user_id==0?null:user_id
+          };
+        }
+      }
 
       var body = json.encode(data);
 
-      final response = await http.post(Uri.parse(companies),
+      final response = await http.post(
+          Uri.parse(isfromSearch == 1 ? companies : shuffled_companies),
           headers: {
             "Content-Type": "application/json",
             'Authorization': 'Bearer ' + prefs.getString("token"),
@@ -921,15 +1060,9 @@ class WebService {
   }
 
   Future GetNotifications() async {
-    //TODO: there is no norificatin in my acccount so used postmans
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      Map data = {
-        "currentpage": 1,
-        "pagesize": 3,
-        "source": "android/ios",
-        "is_tapped": false
-      };
+      Map data = {"currentpage": 1, "pagesize": 10, "source": "android"};
 
       var body = json.encode(data);
 
@@ -937,8 +1070,6 @@ class WebService {
           headers: {
             "Content-Type": "application/json",
             'Authorization': 'Bearer ' + prefs.getString("token")
-            /*
-                'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo4MDYyLCJlbWFpbCI6ImFtb2xAa2lzYW4ubmV0IiwidXNlcm5hbWUiOiI2NTQ0OTQxNTY0Mzk4NTkzIiwiZXhwIjoxNjMyODMwNTI1LCJvcmlnX2lhdCI6MTYxNzI3ODUyNSwic2Vzc2lvbl9pZCI6IjNlM2YwMGRmLTVjNjMtNDA5YS1iMDBlLTRjYWFlY2VlMzQ1NSJ9.e7g563e7Ps_Q7Qla2jHIbWVLJmVNrqjZ9OE4y78YhlE',*/
           },
           body: body);
 
@@ -1205,7 +1336,7 @@ class WebService {
         "org_logo": "",
         "org_name": "Razorpay Software Private Ltd",
         "checkout_logo":
-            "https://dashboard-activation.s3.amazonaws.com/org_100000razorpay/checkout_logo/phpnHMpJe",
+        "https://dashboard-activation.s3.amazonaws.com/org_100000razorpay/checkout_logo/phpnHMpJe",
         "custom_branding": false
       };
 
@@ -1648,11 +1779,11 @@ class WebService {
     }
   }
 
-  Future GetCallHistory() async {
+  Future GetCallHistory(String search_string, int pageCount) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     try {
-      Map data = {"page": 1};
+      Map data = {"page": pageCount, "search_string": search_string};
 
       var body = json.encode(data);
 
@@ -1804,7 +1935,7 @@ class WebService {
         "account_type": 1,
         "event_id": event_id,
         "user_id": user_id,
-        "type": "published,live",
+        "type": "published,live,completed",
         "search_string": ""
       };
 
@@ -1948,12 +2079,12 @@ class WebService {
       var body = json.encode(data);
 
       final response =
-          await http.post(Uri.parse(set_unset_notification_consent),
-              headers: {
-                "Content-Type": "application/json",
-                'Authorization': 'Bearer ' + prefs.getString("token"),
-              },
-              body: body);
+      await http.post(Uri.parse(set_unset_notification_consent),
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + prefs.getString("token"),
+          },
+          body: body);
 
       print(response.body);
 
@@ -2030,7 +2161,6 @@ class WebService {
       print("exception" + Exception.toString());
     }
   }
-
 
   Future GetMyWebinarList(String user_id, int pageCount) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -10,17 +10,29 @@ import 'package:kisanweb/localization/language_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
+TextEditingController searchTextController = new TextEditingController();
+FocusNode focusSearch = FocusNode();
+
 class CallHistory extends StatefulWidget {
   @override
   _CallHistoryState createState() => _CallHistoryState();
 }
 
 class _CallHistoryState extends State<CallHistory> {
+  int pageCountW = 1;
+  bool isLoadingW = false;
+
   bool _isloaded = false;
 
   Future<void> initTask() async {
+    setState(() {
+      pageCountW = 1;
+      isLoadingW = false;
+      _isloaded = false;
+    });
+
     Provider.of<CustomViewModel>(context, listen: false)
-        .GetCallHistory()
+        .GetCallHistory(searchTextController.text ?? "")
         .then((value) {
       setState(() {
         _isloaded = true;
@@ -299,7 +311,55 @@ class _CallHistoryState extends State<CallHistory> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   //CustomBackButton(text: "",),
-                  SizedBox(width: 10,),
+                  Container(
+                    child: TextField(
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      focusNode: focusSearch,
+                      style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                          fontSize: 14),
+                      decoration: InputDecoration(
+                        hintText: "Search a person, product, company",
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(10.0),
+                          ),
+                        ),
+                        fillColor: Colors.grey.shade100,
+                        suffixIconConstraints: BoxConstraints.tightFor(height: 40),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              searchTextController.clear();
+                            });
+                            initTask();
+                          },
+                          child: Padding(
+                              padding: EdgeInsetsDirectional.only(end: 20),
+                              child: Icon(
+                                Icons.clear,
+                                size: 30,
+                              )),
+                        ),
+                      ),
+                      /*onChanged: (value) {
+
+                                },*/
+                      onEditingComplete: () {
+                        initTask();
+                        focusSearch.unfocus();
+                      },
+                      controller: searchTextController,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   SearchBar(),
                 ],
               ),

@@ -43,6 +43,7 @@ class CustomViewModel extends ChangeNotifier {
   String googleFName;
   String googleLName;
   String googleImageUrl;
+  int unread_notification_count = 0;
 
   bool canLoadMoreWebinar = true;
   bool canLoadMoreMyWebinar =  true;
@@ -91,18 +92,29 @@ class CustomViewModel extends ChangeNotifier {
 
   //products found screen
   List<ProductListParser> productsListbycatidsandsearchstring =
-      []; //this list is also used in search screen
+  []; //this list is also used in search screen
+
   ProductListParser productsCouts;
-  List<String> productsImages = [];
 
   //Search Screen
   List<CompaniesListParser> companiessListbycatidsandsearchstring = [];
+
   List<OfferListParser> offersListbysearchstring = [];
+  int searchProductCounts = 0;
+  int searchCompaniesCounts = 0;
+
+  Future setUnReadNotCount() async {
+    print("setUnReadNotCount2");
+    this.unread_notification_count = 0;
+    notifyListeners();
+    return "success";
+  }
 
   //category page
   List<SubCategoryListParser> subcategoryList = [];
   SubCategoryListParser subcategoryCouts; // comapnies and products ounts
-  List<String> subcategoryImages = []; // images for slider in category page
+
+  List<SubCategoryListParser> searchedSubCategoryList = [];
 
   //notifications
   List<NotificationsListParser> notificationsList = [];
@@ -122,7 +134,7 @@ class CustomViewModel extends ChangeNotifier {
   List<DetailedAssetsParser> companyDetailsAssets = [];
   String BrandBannerbigthumb_url, BrandBannermedia_type, BrandBannermedia_url;
   List<DetailedAssetsParser> companyDetailsVideos =
-      []; // we can use DetailedAssetsParser Model for this
+  []; // we can use DetailedAssetsParser Model for this
   List<String> companyDetailsAssetsUrl = []; //for slider
   List<DetailedBrouchersParser> companyDetailsBrouchers = [];
   List<ProductListParser> companyDetailsProductsList = [];
@@ -157,19 +169,63 @@ class CustomViewModel extends ChangeNotifier {
   EventDetails eventDetails;
   List<WebinarListParser> webinarList = [];
   List<CategoryListParser> pavilionsList = [];
+  List<dynamic> subcategories = [];
+  List<String> pavilion_id_list = [];
+  List<String> subcategory_ids_list = [];
+  int category_count = 0;
+  int subcategory_count = 0;
 
   //WebinarDetails webinarDetails;
   WebinarDetails webinarDetails;
 
   //View all webinars and its filiters
   List<WebinarListParser> webinarListViewAll = [];
-  List<WebinarListParser> webinarListViewAllSearched = [];
   List<FilterCategoryListParser> filterCategoryList = [];
   List<FilterLanguageListParser> filterLanguageList = [];
   List<String> recencyLang = [];
 
-  Future sendOTP(String phoneNumber, String OPT) async {
-    final response = await WebService().sendOTP(phoneNumber, OPT);
+  //shuffle featuredProduct indexes
+  int shuffled_index1FP = 0;
+  int shuffled_index2FP = 0;
+  int max_idFP = 0;
+
+  //shuffle featuredCompanies indexes
+  int shuffled_index1FC = 0;
+  int shuffled_index2FC = 0;
+  int max_idFC = 0;
+
+  //shuffle Product indexes
+  int shuffled_index1P = 0;
+  int shuffled_index2P = 0;
+  int max_idP = 0;
+
+  //shuffle Companies indexes
+  int shuffled_index1C = 0;
+  int shuffled_index2C = 0;
+  int max_idC = 0;
+
+  Future sendOTP(String phoneNumber, bool _isChecked) async {
+    final response = await WebService().sendOTP(phoneNumber, _isChecked);
+
+    var responseDecoded = jsonDecode(response.body);
+    var responseDecodedSuccess = responseDecoded['success'];
+    var responseDecodedMsg = responseDecoded['message'].toString();
+
+    if (responseDecodedSuccess == "false") {
+      notifyListeners();
+      return responseDecodedMsg;
+    } else if (responseDecodedSuccess == "true") {
+      verification_token = responseDecoded['data']['token'].toString();
+      notifyListeners();
+      return responseDecodedMsg;
+    } else {
+      notifyListeners();
+      return "error";
+    }
+  }
+
+  Future resendOTP(String phoneNo, String mode, String OPT_IN_OUT) async {
+    final response = await WebService().resendOTP(phoneNo, mode, OPT_IN_OUT);
 
     var responseDecoded = jsonDecode(response.body);
     var responseDecodedSuccess = responseDecoded['success'];
@@ -191,7 +247,7 @@ class CustomViewModel extends ChangeNotifier {
   Future verifyOTP(String verification_code) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final response =
-        await WebService().verifyOTP(verification_token, verification_code);
+    await WebService().verifyOTP(verification_token, verification_code);
 
     var responseDecoded = jsonDecode(response.body);
     var responseDecodedSuccess = responseDecoded['success'];
@@ -220,7 +276,7 @@ class CustomViewModel extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print("*********ishere");
     final response =
-        await WebService().verifyOTP(verification_token, verification_code);
+    await WebService().verifyOTP(verification_token, verification_code);
 
     var responseDecoded = jsonDecode(response.body);
     var responseDecodedSuccess = responseDecoded['success'];
@@ -231,7 +287,7 @@ class CustomViewModel extends ChangeNotifier {
       return responseDecodedMsg;
     } else if (responseDecodedSuccess == "true") {
       print("response" + responseDecodedMsg.toString());
-      print(responseDecoded['user']['email']);
+
       if (responseDecodedMsg == "This is signup.") {
         prefs.setString("token", responseDecoded['registration_token']);
         notifyListeners();
@@ -258,6 +314,8 @@ class CustomViewModel extends ChangeNotifier {
   }
 
   Future GetProfileData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     final response = await WebService().GetProfileData();
 
     if (response != "error") {
@@ -300,6 +358,13 @@ class CustomViewModel extends ChangeNotifier {
           responseDecoded['user_profile']['is_dnd'],
           responseDecoded['user_profile']['whatsapp_opt_in_status'],
           responseDecoded['user_profile']['user']);
+
+      prefs.setString("first_name", responseDecoded['first_name']);
+      prefs.setString("last_name", responseDecoded['last_name']);
+      prefs.setString("email", responseDecoded['email']);
+      prefs.setString("mobile", responseDecoded['user_profile']['mobile1']);
+      prefs.setString("optin", responseDecoded['user_profile']['whatsapp_opt_in_status'].toString());
+
       notifyListeners();
       return "success";
     } else {
@@ -511,7 +576,8 @@ class CustomViewModel extends ChangeNotifier {
       String city,
       String state,
       String longitude,
-      String latitude) async {
+      String latitude,
+      bool isChecked) async {
     final response = await WebService().UpdateProfileData(
         first_name,
         last_name,
@@ -522,7 +588,8 @@ class CustomViewModel extends ChangeNotifier {
         city,
         state,
         longitude,
-        latitude);
+        latitude,
+        isChecked);
 
     if (response != "error") {
       var responseDecoded = jsonDecode(response.body);
@@ -809,8 +876,9 @@ class CustomViewModel extends ChangeNotifier {
     }
   }
 
-  Future GetAdsForCategorySlider(int pavilion_id) async {
-    final response = await WebService().GetAdsForCategorySlider(pavilion_id);
+  Future GetAdsForCategorySlider(int event_id, int pavilion_id) async {
+    final response =
+    await WebService().GetAdsForCategorySlider(event_id, pavilion_id);
 
     if (response != "error") {
       this.categoryAdsList.clear();
@@ -880,7 +948,8 @@ class CustomViewModel extends ChangeNotifier {
   }
 
   Future GetFeaturedProducts() async {
-    final response = await WebService().GetFeaturedProducts();
+    final response = await WebService()
+        .GetFeaturedProducts(shuffled_index1FP, shuffled_index2FP, max_idFP);
 
     if (response != "error") {
       this.featuredproductsList.clear();
@@ -895,10 +964,15 @@ class CustomViewModel extends ChangeNotifier {
         print("response" + responseDecodedMsg.toString());
 
         final data = responseDecoded['data']['list'];
+        this.featuredproductsList.clear();
 
         for (Map i in data) {
           featuredproductsList.add(ProductListParser.fromJson(i));
         }
+
+        shuffled_index1FP = responseDecoded['data']['shuffled_index1'];
+        shuffled_index2FP = responseDecoded['data']['shuffled_index2'];
+        max_idFP = responseDecoded['data']['max_id'];
 
         notifyListeners();
         return "success";
@@ -948,7 +1022,8 @@ class CustomViewModel extends ChangeNotifier {
   }
 
   Future GetFeaturedCompanies() async {
-    final response = await WebService().GetFeaturedCompanies();
+    final response = await WebService()
+        .GetFeaturedCompanies(shuffled_index1FC, shuffled_index2FC, max_idFC);
 
     if (response != "error") {
       this.featuredcompaniesList.clear();
@@ -963,10 +1038,15 @@ class CustomViewModel extends ChangeNotifier {
         print("response" + responseDecodedMsg.toString());
 
         final data = responseDecoded['data']['list'];
+        this.featuredcompaniesList.clear();
 
         for (Map i in data) {
           featuredcompaniesList.add(CompaniesListParser.fromJson(i));
         }
+
+        shuffled_index1FC = responseDecoded['data']['shuffled_index1'];
+        shuffled_index2FC = responseDecoded['data']['shuffled_index2'];
+        max_idFC = responseDecoded['data']['max_id'];
 
         notifyListeners();
         return "success";
@@ -1085,7 +1165,7 @@ class CustomViewModel extends ChangeNotifier {
 
   Future GetEvents() async {
     final response =
-        await WebService().GetEvents(userprofileData.user.toString());
+    await WebService().GetEvents(userprofileData.user.toString());
 
     if (response != "error") {
       this.eventList.clear();
@@ -1120,7 +1200,7 @@ class CustomViewModel extends ChangeNotifier {
 
   Future GetFeaturedEvents() async {
     final response =
-        await WebService().GetFeaturedEvents(userprofileData.user.toString());
+    await WebService().GetFeaturedEvents(userprofileData.user.toString());
 
     if (response != "error") {
       this.featuredeventList.clear();
@@ -1187,12 +1267,12 @@ class CustomViewModel extends ChangeNotifier {
     }
   }
 
-  Future GetSubCategories(int pavilion_id) async {
-    final response = await WebService().GetSubCategories(pavilion_id);
+  Future GetSubCategories(int event_id, int pavilion_id) async {
+    final response = await WebService().GetSubCategories(event_id, pavilion_id);
 
     if (response != "error") {
       this.subcategoryList.clear();
-      this.subcategoryImages.clear();
+      this.searchedSubCategoryList.clear();
 
       var responseDecoded = jsonDecode(response.body);
       var responseDecodedSuccess = responseDecoded['success'];
@@ -1211,8 +1291,7 @@ class CustomViewModel extends ChangeNotifier {
         final data = responseDecoded['data']['list'];
         for (Map i in data) {
           subcategoryList.add(SubCategoryListParser.fromJson(i));
-          subcategoryImages.add(SubCategoryListParser.fromJson(i).image);
-          print(SubCategoryListParser.fromJson(i).id);
+          searchedSubCategoryList.add(SubCategoryListParser.fromJson(i));
         }
 
         notifyListeners();
@@ -1228,14 +1307,40 @@ class CustomViewModel extends ChangeNotifier {
     }
   }
 
-  Future GetProductsByCategoryIdsAndSearchString(
-      List<int> catids, String searchString) async {
-    final response = await WebService()
-        .GetProductsByCategoryIdsAndSearchString(catids, searchString);
+  Future SearchSubCategories(String text) async {
+    this.searchedSubCategoryList.clear();
+
+    for (int i = 0; i < subcategoryList.length; i++) {
+      if (subcategoryList[i]
+          .name
+          .toString()
+          .toLowerCase()
+          .contains(text.toLowerCase())) {
+        searchedSubCategoryList.add(subcategoryList[i]);
+      }
+    }
+
+    notifyListeners();
+    return "success";
+  }
+
+  //these func used in searchscreen(multiple cat) and product found(single cat id)
+  Future GetProductsByCategoryIdsAndSearchString(int isfromSearch, int event_id,
+      List<int> catids, String searchString, int user_id) async {
+    this.canLoadMoreProducts = true;
+    final response = await WebService().GetProductsByCategoryIdsAndSearchString(
+        isfromSearch,
+        event_id,
+        catids,
+        searchString,
+        1,
+        shuffled_index1P,
+        shuffled_index2P,
+        max_idP, user_id);
 
     if (response != "error") {
       this.productsListbycatidsandsearchstring.clear();
-      this.productsImages.clear();
+      this.searchProductCounts = 0;
       var responseDecoded = jsonDecode(response.body);
       var responseDecodedSuccess = responseDecoded['success'];
       var responseDecodedMsg = responseDecoded['message'].toString();
@@ -1244,18 +1349,29 @@ class CustomViewModel extends ChangeNotifier {
         notifyListeners();
         return responseDecodedMsg;
       } else if (responseDecodedSuccess == "true") {
-        print("response" + responseDecodedMsg.toString());
+        print("response asdf" + responseDecoded.toString());
 
         productsCouts = ProductListParser.forcounts(
             responseDecoded['data']['companies'],
             responseDecoded['data']['products']);
+
+        // searchProductCounts = responseDecoded['data']['products'];
 
         final data = responseDecoded['data']['list'];
 
         for (Map i in data) {
           productsListbycatidsandsearchstring
               .add(ProductListParser.fromJson(i));
-          productsImages.add(ProductListParser.fromJson(i).media_url);
+        }
+
+        if (isfromSearch == 0) {
+          shuffled_index1P = responseDecoded['data']['shuffled_index1'];
+          shuffled_index2P = responseDecoded['data']['shuffled_index2'];
+          max_idP = responseDecoded['data']['max_id'];
+        }
+
+        if (productsListbycatidsandsearchstring.length == 0 || responseDecoded['data']['products'] <= 10 ) {
+          this.canLoadMoreProducts = false;
         }
 
         notifyListeners();
@@ -1271,13 +1387,66 @@ class CustomViewModel extends ChangeNotifier {
     }
   }
 
-  Future GetCompaniesByCategoryIdsAndSearchString(
-      List<int> catids, String searchString) async {
-    print("*******");
-    print(catids);
-    print(searchString);
+  Future AppendProductsForSearch(int event_id, List<int> catids,
+      String searchString, int pageCount, int user_id) async {
+    this.canLoadMoreProducts = true;
+
+    print("AppendProductsForSearch2");
+    final response = await WebService().GetProductsByCategoryIdsAndSearchString(
+        1, event_id, catids, searchString, pageCount, 0, 0, 0, user_id);
+
+    if (response != "error") {
+      var responseDecoded = jsonDecode(response.body);
+      var responseDecodedSuccess = responseDecoded['success'];
+      var responseDecodedMsg = responseDecoded['message'].toString();
+
+      if (responseDecodedSuccess == "false") {
+        notifyListeners();
+        return responseDecodedMsg;
+      } else if (responseDecodedSuccess == "true") {
+        print("AppendProductsForSearch3");
+
+        final data = responseDecoded['data']['list'];
+
+        int temp = productsListbycatidsandsearchstring.length;
+        for (Map i in data) {
+          productsListbycatidsandsearchstring
+              .add(ProductListParser.fromJson(i));
+        }
+
+        if (temp == productsListbycatidsandsearchstring.length ||  productsListbycatidsandsearchstring.length-temp<10) {
+          this.canLoadMoreProducts = false;
+          notifyListeners();
+          return "No more items";
+        } else {
+          notifyListeners();
+          return "success";
+        }
+      } else {
+        notifyListeners();
+        return "error";
+      }
+    } else {
+      print("***error");
+      notifyListeners();
+      return "error";
+    }
+  }
+
+  Future GetCompaniesByCategoryIdsAndSearchString(int isfromSearch,
+      int event_id, List<int> catids, String searchString, int user_id) async {
+    this.canLoadMoreCompanies = true;
+
     final response = await WebService()
-        .GetCompaniesByCategoryIdsAndSearchString(catids, searchString);
+        .GetCompaniesByCategoryIdsAndSearchString(
+        isfromSearch,
+        event_id,
+        catids,
+        searchString,
+        1,
+        shuffled_index1C,
+        shuffled_index2C,
+        max_idC, user_id);
 
     if (response != "error") {
       this.companiessListbycatidsandsearchstring.clear();
@@ -1298,12 +1467,77 @@ class CustomViewModel extends ChangeNotifier {
         for (Map i in data) {
           companiessListbycatidsandsearchstring
               .add(CompaniesListParser.fromJson(i));
-          print("companiessListbycatidsandsearchstring" +
-              CompaniesListParser.fromJson(i).organisation_name.toString());
+        }
+
+        print("=========");
+        print(shuffled_index1P.toString());
+        print(shuffled_index1P.toString());
+        print(shuffled_index1P.toString());
+        print("=========");
+        print(shuffled_index1C.toString());
+        print(shuffled_index1C.toString());
+        print(shuffled_index1C.toString());
+
+        if (isfromSearch == 0) {
+          shuffled_index1C = responseDecoded['data']['shuffled_index1'];
+          shuffled_index2C = responseDecoded['data']['shuffled_index2'];
+          max_idC = responseDecoded['data']['max_id'];
+        }
+
+        if (companiessListbycatidsandsearchstring.length == 0 || productsCouts.companies <= 10 ) {
+          this.canLoadMoreCompanies = false;
         }
 
         notifyListeners();
         return "success";
+      } else {
+        notifyListeners();
+        return "error";
+      }
+    } else {
+      print("***error");
+      notifyListeners();
+      return "error";
+    }
+  }
+
+  Future AppendCompaniesForSearch(int event_id, List<int> catids,
+      String searchString, int pageCount, int user_id) async {
+    this.canLoadMoreCompanies = true;
+
+    final response = await WebService()
+        .GetCompaniesByCategoryIdsAndSearchString(
+        1, event_id, catids, searchString, pageCount, 0, 0, 0, user_id);
+
+    if (response != "error") {
+      var responseDecoded = jsonDecode(response.body);
+      var responseDecodedSuccess = responseDecoded['success'];
+      var responseDecodedMsg = responseDecoded['message'].toString();
+
+      print("*******2");
+      print(responseDecodedSuccess);
+      if (responseDecodedSuccess == "false") {
+        notifyListeners();
+        return responseDecodedMsg;
+      } else if (responseDecodedSuccess == "true") {
+        print("response" + responseDecodedMsg.toString());
+
+        final data = responseDecoded['data']['list'];
+
+        int temp = companiessListbycatidsandsearchstring.length;
+        for (Map i in data) {
+          companiessListbycatidsandsearchstring
+              .add(CompaniesListParser.fromJson(i));
+        }
+
+        if (temp == companiessListbycatidsandsearchstring.length ||  companiessListbycatidsandsearchstring.length-temp<10) {
+          this.canLoadMoreCompanies = false;
+          notifyListeners();
+          return "No more items";
+        } else {
+          notifyListeners();
+          return "success";
+        }
       } else {
         notifyListeners();
         return "error";
@@ -1455,7 +1689,7 @@ class CustomViewModel extends ChangeNotifier {
 
   Future GetSimilarProducts(List<int> category, int skip_product_id) async {
     final response =
-        await WebService().GetSimilarProducts(category, skip_product_id);
+    await WebService().GetSimilarProducts(category, skip_product_id);
 
     if (response != "error") {
       this.productsListofSimilar.clear();
@@ -1550,6 +1784,7 @@ class CustomViewModel extends ChangeNotifier {
 
         for (Map i in assets) {
           companyDetailsAssets.add(DetailedAssetsParser.fromJson(i));
+
           if ((DetailedAssetsParser.fromJson(i).is_cover ?? false) == true) {
             BrandBannerbigthumb_url =
                 DetailedAssetsParser.fromJson(i).bigthumb_url;
@@ -1667,7 +1902,7 @@ class CustomViewModel extends ChangeNotifier {
 
   Future LikeDislikeProduct(int user_id, int company_id, int product_id) async {
     final response =
-        await WebService().LikeDislikeProduct(user_id, company_id, product_id);
+    await WebService().LikeDislikeProduct(user_id, company_id, product_id);
 
     if (response != "error") {
       var responseDecoded = jsonDecode(response.body);
@@ -1848,7 +2083,7 @@ class CustomViewModel extends ChangeNotifier {
           KissanNetObj(
               responseDecoded['app_update']['android']['force_update_needed'],
               responseDecoded['app_update']['android']
-                  ['force_update_version_code'],
+              ['force_update_version_code'],
               responseDecoded['kisan_exhibition']['home_tile_url_link'],
               responseDecoded['kisan_exhibition']['video_english'],
               responseDecoded['kisan_exhibition']['video_hindi'],
@@ -1882,6 +2117,7 @@ class CustomViewModel extends ChangeNotifier {
 
   Future AppStart() async {
     final response = await WebService().AppStart();
+    unread_notification_count = 0;
 
     if (response != "error") {
       this.membershipplansList.clear();
@@ -1910,12 +2146,15 @@ class CustomViewModel extends ChangeNotifier {
             responseDecoded['data']['membership_info']['is_complementary'],
             responseDecoded['data']['membership_info']['is_expired']);
 
+        unread_notification_count =
+        responseDecoded['data']['unread_notification_count'];
+
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString("membership_status",
-            responseDecoded['data']['membership_info']['status']);
+            responseDecoded['data']['membership_info']['status'] ?? "");
 
         USE_RAZORPAY_SUBSCRIPTIONS =
-            responseDecoded['data']['USE_RAZORPAY_SUBSCRIPTIONS'];
+        responseDecoded['data']['USE_RAZORPAY_SUBSCRIPTIONS'];
 
         notifyListeners();
         return "success";
@@ -1947,13 +2186,13 @@ class CustomViewModel extends ChangeNotifier {
         subscriptionInitialInfo = new SubscriptionInitialInfo(
             responseDecoded['data']['subscription_details']['id'],
             responseDecoded['data']['subscription_details']
-                ['razorpay_subscription_id'],
+            ['razorpay_subscription_id'],
             responseDecoded['data']['subscription_details']['plan_id'],
             responseDecoded['data']['subscription_details']['razorpay_plan_id'],
             responseDecoded['data']['subscription_details']['status'],
             responseDecoded['data']['subscription_details']['short_url'],
             responseDecoded['data']['subscription_details']
-                ['expires_at_datetime']);
+            ['expires_at_datetime']);
         notifyListeners();
         return "success";
       } else {
@@ -2024,7 +2263,7 @@ class CustomViewModel extends ChangeNotifier {
 
   Future connectProductCall(int user_id, int rep_id, int product_id) async {
     final response =
-        await WebService().connectProductCall(user_id, rep_id, product_id);
+    await WebService().connectProductCall(user_id, rep_id, product_id);
 
     if (response != "error") {
       var responseDecoded = jsonDecode(response.body);
@@ -2079,7 +2318,7 @@ class CustomViewModel extends ChangeNotifier {
 
   Future connectCompanyCall(int user_id, int rep_id, int company_id) async {
     final response =
-        await WebService().connectCompanyCall(user_id, rep_id, company_id);
+    await WebService().connectCompanyCall(user_id, rep_id, company_id);
 
     if (response != "error") {
       var responseDecoded = jsonDecode(response.body);
@@ -2164,7 +2403,7 @@ class CustomViewModel extends ChangeNotifier {
 
   Future requestCallMe(int user_id, int company_id, int product_id) async {
     final response =
-        await WebService().requestCallMe(user_id, company_id, product_id);
+    await WebService().requestCallMe(user_id, company_id, product_id);
 
     if (response != "error") {
       var responseDecoded = jsonDecode(response.body);
@@ -2192,7 +2431,7 @@ class CustomViewModel extends ChangeNotifier {
   Future InitiateGreenPass(
       String mobile, String first_name, String last_name) async {
     final response =
-        await WebService().InitiateGreenPass(mobile, first_name, last_name);
+    await WebService().InitiateGreenPass(mobile, first_name, last_name);
 
     if (response != "error") {
       order_id = null;
@@ -2305,7 +2544,7 @@ class CustomViewModel extends ChangeNotifier {
 
   Future visitCompany(int company_id) async {
     final response =
-        await WebService().visitCompany(userprofileData.user, company_id);
+    await WebService().visitCompany(userprofileData.user, company_id);
 
     if (response != "error") {
       var responseDecoded = jsonDecode(response.body);
@@ -2330,8 +2569,10 @@ class CustomViewModel extends ChangeNotifier {
     }
   }
 
-  Future GetCallHistory() async {
-    final response = await WebService().GetCallHistory();
+  Future GetCallHistory(String search_string) async {
+    this.canLoadMoreCalls = true;
+
+    final response = await WebService().GetCallHistory(search_string, 1);
 
     if (response != "error") {
       this.callHistoryList.clear();
@@ -2352,7 +2593,6 @@ class CustomViewModel extends ChangeNotifier {
 
         for (Map i in data) {
           callHistoryList.add(CallHistoryListParser.fromJson(i));
-          print(responseDecoded['data'][j]['user_data']);
 
           callHistoryUserObj.add(CallHistoryUserObj.fromJson(
               responseDecoded['data'][j]['user_data']));
@@ -2360,8 +2600,62 @@ class CustomViewModel extends ChangeNotifier {
           j++;
         }
 
+        if (callHistoryList.length == 0  || j < 10 ) {
+          this.canLoadMoreCalls = false;
+        }
+
         notifyListeners();
         return "success";
+      } else {
+        notifyListeners();
+        return "error";
+      }
+    } else {
+      print("***error");
+      notifyListeners();
+      return "error";
+    }
+  }
+
+  Future AppendCallHistory(String search_string, int pageCount) async {
+    this.canLoadMoreCalls = true;
+
+    final response =
+    await WebService().GetCallHistory(search_string, pageCount);
+
+    if (response != "error") {
+      var responseDecoded = jsonDecode(response.body);
+      var responseDecodedSuccess = responseDecoded['success'];
+      var responseDecodedMsg = responseDecoded['message'].toString();
+
+      if (responseDecodedSuccess == "false") {
+        this.canLoadMoreCalls = false;
+        notifyListeners();
+        return "No more items";
+      } else if (responseDecodedSuccess == "true") {
+        print("response" + responseDecodedMsg.toString());
+
+        final data = responseDecoded['data'];
+
+        int j = 0;
+
+        int temp = callHistoryList.length;
+        for (Map i in data) {
+          callHistoryList.add(CallHistoryListParser.fromJson(i));
+          callHistoryUserObj.add(CallHistoryUserObj.fromJson(
+              responseDecoded['data'][j]['user_data']));
+
+          j++;
+        }
+
+        if (temp == callHistoryList.length || callHistoryList.length-temp<10 ) {
+          this.canLoadMoreCalls = false;
+          notifyListeners();
+          return "No more items";
+        } else {
+          notifyListeners();
+          return "success";
+        }
       } else {
         notifyListeners();
         return "error";
@@ -2380,6 +2674,12 @@ class CustomViewModel extends ChangeNotifier {
       eventDetails = null;
       this.webinarList.clear();
       this.pavilionsList.clear();
+      this.subcategories.clear();
+      this.pavilion_id_list.clear();
+      this.subcategory_ids_list.clear();
+      category_count = 0;
+      subcategory_count = 0;
+
       var responseDecoded = jsonDecode(response.body);
       var responseDecodedSuccess = responseDecoded['success'];
       var responseDecodedMsg = responseDecoded['message'].toString();
@@ -2391,24 +2691,29 @@ class CustomViewModel extends ChangeNotifier {
       } else if (responseDecodedSuccess == "true") {
         if (responseDecoded['data']['event_details']['type'] == "WSM") {
           eventDetails = new EventDetails(
-              responseDecoded['data']['event_details']['user_id'],
-              responseDecoded['data']['event_details']['type'],
-              responseDecoded['data']['event_details']['title'],
-              responseDecoded['data']['event_details']['about'],
-              responseDecoded['data']['event_details']['about_hindi'],
-              responseDecoded['data']['event_details']['about_marathi'],
-              responseDecoded['data']['event_details']['created_date'],
-              responseDecoded['data']['event_details']['image_path'],
-              responseDecoded['data']['event_details']['image_path_medium'],
-              responseDecoded['data']['event_details']['image_path_small'],
-              responseDecoded['data']['event_details']['webinar_ids'],
-              responseDecoded['data']['event_details']['pavilion_id'],
-              responseDecoded['data']['event_details']['media_type'],
-              responseDecoded['data']['event_details']['media_url'],
-              responseDecoded['data']['event_details']['start_date'],
-              responseDecoded['data']['event_details']['end_date'],
-              responseDecoded['data']['event_details']['share_link'],
-              responseDecoded['data']['event_details']['event_date_status']);
+            responseDecoded['data']['event_details']['user_id'],
+            responseDecoded['data']['event_details']['type'],
+            responseDecoded['data']['event_details']['title'],
+            responseDecoded['data']['event_details']['about'],
+            responseDecoded['data']['event_details']['about_hindi'],
+            responseDecoded['data']['event_details']['about_marathi'],
+            responseDecoded['data']['event_details']['created_date'],
+            responseDecoded['data']['event_details']['image_path'],
+            responseDecoded['data']['event_details']['image_path_medium'],
+            responseDecoded['data']['event_details']['image_path_small'],
+            responseDecoded['data']['event_details']['webinar_ids'],
+            responseDecoded['data']['event_details']['pavilion_id'],
+            responseDecoded['data']['event_details']['media_type'],
+            responseDecoded['data']['event_details']['media_url'],
+            responseDecoded['data']['event_details']['start_date'],
+            responseDecoded['data']['event_details']['end_date'],
+            responseDecoded['data']['event_details']['share_link'],
+            responseDecoded['data']['event_details']['event_date_status'],
+            responseDecoded['data']['event_details']['quiz_form_url'],
+            responseDecoded['data']['event_details']['survey_form_url'],
+            responseDecoded['data']['event_details']['poll_form_url'],
+            responseDecoded['data']['is_added_to_calender'],
+          );
 
           final data = responseDecoded['data']['webinars'];
 
@@ -2424,6 +2729,32 @@ class CustomViewModel extends ChangeNotifier {
               pavilionsList.add(CategoryListParser.fromJson(j));
             }
           }
+
+          final temp_subcategories = responseDecoded['data']['subcategories'];
+          if (temp_subcategories != null) {
+            subcategories = temp_subcategories;
+          }
+
+          if (responseDecoded['data']['event_details']['pavilion_id'] != null) {
+            pavilion_id_list = responseDecoded['data']['event_details']
+            ['pavilion_id']
+                .toString()
+                .split(",");
+          }
+
+          if (responseDecoded['data']['event_details']['subcategory_ids'] !=
+              null) {
+            subcategory_ids_list = responseDecoded['data']['event_details']
+            ['subcategory_ids']
+                .toString()
+                .split(",");
+          }
+
+          category_count =
+              responseDecoded['data']['event_details']['category_count'] ?? 0;
+          subcategory_count = responseDecoded['data']['event_details']
+          ['subcategory_count'] ??
+              0;
 
           notifyListeners();
           return "success";
@@ -2470,7 +2801,7 @@ class CustomViewModel extends ChangeNotifier {
 
   Future GetWebinarDetail(int event_id) async {
     final response =
-        await WebService().GetWebinarDetail(event_id, userprofileData.user);
+    await WebService().GetWebinarDetail(event_id, userprofileData.user);
 
     if (response != "error") {
       webinarDetails = null;
@@ -2624,6 +2955,8 @@ class CustomViewModel extends ChangeNotifier {
       String min_scheduled_date,
       String max_scheduled_date,
       String category) async {
+    this.canLoadMoreWebinar = true;
+
     final response = await WebService().GetWebinarList(
         userprofileData.user.toString(),
         search_string,
@@ -2635,7 +2968,6 @@ class CustomViewModel extends ChangeNotifier {
 
     if (response != "error") {
       this.webinarListViewAll.clear();
-      this.webinarListViewAllSearched.clear();
       var responseDecoded = jsonDecode(response.body);
       var responseDecodedSuccess = responseDecoded['success'];
       var responseDecodedMsg = responseDecoded['message'].toString();
@@ -2650,7 +2982,9 @@ class CustomViewModel extends ChangeNotifier {
 
         for (Map i in data) {
           webinarListViewAll.add(WebinarListParser.fromJson(i));
-          webinarListViewAllSearched.add(WebinarListParser.fromJson(i));
+        }
+        if (webinarListViewAll.length == 0 || webinarListViewAll.length<10) {
+          this.canLoadMoreWebinar = false;
         }
 
         notifyListeners();
@@ -2663,27 +2997,6 @@ class CustomViewModel extends ChangeNotifier {
       print("***error");
       notifyListeners();
       return "error";
-    }
-  }
-
-  Future SearchWebinarsInList(String text) async {
-    this.webinarListViewAllSearched.clear();
-
-    for (int i = 0; i < webinarListViewAll.length; i++) {
-      if ((webinarListViewAll[i]
-              .title
-              .toLowerCase()
-              .contains(text.toLowerCase().toString()) ||
-          webinarListViewAll[i]
-              .organisation_name
-              .toLowerCase()
-              .contains(text.toLowerCase().toString()) ||
-          webinarListViewAll[i]
-              .about
-              .toLowerCase()
-              .contains(text.toLowerCase().toString()))) {
-        webinarListViewAllSearched.add(webinarListViewAll[i]);
-      }
     }
   }
 
