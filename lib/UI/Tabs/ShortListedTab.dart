@@ -4,8 +4,10 @@ import 'package:kisanweb/Helpers/constants.dart' as constants;
 import 'package:kisanweb/Helpers/constants.dart';
 import 'package:kisanweb/Helpers/helper.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
+import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
 import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
 import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
+
 //import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
 //import 'package:kisanweb/UI/DetailedScreens/DetailedProducts.dart';
 import 'package:kisanweb/UI/Tabs/HomeTab.dart';
@@ -75,8 +77,12 @@ class _ShortListedTabState extends State<ShortListedTab> {
     buildFilterContainer(BuildContext context) {
       return Center(
         child: Container(
-          width: getProportionateScreenWidth(400),
-          height: getProportionateScreenHeight(70),
+          width: ResponsiveWidget.isSmallScreen(context)
+              ? screenWidth / 1.3
+              : getProportionateScreenWidth(400),
+          height: ResponsiveWidget.isSmallScreen(context)
+              ? getProportionateMobileScreenHeight(50)
+              : getProportionateScreenHeight(70),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(50)),
               color: Color(0xffF5F5F5),
@@ -93,8 +99,12 @@ class _ShortListedTabState extends State<ShortListedTab> {
                 },
                 child: Container(
                   //width: screenWidth / 1.3 / 3.02,
-                  width: getProportionateScreenWidth(198),
-                  height: 50,
+                  width: ResponsiveWidget.isSmallScreen(context)
+                      ? screenWidth / 1.3 / 2
+                      : getProportionateScreenWidth(198),
+                  height: ResponsiveWidget.isSmallScreen(context)
+                      ? getProportionateMobileScreenHeight(50)
+                      : 50,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(50),
@@ -159,7 +169,9 @@ class _ShortListedTabState extends State<ShortListedTab> {
                 },
                 child: Container(
                   // width: screenWidth / 1.3 / 3.02,
-                  width: getProportionateScreenWidth(198),
+                  width: ResponsiveWidget.isSmallScreen(context)
+                      ? screenWidth / 1.3 / 2 - 3
+                      : getProportionateScreenWidth(198),
                   height: 50,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -198,95 +210,106 @@ class _ShortListedTabState extends State<ShortListedTab> {
               shrinkWrap: true,
               itemCount: providerListener.favproductsList.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 5, crossAxisSpacing: 0, mainAxisSpacing: 10,childAspectRatio: 0.9),
+                crossAxisCount: ResponsiveWidget.isSmallScreen(context) ? 2 : 5,
+              ),
               itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Container(
-                    width: getProportionateScreenWidth(272),
-                    height: getProportionateScreenHeight(328),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey[300],
-                            blurRadius: 7,
-                            spreadRadius: 4)
-                      ],
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                       push(
-                           context,
-                           DetailedProducts(
-                               providerListener.favproductsList[index].id,
-                               providerListener
-                                   .favproductsList[index].user_id));
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                ),
-                                color: Colors.white,
-                                image: DecorationImage(
-                                    image: NetworkImage(providerListener
-                                            .favproductsList[index]
-                                            .bigthumb_url ??
-                                        ""),
-                                    fit: BoxFit.cover),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey[200],
-                                      blurRadius: 1,
-                                      spreadRadius: 1)
-                                ],
+                return Container(
+                  width: ResponsiveWidget.isSmallScreen(context)
+                      ? getProportionateMobileScreenWidth(174)
+                      : getProportionateScreenWidth(272),
+                  height: ResponsiveWidget.isSmallScreen(context)
+                      ? getProportionateMobileScreenHeight(211)
+                      : getProportionateScreenHeight(328),
+                  margin: ResponsiveWidget.isSmallScreen(context)
+                      ? EdgeInsets.all(10)
+                      : EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey[300],
+                          blurRadius: 7,
+                          spreadRadius: 4)
+                    ],
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      push(
+                          context,
+                          DetailedProducts(
+                              providerListener.favproductsList[index].id,
+                              providerListener.favproductsList[index].user_id));
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
                               ),
-                            ),
-                          ),
-                          Container(
-                            height: getProportionateScreenHeight(100),
-                            padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(19)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  color: Colors.white,
-                                  child: Text(
-                                    parseHtmlString(providerListener
-                                        .favproductsList[index].title_english),
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  color: Colors.white,
-                                  child: Text(
-                                    parseHtmlString(providerListener
-                                        .favproductsList[index].organisation_name),
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.grey[700],
-                                      fontSize: 9,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
+                              color: Colors.white,
+                              image: DecorationImage(
+                                  image: NetworkImage(providerListener
+                                          .favproductsList[index]
+                                          .bigthumb_url ??
+                                      ""),
+                                  fit: BoxFit.cover),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey[200],
+                                    blurRadius: 1,
+                                    spreadRadius: 1)
                               ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        Container(
+                          height: ResponsiveWidget.isSmallScreen(context)
+                              ? getProportionateMobileScreenHeight(60)
+                              : getProportionateScreenHeight(100),
+                          padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  ResponsiveWidget.isSmallScreen(context)
+                                      ? getProportionateMobileScreenWidth(20)
+                                      : getProportionateScreenWidth(19)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                color: Colors.white,
+                                child: Text(
+                                  parseHtmlString(providerListener
+                                      .favproductsList[index].title_english),
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                color: Colors.white,
+                                child: Text(
+                                  parseHtmlString(providerListener
+                                      .favproductsList[index]
+                                      .organisation_name),
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.grey[700],
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
@@ -427,113 +450,239 @@ class _ShortListedTabState extends State<ShortListedTab> {
       final providerListener = Provider.of<CustomViewModel>(context);
 
       return _isCompaniesLoaded == true
-          ? GridView.builder(
-              scrollDirection: Axis.vertical,
-              primary: false,
-              shrinkWrap: true,
-              itemCount: providerListener.favcompaniesList.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10,childAspectRatio: 466/121),
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  height: getProportionateScreenHeight(121),
-                  margin: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey[200],
-                          blurRadius: 1,
-                          spreadRadius: 1)
-                    ],
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                       push(
-                           context,
-                           CompanyDetails(providerListener
-                               .favcompaniesList[index].user_id));
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 100,
-                          width: 125,
-                          padding: EdgeInsets.all(17),
-                          decoration: BoxDecoration(
-                            /*image: DecorationImage(
+          ? ResponsiveWidget.isSmallScreen(context)
+              ? ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  primary: false,
+                  shrinkWrap: true,
+                  itemCount: providerListener.favcompaniesList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: Container(
+                        width: screenWidth,
+                        height: getProportionateMobileScreenHeight(100),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey[200],
+                                blurRadius: 1,
+                                spreadRadius: 1)
+                          ],
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            push(
+                                context,
+                                CompanyDetails(providerListener
+                                    .favcompaniesList[index].user_id));
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: ResponsiveWidget.isSmallScreen(context)
+                                    ? getProportionateMobileScreenWidth(100)
+                                    : 100,
+                                width: ResponsiveWidget.isSmallScreen(context)
+                                    ? getProportionateMobileScreenWidth(100)
+                                    : 125,
+                                padding: EdgeInsets.all(17),
+                                decoration: BoxDecoration(
+                                  /*image: DecorationImage(
+                                  image: NetworkImage(providerListener
+                                          .favcompaniesList[index]
+                                          .image_bigthumb_url ??
+                                      ""),
+                                  fit: BoxFit.cover),*/
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                  ),
+                                  color: Colors.white,
+                                ),
+                                child: Image.network(
+                                  providerListener.favcompaniesList[index]
+                                          .image_bigthumb_url ??
+                                      "",
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Container(
+                                width: ResponsiveWidget.isSmallScreen(context)
+                                    ? getProportionateMobileScreenWidth(200)
+                                    : 200,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      providerListener.favcompaniesList[index]
+                                          .organisation_name,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.image,
+                                          size: 15,
+                                          color: Colors.grey,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          providerListener
+                                                  .favcompaniesList[index]
+                                                  .products
+                                                  .toString() +
+                                              " products",
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  })
+              : GridView.builder(
+                  scrollDirection: Axis.vertical,
+                  primary: false,
+                  shrinkWrap: true,
+                  itemCount: providerListener.favcompaniesList.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: 466 / 121),
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      height: getProportionateScreenHeight(121),
+                      margin: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey[200],
+                              blurRadius: 1,
+                              spreadRadius: 1)
+                        ],
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          push(
+                              context,
+                              CompanyDetails(providerListener
+                                  .favcompaniesList[index].user_id));
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 100,
+                              width: 125,
+                              padding: EdgeInsets.all(17),
+                              decoration: BoxDecoration(
+                                /*image: DecorationImage(
                                 image: NetworkImage(providerListener
                                         .favcompaniesList[index]
                                         .image_bigthumb_url ??
                                     ""),
                                 fit: BoxFit.cover),*/
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                            ),
-                            color: Colors.white,
-                          ),
-                          child: Image.network(providerListener
-                              .favcompaniesList[index]
-                              .image_bigthumb_url ??
-                              "",fit: BoxFit.contain,),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Container(
-                          width: 200,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                providerListener.favcompaniesList[index]
-                                    .organisation_name,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
                                 ),
+                                color: Colors.white,
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                              child: Image.network(
+                                providerListener.favcompaniesList[index]
+                                        .image_bigthumb_url ??
+                                    "",
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Container(
+                              width: 200,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(
-                                    Icons.image,
-                                    size: 15,
-                                    color: Colors.grey,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
                                   Text(
-                                    providerListener
-                                            .favcompaniesList[index].products
-                                            .toString() +
-                                        " products",
+                                    providerListener.favcompaniesList[index]
+                                        .organisation_name,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
                                     style: GoogleFonts.poppins(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
                                     ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.image,
+                                        size: 15,
+                                        color: Colors.grey,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        providerListener.favcompaniesList[index]
+                                                .products
+                                                .toString() +
+                                            " products",
+                                        style: GoogleFonts.poppins(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                );
-              })
+                      ),
+                    );
+                  })
           : Container(
               color: Colors.white,
               height: SizeConfig.screenHeight / 2,
@@ -549,26 +698,22 @@ class _ShortListedTabState extends State<ShortListedTab> {
     }
 
     buildViews(BuildContext context) {
-      return Padding(
-        padding: show == "1"
-            ? EdgeInsets.only(left: 20, right: 20)
-            : show == "2"
-                ? EdgeInsets.only(left: 20, right: 0)
-                : EdgeInsets.only(left: 20, right: 20),
-        child: Center(
-            child: show == "3"
-                ? buildGridViewCompanies(context)
-                : show == "1"
-                    ? buildGridViewProducts(context)
-                    : buildGridViewOffers(context)),
-      );
+      return Center(
+          child: show == "3"
+              ? buildGridViewCompanies(context)
+              : show == "1"
+                  ? buildGridViewProducts(context)
+                  : buildGridViewOffers(context));
     }
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(200)),
+          padding: EdgeInsets.symmetric(
+              horizontal: ResponsiveWidget.isSmallScreen(context)
+                  ? getProportionateMobileScreenWidth(20)
+                  : getProportionateScreenWidth(200)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,

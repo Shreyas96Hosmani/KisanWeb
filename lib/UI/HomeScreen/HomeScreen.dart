@@ -683,7 +683,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 : PreferredSize(
               preferredSize: Size(MediaQuery.of(context).size.width, 0),
               child: Container(),
-            ) : PreferredSize(
+            ) :
+            PreferredSize(
               preferredSize: Size.fromHeight(80),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(200)),
@@ -1031,102 +1032,104 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.symmetric(
               horizontal: getProportionateScreenHeight(30),
               vertical: getProportionateScreenHeight(50)),
-          child: Column(
-            children: [
-              DrawerHeader(context),
-              /*Container(
-                height: getProportionateScreenHeight(500),
-                child:
-                ListView.builder(
-                  itemCount: drawerItems.length,
-                  itemBuilder: (context, index) {
-                    return DrawerItem(
-                      icon: drawerItems[index]['icon'],
-                      text: drawerItems[index]['text'],
-                      onPressed: drawerItems[index]['onPressed'],
-                    );
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                DrawerHeader(context),
+                /*Container(
+                  height: getProportionateScreenHeight(500),
+                  child:
+                  ListView.builder(
+                    itemCount: drawerItems.length,
+                    itemBuilder: (context, index) {
+                      return DrawerItem(
+                        icon: drawerItems[index]['icon'],
+                        text: drawerItems[index]['text'],
+                        onPressed: drawerItems[index]['onPressed'],
+                      );
+                    },
+                  ),
+                ),*/
+                ResponsiveWidget.isSmallScreen(context) ? Container() : BottomTabs(
+                  selectedTab: _selectedTab,
+                  tabPressed: (num) {
+                    _tabPageController.animateToPage(num,
+                        duration: Duration(milliseconds: ANIMATION_DURATION),
+                        curve: Curves.easeOutCubic);
                   },
                 ),
-              ),*/
-              ResponsiveWidget.isSmallScreen(context) ? Container() : BottomTabs(
-                selectedTab: _selectedTab,
-                tabPressed: (num) {
-                  _tabPageController.animateToPage(num,
-                      duration: Duration(milliseconds: ANIMATION_DURATION),
-                      curve: Curves.easeOutCubic);
-                },
-              ),
-              SizedBox(
-                height: getProportionateScreenHeight(10),
-              ),
-              Container(height: 1.5,color: Colors.white.withOpacity(0.5),),
-              DrawerItem(
-                icon: Icons.calendar_today_rounded,
-                text: getTranslated(context, 'my_webinars'),
-                onPressed: () {},
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
-              ),
-              DrawerSvgItem(
-                icon: "assets/icons/WhiteSubscribeIcon.svg",
-                text: "My Pass",
-                onPressed: () {},
-              ),
-              Container(height: 1.5,color: Colors.white.withOpacity(0.5),),
-              DrawerItem(
-                icon: Icons.settings,
-                text: "Settings",
-                onPressed: () {},
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
-              ),
-              DrawerItem(
-                icon: Icons.share,
-                text: getTranslated(context, 'invite_friends'),
-                onPressed: () {},
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
-              ),
-              DrawerItem(
-                icon: Icons.help,
-                text: "FAQ & Support",
-                onPressed: () {},
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
-              ),
-              /*DrawerItem(
-                icon: Icons.info,
-                text: getTranslated(context, 'about_app'),
-                onPressed: () {},
-              ),*/
-              DrawerItem(
-                icon: Icons.description_rounded,
-                text: getTranslated(context, 'termandprivacypolicy'),
-                onPressed: () {},
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
-              ),
-              DrawerItem(
-                icon: Icons.logout,
-                text: "Logout",
-                onPressed: () async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  await prefs.clear();
-                  pushReplacement(context, InitialScreen("HomeScreen", 0, 0));
-                },
-              ),
-            ],
+                SizedBox(
+                  height: getProportionateScreenHeight(10),
+                ),
+                Container(height: 1.5,color: Colors.white.withOpacity(0.5),),
+                DrawerItem(
+                  icon: Icons.calendar_today_rounded,
+                  text: getTranslated(context, 'my_webinars'),
+                  onPressed: () {},
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
+                ),
+                DrawerSvgItem(
+                  icon: "assets/icons/WhiteSubscribeIcon.svg",
+                  text: "My Pass",
+                  onPressed: () {},
+                ),
+                Container(height: 1.5,color: Colors.white.withOpacity(0.5),),
+                DrawerItem(
+                  icon: Icons.settings,
+                  text: "Settings",
+                  onPressed: () {},
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
+                ),
+                DrawerItem(
+                  icon: Icons.share,
+                  text: getTranslated(context, 'invite_friends'),
+                  onPressed: () {},
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
+                ),
+                DrawerItem(
+                  icon: Icons.help,
+                  text: "FAQ & Support",
+                  onPressed: () {},
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
+                ),
+                /*DrawerItem(
+                  icon: Icons.info,
+                  text: getTranslated(context, 'about_app'),
+                  onPressed: () {},
+                ),*/
+                DrawerItem(
+                  icon: Icons.description_rounded,
+                  text: getTranslated(context, 'termandprivacypolicy'),
+                  onPressed: () {},
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Container(height: 1.5,color: Colors.white.withOpacity(0.3),),
+                ),
+                DrawerItem(
+                  icon: Icons.logout,
+                  text: "Logout",
+                  onPressed: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    await prefs.clear();
+                    pushReplacement(context, InitialScreen("HomeScreen", 0, 0));
+                  },
+                ),
+              ],
+            ),
           )),
     );
   }

@@ -237,7 +237,7 @@ class _SocialAuthState extends State<SocialAuth> {
                   SizedBox(
                     height: 20,
                   ),
-                  Row(
+                  /*Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -308,7 +308,7 @@ class _SocialAuthState extends State<SocialAuth> {
                             ),
                           ],
                         )),
-                  ),
+                  ),*/
                   SizedBox(
                     height: 20,
                   ),

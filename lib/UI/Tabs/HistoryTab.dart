@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:kisanweb/Helpers/constants.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
+import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
 import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
 import 'package:kisanweb/View%20Models/CustomViewModel.dart';
 import 'package:kisanweb/localization/language_constants.dart';
@@ -55,140 +56,385 @@ class _CallHistoryState extends State<CallHistory> {
 
     buildList(BuildContext context) {
       return _isloaded == true
-          ? GridView.builder(
-              scrollDirection: Axis.vertical,
-              primary: false,
-              gridDelegate:
-              SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 10,
-                childAspectRatio: 461/131,
-                mainAxisSpacing: 10),
-              shrinkWrap: true,
-              itemCount: providerListener.callHistoryList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  width: 461,
-                  height: 131,
-                  padding: EdgeInsets.symmetric(
-                      vertical: getProportionateScreenWidth(15),
-                      horizontal: getProportionateScreenWidth(10)),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey[200],
-                          blurRadius: 1,
-                          spreadRadius: 1)
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Colors.grey,
-                     child: Image.network(providerListener.callHistoryUserObj[index].image_bigthumb_url??""),
-
+          ? ResponsiveWidget.isSmallScreen(context)
+              ? ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  primary: false,
+                  shrinkWrap: true,
+                  itemCount: providerListener.callHistoryList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      width: screenWidth,
+                      height: 100,
+                      padding: EdgeInsets.symmetric(
+                          vertical: ResponsiveWidget.isSmallScreen(context)
+                              ? getProportionateMobileScreenHeight(15)
+                              : getProportionateScreenWidth(15),
+                          horizontal: ResponsiveWidget.isSmallScreen(context)
+                              ? getProportionateMobileScreenWidth(10)
+                              : getProportionateScreenWidth(10)),
+                      margin: EdgeInsets.only(bottom: 15),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey[200],
+                              blurRadius: 1,
+                              spreadRadius: 1)
+                        ],
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Column(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            providerListener
-                                    .callHistoryUserObj[index].first_name +
-                                " " +
-                                providerListener
-                                    .callHistoryUserObj[index].last_name,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.poppins(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
+                          CircleAvatar(
+                            radius: ResponsiveWidget.isSmallScreen(context)
+                                ? 40
+                                : 25,
+                            backgroundColor: Colors.white,
+                            child: Image.network(providerListener
+                                    .callHistoryUserObj[index]
+                                    .image_bigthumb_url ??
+                                ""),
                           ),
-                          Row(
-                            children: [
-                              providerListener.callHistoryList[index].field1 !=
-                                      "whatsapp"
-                                  ? Icon(
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  providerListener.callHistoryUserObj[index]
+                                          .first_name +
+                                      " " +
+                                      providerListener
+                                          .callHistoryUserObj[index].last_name,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    providerListener.callHistoryList[index]
+                                                .field1 !=
+                                            "whatsapp"
+                                        ? Icon(
+                                            providerListener
+                                                        .callHistoryList[index]
+                                                        .field1 ==
+                                                    "call"
+                                                ? Icons.call
+                                                : providerListener
+                                                            .callHistoryList[
+                                                                index]
+                                                            .field1 ==
+                                                        "request call"
+                                                    ? Icons.call_missed
+                                                    : Icons.call,
+                                            color: providerListener
+                                                        .callHistoryList[index]
+                                                        .field1 !=
+                                                    "request call"
+                                                ? Color(0xff58C12A)
+                                                : Color(0xffF87676),
+                                            size: 15,
+                                          )
+                                        : Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 5),
+                                            child: Image.asset(
+                                              "assets/images/whatsapp.png",
+                                              height: 13,
+                                            ),
+                                          ),
+                                    Text(
+                                      /*"Today, 11:00 AM",*/
+                                      DateFormat.MMMMEEEEd().format(
+                                            DateTime.parse(providerListener
+                                                .callHistoryList[index]
+                                                .activity_datetime),
+                                          ) +
+                                          ", " +
+                                          DateFormat.jm().format(
+                                            DateTime.parse(providerListener
+                                                .callHistoryList[index]
+                                                .activity_datetime),
+                                          ),
+                                      style: GoogleFonts.poppins(
+                                        color: providerListener
+                                                    .callHistoryList[index]
+                                                    .field1 !=
+                                                "request call"
+                                            ? Color(0xff58C12A)
+                                            : Color(0xffF87676),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 5),
+                                Row(
+                                  children: [
+                                    Text(
                                       providerListener.callHistoryList[index]
                                                   .field1 ==
                                               "call"
-                                          ? Icons.call
-                                          : providerListener
+                                          ? (getTranslated(context,
+                                                  'you_requested_na_call_for') ??
+                                              "")
+                                          : "",
+                                      style: GoogleFonts.poppins(
+                                        color: Color(0xffB5B5B5),
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: getProportionateScreenWidth(20),
+                                    ),
+                                    /* Row(
+                                  children: [
+                                    Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                          //border: Border.all(color: Color(0xffB5B5B5)),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5)),
+                                          color: Color(COLOR_BACKGROUND)),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "10% Discount\nSonalika Tiger 26",
+                                      style: GoogleFonts.poppins(
+                                        color: Color(0xffB5B5B5),
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),*/
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Spacer(),
+                          InkWell(
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              margin: EdgeInsets.only(left: 10),
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                //border: Border.all(color: Color(0xffB5B5B5)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50)),
+                                color: Color(0xffE5F3EB),
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.call,
+                                  size: 18,
+                                  color: Color(0xff58C12A),
+                                ),
+                              ),
+                            ),
+                            onTap: () {
+                              UrlLauncher.launch("tel://" +
+                                  providerListener
+                                      .callHistoryUserObj[index].mobile);
+                            },
+                          ),
+                          SizedBox(
+                            width: getProportionateScreenWidth(10),
+                          ),
+                          providerListener.callHistoryList[index].field1 ==
+                                  "whatsapp"
+                              ? InkWell(
+                                  child: Container(
+                                    width: 30,
+                                    height: 30,
+                                    margin: EdgeInsets.only(left: 5),
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      //border: Border.all(color: Color(0xffB5B5B5)),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(50)),
+                                      color: Color(0xffE5F3EB),
+                                    ),
+                                    child: Center(
+                                      child: Container(
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 2),
+                                        child: Image.asset(
+                                          "assets/images/whatsapp.png",
+                                          height: 18,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    UrlLauncher.launch("https://wa.me/?phone=" +
+                                        providerListener
+                                            .callHistoryUserObj[index].mobile
+                                            .replaceAll(" ", "")
+                                            .replaceAll("+", ""));
+                                  },
+                                )
+                              : SizedBox(
+                                  width: 1,
+                                )
+                        ],
+                      ),
+                    );
+                  })
+              : GridView.builder(
+                  scrollDirection: Axis.vertical,
+                  primary: false,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 461 / 131,
+                      mainAxisSpacing: 10),
+                  shrinkWrap: true,
+                  itemCount: providerListener.callHistoryList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      width: 461,
+                      height: 131,
+                      padding: EdgeInsets.symmetric(
+                          vertical: getProportionateScreenWidth(15),
+                          horizontal: getProportionateScreenWidth(10)),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey[200],
+                              blurRadius: 1,
+                              spreadRadius: 1)
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Colors.grey,
+                            child: Image.network(providerListener
+                                    .callHistoryUserObj[index]
+                                    .image_bigthumb_url ??
+                                ""),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                providerListener
+                                        .callHistoryUserObj[index].first_name +
+                                    " " +
+                                    providerListener
+                                        .callHistoryUserObj[index].last_name,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.poppins(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  providerListener
+                                              .callHistoryList[index].field1 !=
+                                          "whatsapp"
+                                      ? Icon(
+                                          providerListener
                                                       .callHistoryList[index]
                                                       .field1 ==
+                                                  "call"
+                                              ? Icons.call
+                                              : providerListener
+                                                          .callHistoryList[
+                                                              index]
+                                                          .field1 ==
+                                                      "request call"
+                                                  ? Icons.call_missed
+                                                  : Icons.call,
+                                          color: providerListener
+                                                      .callHistoryList[index]
+                                                      .field1 !=
                                                   "request call"
-                                              ? Icons.call_missed
-                                              : Icons.call,
+                                              ? Color(0xff58C12A)
+                                              : Color(0xffF87676),
+                                          size: 15,
+                                        )
+                                      : Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                          child: Image.asset(
+                                            "assets/images/whatsapp.png",
+                                            height: 13,
+                                          ),
+                                        ),
+                                  Text(
+                                    /*"Today, 11:00 AM",*/
+                                    DateFormat.MMMMEEEEd().format(
+                                          DateTime.parse(providerListener
+                                              .callHistoryList[index]
+                                              .activity_datetime),
+                                        ) +
+                                        ", " +
+                                        DateFormat.jm().format(
+                                          DateTime.parse(providerListener
+                                              .callHistoryList[index]
+                                              .activity_datetime),
+                                        ),
+                                    style: GoogleFonts.poppins(
                                       color: providerListener
                                                   .callHistoryList[index]
                                                   .field1 !=
                                               "request call"
                                           ? Color(0xff58C12A)
                                           : Color(0xffF87676),
-                                      size: 15,
-                                    )
-                                  : Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 5),
-                                      child: Image.asset(
-                                        "assets/images/whatsapp.png",
-                                        height: 13,
-                                      ),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
                                     ),
-                              Text(
-                                /*"Today, 11:00 AM",*/
-                                DateFormat.MMMMEEEEd().format(
-                                      DateTime.parse(providerListener
-                                          .callHistoryList[index]
-                                          .activity_datetime),
-                                    ) +
-                                    ", " +
-                                    DateFormat.jm().format(
-                                      DateTime.parse(providerListener
-                                          .callHistoryList[index]
-                                          .activity_datetime),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 5),
+                              Row(
+                                children: [
+                                  Text(
+                                    providerListener.callHistoryList[index]
+                                                .field1 ==
+                                            "call"
+                                        ? (getTranslated(context,
+                                                'you_requested_na_call_for') ??
+                                            "")
+                                        : "",
+                                    style: GoogleFonts.poppins(
+                                      color: Color(0xffB5B5B5),
+                                      fontSize: 12,
                                     ),
-                                style: GoogleFonts.poppins(
-                                  color: providerListener
-                                              .callHistoryList[index].field1 !=
-                                          "request call"
-                                      ? Color(0xff58C12A)
-                                      : Color(0xffF87676),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 5),
-                          Row(
-                            children: [
-                              Text(
-                                providerListener
-                                            .callHistoryList[index].field1 ==
-                                        "call"
-                                    ? (getTranslated(context,
-                                            'you_requested_na_call_for') ??
-                                        "")
-                                    : "",
-                                style: GoogleFonts.poppins(
-                                  color: Color(0xffB5B5B5),
-                                  fontSize: 12,
-                                ),
-                              ),
-                              SizedBox(
-                                width: getProportionateScreenWidth(20),
-                              ),
-                              /* Row(
+                                  ),
+                                  SizedBox(
+                                    width: getProportionateScreenWidth(20),
+                                  ),
+                                  /* Row(
                                 children: [
                                   Container(
                                     width: 30,
@@ -211,77 +457,79 @@ class _CallHistoryState extends State<CallHistory> {
                                   ),
                                 ],
                               ),*/
+                                ],
+                              ),
                             ],
                           ),
-                        ],
-                      ),
-                      InkWell(
-                        child: Container(
-                          width: 30,
-                          height: 30,
-                          margin: EdgeInsets.only(left: 10),
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            //border: Border.all(color: Color(0xffB5B5B5)),
-                            borderRadius: BorderRadius.all(Radius.circular(50)),
-                            color: Color(0xffE5F3EB),
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.call,
-                              size: 18,
-                              color: Color(0xff58C12A),
-                            ),
-                          ),
-                        ),
-                        onTap: () {
-                          UrlLauncher.launch("tel://" +
-                              providerListener
-                                  .callHistoryUserObj[index].mobile);
-                        },
-                      ),
-                      SizedBox(
-                        width: getProportionateScreenWidth(10),
-                      ),
-                      providerListener.callHistoryList[index].field1 ==
-                              "whatsapp"
-                          ? InkWell(
-                              child: Container(
-                                width: 30,
-                                height: 30,
-                                margin: EdgeInsets.only(left: 5),
-                                padding: EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  //border: Border.all(color: Color(0xffB5B5B5)),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(50)),
-                                  color: Color(0xffE5F3EB),
-                                ),
-                                child: Center(
-                                  child: Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 2),
-                                    child: Image.asset(
-                                      "assets/images/whatsapp.png",
-                                      height: 18,
-                                    ),
-                                  ),
+                          InkWell(
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              margin: EdgeInsets.only(left: 10),
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                //border: Border.all(color: Color(0xffB5B5B5)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50)),
+                                color: Color(0xffE5F3EB),
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.call,
+                                  size: 18,
+                                  color: Color(0xff58C12A),
                                 ),
                               ),
-                              onTap: () {
-                                UrlLauncher.launch("https://wa.me/?phone=" +
-                                    providerListener.callHistoryUserObj[index].mobile
-                                        .replaceAll(" ", "")
-                                        .replaceAll("+", ""));
-                              },
-                            )
-                          : SizedBox(
-                              width: 1,
-                            )
-                    ],
-                  ),
-                );
-              })
+                            ),
+                            onTap: () {
+                              UrlLauncher.launch("tel://" +
+                                  providerListener
+                                      .callHistoryUserObj[index].mobile);
+                            },
+                          ),
+                          SizedBox(
+                            width: getProportionateScreenWidth(10),
+                          ),
+                          providerListener.callHistoryList[index].field1 ==
+                                  "whatsapp"
+                              ? InkWell(
+                                  child: Container(
+                                    width: 30,
+                                    height: 30,
+                                    margin: EdgeInsets.only(left: 5),
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      //border: Border.all(color: Color(0xffB5B5B5)),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(50)),
+                                      color: Color(0xffE5F3EB),
+                                    ),
+                                    child: Center(
+                                      child: Container(
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 2),
+                                        child: Image.asset(
+                                          "assets/images/whatsapp.png",
+                                          height: 18,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    UrlLauncher.launch("https://wa.me/?phone=" +
+                                        providerListener
+                                            .callHistoryUserObj[index].mobile
+                                            .replaceAll(" ", "")
+                                            .replaceAll("+", ""));
+                                  },
+                                )
+                              : SizedBox(
+                                  width: 1,
+                                )
+                        ],
+                      ),
+                    );
+                  })
           : Container(
               height: SizeConfig.screenHeight / 2,
               color: Colors.white,
@@ -301,69 +549,125 @@ class _CallHistoryState extends State<CallHistory> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 200),
+          padding: ResponsiveWidget.isSmallScreen(context)
+              ? EdgeInsets.symmetric(horizontal: 20)
+              : EdgeInsets.symmetric(horizontal: 200),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              /*Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   //CustomBackButton(text: "",),
                   Container(
-                    child: TextField(
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      textAlignVertical: TextAlignVertical.bottom,
-                      focusNode: focusSearch,
-                      style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                          fontSize: 14),
-                      decoration: InputDecoration(
-                        hintText: "Search a person, product, company",
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: const BorderRadius.all(
-                            const Radius.circular(10.0),
-                          ),
-                        ),
-                        fillColor: Colors.grey.shade100,
-                        suffixIconConstraints: BoxConstraints.tightFor(height: 40),
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              searchTextController.clear();
-                            });
-                            initTask();
-                          },
-                          child: Padding(
-                              padding: EdgeInsetsDirectional.only(end: 20),
-                              child: Icon(
-                                Icons.clear,
-                                size: 30,
-                              )),
-                        ),
+                child: TextField(
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.done,
+                  textAlignVertical: TextAlignVertical.bottom,
+                  focusNode: focusSearch,
+                  style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                      fontSize: 14),
+                  decoration: InputDecoration(
+                    hintText: "Search a person, product, company",
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: const BorderRadius.all(
+                        const Radius.circular(10.0),
                       ),
-                      /*onChanged: (value) {
-
-                                },*/
-                      onEditingComplete: () {
+                    ),
+                    fillColor: Colors.grey.shade100,
+                    suffixIconConstraints: BoxConstraints.tightFor(height: 40),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          searchTextController.clear();
+                        });
                         initTask();
-                        focusSearch.unfocus();
                       },
-                      controller: searchTextController,
+                      child: Padding(
+                          padding: EdgeInsetsDirectional.only(end: 20),
+                          child: Icon(
+                            Icons.clear,
+                            size: 30,
+                          )),
                     ),
                   ),
+                  /*onChanged: (value) {
+
+                                },*/
+                  onEditingComplete: () {
+                    initTask();
+                    focusSearch.unfocus();
+                  },
+                  controller: searchTextController,
+                ),
+              ),
                   SizedBox(
                     height: 20,
                   ),
-                  SearchBar(),
+
                 ],
+              ),*/
+              Container(
+                child: TextField(
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.done,
+                  textAlignVertical: TextAlignVertical.bottom,
+                  focusNode: focusSearch,
+                  style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                      fontSize: 14),
+                  decoration: InputDecoration(
+                    hintText: "Search a person, product, company",
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: const BorderRadius.all(
+                        const Radius.circular(10.0),
+                      ),
+                    ),
+                    fillColor: Colors.grey.shade100,
+                    suffixIconConstraints: BoxConstraints.tightFor(height: 40),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          searchTextController.clear();
+                        });
+                        initTask();
+                      },
+                      child: Padding(
+                          padding: EdgeInsetsDirectional.only(end: 20),
+                          child: Icon(
+                            Icons.clear,
+                            size: 30,
+                          )),
+                    ),
+                  ),
+                  /*onChanged: (value) {
+
+                                },*/
+                  onEditingComplete: () {
+                    initTask();
+                    focusSearch.unfocus();
+                  },
+                  controller: searchTextController,
+                ),
+              ),
+              SizedBox(
+                height: 10,
               ),
               buildList(context),
+              ResponsiveWidget.isSmallScreen(context)
+                  ? SizedBox(
+                      height: 50,
+                    )
+                  : null,
             ],
           ),
         ),
