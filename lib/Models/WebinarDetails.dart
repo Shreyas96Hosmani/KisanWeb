@@ -23,7 +23,11 @@ class WebinarDetails {
       organisation_name,
       first_name,
       last_name,
-      mobile, media_type, media_url, in_event;
+      mobile,
+      media_type,
+      media_url,
+      in_event,
+      addons_name;
 
   bool nature, is_paid;
 
@@ -57,5 +61,7 @@ class WebinarDetails {
       this.organisation_name,
       this.first_name,
       this.last_name,
-      this.mobile, this.in_event);
+      this.mobile,
+      this.in_event,
+      this.addons_name);
 }

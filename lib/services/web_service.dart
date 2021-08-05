@@ -2196,4 +2196,36 @@ class WebService {
       print("exception" + Exception.toString());
     }
   }
+
+  Future requestCallMeForWebinar(String email, String id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    try {
+      Map data = {
+        "email": email,
+        "item_source": "KisanSamvaad",
+        "item_source_id": id,
+        "item_type": "event",
+        "request_source": "android"
+      };
+
+      var body = json.encode(data);
+      print(body);
+
+      final response = await http.post(Uri.parse(addrequest),
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + prefs.getString("token"),
+          },
+          body: body);
+
+      if (response.statusCode == 200) {
+        return response;
+      } else {
+        return "error";
+      }
+    } catch (Exception) {
+      print("exception" + Exception.toString());
+    }
+  }
 }

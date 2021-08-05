@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:kisanweb/Helpers/constants.dart';
+import 'package:kisanweb/Helpers/helper.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
 import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
 import 'package:kisanweb/UI/CompanyProfile/CompanyProfile.dart';
@@ -65,14 +66,9 @@ class _CallHistoryState extends State<CallHistory> {
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       width: screenWidth,
-                      height: 100,
                       padding: EdgeInsets.symmetric(
-                          vertical: ResponsiveWidget.isSmallScreen(context)
-                              ? getProportionateMobileScreenHeight(15)
-                              : getProportionateScreenWidth(15),
-                          horizontal: ResponsiveWidget.isSmallScreen(context)
-                              ? getProportionateMobileScreenWidth(10)
-                              : getProportionateScreenWidth(10)),
+                          vertical: getProportionateMobileScreenHeight(15),
+                          horizontal: getProportionateMobileScreenWidth(10)),
                       margin: EdgeInsets.only(bottom: 15),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -86,212 +82,419 @@ class _CallHistoryState extends State<CallHistory> {
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CircleAvatar(
-                            radius: ResponsiveWidget.isSmallScreen(context)
-                                ? 40
-                                : 25,
-                            backgroundColor: Colors.white,
-                            child: Image.network(providerListener
-                                    .callHistoryUserObj[index]
-                                    .image_bigthumb_url ??
+                            radius: 25,
+                            backgroundColor: Colors.transparent,
+                            backgroundImage: NetworkImage(providerListener
+                                .callHistoryUserObj[index]
+                                .image_bigthumb_url ??
                                 ""),
                           ),
                           SizedBox(
                             width: 10,
                           ),
-                          Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  providerListener.callHistoryUserObj[index]
-                                          .first_name +
-                                      " " +
-                                      providerListener
-                                          .callHistoryUserObj[index].last_name,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    providerListener.callHistoryList[index]
-                                                .field1 !=
-                                            "whatsapp"
-                                        ? Icon(
-                                            providerListener
-                                                        .callHistoryList[index]
-                                                        .field1 ==
-                                                    "call"
-                                                ? Icons.call
-                                                : providerListener
-                                                            .callHistoryList[
-                                                                index]
-                                                            .field1 ==
-                                                        "request call"
-                                                    ? Icons.call_missed
-                                                    : Icons.call,
-                                            color: providerListener
-                                                        .callHistoryList[index]
-                                                        .field1 !=
-                                                    "request call"
-                                                ? Color(0xff58C12A)
-                                                : Color(0xffF87676),
-                                            size: 15,
-                                          )
-                                        : Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 5),
-                                            child: Image.asset(
-                                              "assets/images/whatsapp.png",
-                                              height: 13,
-                                            ),
-                                          ),
-                                    Text(
-                                      /*"Today, 11:00 AM",*/
-                                      DateFormat.MMMMEEEEd().format(
-                                            DateTime.parse(providerListener
-                                                .callHistoryList[index]
-                                                .activity_datetime),
-                                          ) +
-                                          ", " +
-                                          DateFormat.jm().format(
-                                            DateTime.parse(providerListener
-                                                .callHistoryList[index]
-                                                .activity_datetime),
-                                          ),
-                                      style: GoogleFonts.poppins(
-                                        color: providerListener
-                                                    .callHistoryList[index]
-                                                    .field1 !=
-                                                "request call"
-                                            ? Color(0xff58C12A)
-                                            : Color(0xffF87676),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 5),
-                                Row(
-                                  children: [
-                                    Text(
-                                      providerListener.callHistoryList[index]
-                                                  .field1 ==
-                                              "call"
-                                          ? (getTranslated(context,
-                                                  'you_requested_na_call_for') ??
-                                              "")
-                                          : "",
-                                      style: GoogleFonts.poppins(
-                                        color: Color(0xffB5B5B5),
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: getProportionateScreenWidth(20),
-                                    ),
-                                    /* Row(
-                                  children: [
-                                    Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          //border: Border.all(color: Color(0xffB5B5B5)),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(5)),
-                                          color: Color(COLOR_BACKGROUND)),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "10% Discount\nSonalika Tiger 26",
-                                      style: GoogleFonts.poppins(
-                                        color: Color(0xffB5B5B5),
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),*/
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Spacer(),
-                          InkWell(
+                          Expanded(
                             child: Container(
-                              width: 30,
-                              height: 30,
-                              margin: EdgeInsets.only(left: 10),
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                //border: Border.all(color: Color(0xffB5B5B5)),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
-                                color: Color(0xffE5F3EB),
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.call,
-                                  size: 18,
-                                  color: Color(0xff58C12A),
-                                ),
-                              ),
-                            ),
-                            onTap: () {
-                              UrlLauncher.launch("tel://" +
-                                  providerListener
-                                      .callHistoryUserObj[index].mobile);
-                            },
-                          ),
-                          SizedBox(
-                            width: getProportionateScreenWidth(10),
-                          ),
-                          providerListener.callHistoryList[index].field1 ==
-                                  "whatsapp"
-                              ? InkWell(
-                                  child: Container(
-                                    width: 30,
-                                    height: 30,
-                                    margin: EdgeInsets.only(left: 5),
-                                    padding: EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      //border: Border.all(color: Color(0xffB5B5B5)),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(50)),
-                                      color: Color(0xffE5F3EB),
-                                    ),
-                                    child: Center(
-                                      child: Container(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 2),
-                                        child: Image.asset(
-                                          "assets/images/whatsapp.png",
-                                          height: 18,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        child: Text(
+                                          (providerListener
+                                              .callHistoryUserObj[index]
+                                              .first_name +
+                                              " " +
+                                              providerListener
+                                                  .callHistoryUserObj[index]
+                                                  .last_name) +
+                                              (providerListener.productCallObj[
+                                              index] ==
+                                                  null
+                                                  ? ""
+                                                  : (providerListener
+                                                  .productCallObj[
+                                              index]
+                                                  .titleEnglish ==
+                                                  null
+                                                  ? ""
+                                                  : ", " +
+                                                  providerListener
+                                                      .productCallObj[
+                                                  index]
+                                                      .titleEnglish)),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
                                         ),
                                       ),
-                                    ),
+                                      Row(
+                                        children: [
+                                          providerListener
+                                              .callHistoryList[index]
+                                              .field1 ==
+                                              "whatsapp"
+                                              ? InkWell(
+                                            child: Container(
+                                              width: 30,
+                                              height: 30,
+                                              margin: EdgeInsets.only(
+                                                  left: 5),
+                                              padding: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                //border: Border.all(color: Color(0xffB5B5B5)),
+                                                borderRadius:
+                                                BorderRadius.all(
+                                                    Radius.circular(
+                                                        50)),
+                                                color: Color(0xffE5F3EB),
+                                              ),
+                                              child: Center(
+                                                child: Container(
+                                                  padding: EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 2),
+                                                  child: Image.asset(
+                                                    "assets/images/whatsapp.png",
+                                                    height: 18,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              UrlLauncher.launch(
+                                                  "https://wa.me/?phone=" +
+                                                      providerListener
+                                                          .callHistoryUserObj[
+                                                      index]
+                                                          .mobile
+                                                          .replaceAll(
+                                                          " ", "")
+                                                          .replaceAll(
+                                                          "+", ""));
+                                            },
+                                          )
+                                              : SizedBox(
+                                            width: 0,
+                                          ),
+                                          SizedBox(
+                                            width:
+                                            getProportionateScreenWidth(10),
+                                          ),
+                                          InkWell(
+                                            child: Container(
+                                              width: 30,
+                                              height: 30,
+                                              padding: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                //border: Border.all(color: Color(0xffB5B5B5)),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(50)),
+                                                color: Color(0xffE5F3EB),
+                                              ),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.call,
+                                                  size: 18,
+                                                  color: Color(0xff58C12A),
+                                                ),
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              UrlLauncher.launch("tel://" +
+                                                  providerListener
+                                                      .callHistoryUserObj[index]
+                                                      .mobile);
+                                            },
+                                          ),
+                                        ],
+                                      )
+                                    ],
                                   ),
-                                  onTap: () {
-                                    UrlLauncher.launch("https://wa.me/?phone=" +
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      providerListener.callHistoryList[index]
+                                          .field1 !=
+                                          "whatsapp"
+                                          ? Icon(
                                         providerListener
-                                            .callHistoryUserObj[index].mobile
-                                            .replaceAll(" ", "")
-                                            .replaceAll("+", ""));
-                                  },
-                                )
-                              : SizedBox(
-                                  width: 1,
-                                )
+                                            .callHistoryList[
+                                        index]
+                                            .field1 ==
+                                            "call"
+                                            ? Icons.call
+                                            : providerListener
+                                            .callHistoryList[
+                                        index]
+                                            .field1 ==
+                                            "request call"
+                                            ? Icons.call_missed
+                                            : Icons.call,
+                                        color: providerListener
+                                            .callHistoryList[
+                                        index]
+                                            .field1 !=
+                                            "request call"
+                                            ? Color(0xff58C12A)
+                                            : Color(0xffF87676),
+                                        size: 15,
+                                      )
+                                          : Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 5),
+                                        child: Image.asset(
+                                          "assets/images/whatsapp.png",
+                                          height: 13,
+                                        ),
+                                      ),
+                                      Text(
+                                        /*"Today, 11:00 AM",*/
+                                        DateFormat.MMMMEEEEd().format(
+                                          DateTime.parse(providerListener
+                                              .callHistoryList[index]
+                                              .activity_datetime),
+                                        ) +
+                                            ", " +
+                                            DateFormat.jm().format(
+                                              DateTime.parse(providerListener
+                                                  .callHistoryList[index]
+                                                  .activity_datetime),
+                                            ),
+                                        style: GoogleFonts.poppins(
+                                          color: providerListener
+                                              .callHistoryList[index]
+                                              .field1 !=
+                                              "request call"
+                                              ? Color(0xff58C12A)
+                                              : Color(0xffF87676),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 5),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: getProportionateMobileScreenWidth(120),
+                                        child: Text(
+                                          providerListener
+                                              .callHistoryList[index]
+                                              .field1 ==
+                                              "call"
+                                              ? (getTranslated(context,
+                                              'you_requested_na_call_for') ??
+                                              "")
+                                              : "You connected on whatsapp",
+                                          style: GoogleFonts.poppins(
+                                            color: providerListener
+                                                .callHistoryList[index]
+                                                .field1 !=
+                                                "request call"
+                                                ? Color(0xff58C12A)
+                                                : Color(0xffB5B5B5),
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: getProportionateMobileScreenWidth(10),
+                                      ),
+                                      providerListener.callHistoryList[index]
+                                          .activity_code ==
+                                          "connect_product"
+                                          ? Row(
+                                        children: [
+                                          Container(
+                                            width: 30,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey,
+                                              image: DecorationImage(
+                                                  image: providerListener
+                                                      .productCallObj[
+                                                  index]
+                                                      .bigthumbUrl
+                                                      .toString() ==
+                                                      "null" ||
+                                                      providerListener
+                                                          .productCallObj[
+                                                      index]
+                                                          .bigthumbUrl
+                                                          .toString() ==
+                                                          "" ||
+                                                      providerListener
+                                                          .productCallObj[
+                                                      index]
+                                                          .bigthumbUrl ==
+                                                          null
+                                                      ? AssetImage(
+                                                      "assets/images/product_placeholder.png")
+                                                      : NetworkImage(
+                                                      providerListener
+                                                          .productCallObj[
+                                                      index]
+                                                          .bigthumbUrl ??
+                                                          ""),
+                                                  fit: BoxFit.fill),
+                                              //border: Border.all(color: Color(0xffB5B5B5)),
+                                              borderRadius:
+                                              BorderRadius.all(
+                                                  Radius.circular(5)),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                            width: providerListener
+                                                .productCallObj[
+                                            index]
+                                                .titleEnglish ==
+                                                null ||
+                                                providerListener
+                                                    .productCallObj[
+                                                index]
+                                                    .titleEnglish
+                                                    .toString() ==
+                                                    "null"
+                                                ? 0
+                                                : getProportionateMobileScreenWidth(
+                                                70),
+                                            child: Text(
+                                              parseHtmlString(
+                                                  providerListener
+                                                      .productCallObj[
+                                                  index]
+                                                      .titleEnglish ??
+                                                      ""),
+                                              overflow:
+                                              TextOverflow.ellipsis,
+                                              maxLines: 2,
+                                              style: GoogleFonts.poppins(
+                                                color: Color(0xff696969),
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons
+                                                .arrow_forward_ios_rounded,
+                                            color: Colors.grey,
+                                          )
+                                        ],
+                                      )
+                                          : providerListener
+                                          .callHistoryList[index]
+                                          .activity_code ==
+                                          "connect_profile"
+                                          ? Row(
+                                        children: [
+                                          Container(
+                                            width: 30,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: providerListener
+                                                        .productCallObj[
+                                                    index]
+                                                        .bigthumbUrl
+                                                        .toString() ==
+                                                        "null" ||
+                                                        providerListener
+                                                            .productCallObj[
+                                                        index]
+                                                            .bigthumbUrl
+                                                            .toString() ==
+                                                            "" ||
+                                                        providerListener
+                                                            .productCallObj[
+                                                        index]
+                                                            .bigthumbUrl ==
+                                                            null
+                                                        ? AssetImage(
+                                                        "assets/images/product_placeholder.png")
+                                                        : NetworkImage(providerListener
+                                                        .productCallObj[
+                                                    index]
+                                                        .bigthumbUrl ??
+                                                        ""),
+                                                    fit: BoxFit.fill),
+                                                //border: Border.all(color: Color(0xffB5B5B5)),
+                                                borderRadius:
+                                                BorderRadius.all(
+                                                    Radius
+                                                        .circular(
+                                                        5)),
+                                                color: Colors.grey),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                            width: providerListener
+                                                .productCallObj[
+                                            index]
+                                                .titleEnglish ==
+                                                null ||
+                                                providerListener
+                                                    .productCallObj[
+                                                index]
+                                                    .titleEnglish
+                                                    .toString() ==
+                                                    "null"
+                                                ? 0
+                                                : getProportionateScreenWidth(
+                                                70),
+                                            child: Text(
+                                              parseHtmlString(providerListener
+                                                  .productCallObj[
+                                              index]
+                                                  .titleEnglish ??
+                                                  ""),
+                                              overflow: TextOverflow
+                                                  .ellipsis,
+                                              maxLines: 2,
+                                              style:
+                                              GoogleFonts.poppins(
+                                                color:
+                                                Color(0xff696969),
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons
+                                                .arrow_forward_ios_rounded,
+                                            color: Colors.grey,
+                                          )
+                                        ],
+                                      )
+                                          : SizedBox(
+                                        width:
+                                        getProportionateScreenWidth(
+                                            1),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     );
@@ -302,14 +505,14 @@ class _CallHistoryState extends State<CallHistory> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       crossAxisSpacing: 10,
-                      childAspectRatio: 461 / 131,
+                      childAspectRatio: 461 / 170,
                       mainAxisSpacing: 10),
                   shrinkWrap: true,
                   itemCount: providerListener.callHistoryList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
-                      width: 461,
-                      height: 131,
+                      height: getProportionateScreenHeight(170),
+                      margin: EdgeInsets.all(5),
                       padding: EdgeInsets.symmetric(
                           vertical: getProportionateScreenWidth(15),
                           horizontal: getProportionateScreenWidth(10)),
@@ -329,203 +532,415 @@ class _CallHistoryState extends State<CallHistory> {
                         children: [
                           CircleAvatar(
                             radius: 25,
-                            backgroundColor: Colors.grey,
-                            child: Image.network(providerListener
-                                    .callHistoryUserObj[index]
-                                    .image_bigthumb_url ??
+                            backgroundColor: Colors.transparent,
+                            backgroundImage: NetworkImage(providerListener
+                                .callHistoryUserObj[index]
+                                .image_bigthumb_url ??
                                 ""),
                           ),
                           SizedBox(
                             width: 10,
                           ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                providerListener
-                                        .callHistoryUserObj[index].first_name +
-                                    " " +
-                                    providerListener
-                                        .callHistoryUserObj[index].last_name,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Row(
+                          Expanded(
+                            child: Container(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  providerListener
-                                              .callHistoryList[index].field1 !=
-                                          "whatsapp"
-                                      ? Icon(
-                                          providerListener
-                                                      .callHistoryList[index]
-                                                      .field1 ==
-                                                  "call"
-                                              ? Icons.call
-                                              : providerListener
-                                                          .callHistoryList[
-                                                              index]
-                                                          .field1 ==
-                                                      "request call"
-                                                  ? Icons.call_missed
-                                                  : Icons.call,
-                                          color: providerListener
-                                                      .callHistoryList[index]
-                                                      .field1 !=
-                                                  "request call"
-                                              ? Color(0xff58C12A)
-                                              : Color(0xffF87676),
-                                          size: 15,
-                                        )
-                                      : Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 5),
-                                          child: Image.asset(
-                                            "assets/images/whatsapp.png",
-                                            height: 13,
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        child: Text(
+                                          (providerListener
+                                              .callHistoryUserObj[index]
+                                              .first_name +
+                                              " " +
+                                              providerListener
+                                                  .callHistoryUserObj[index]
+                                                  .last_name) +
+                                              (providerListener.productCallObj[
+                                              index] ==
+                                                  null
+                                                  ? ""
+                                                  : (providerListener
+                                                  .productCallObj[
+                                              index]
+                                                  .titleEnglish ==
+                                                  null
+                                                  ? ""
+                                                  : ", " +
+                                                  providerListener
+                                                      .productCallObj[
+                                                  index]
+                                                      .titleEnglish)),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
                                           ),
                                         ),
-                                  Text(
-                                    /*"Today, 11:00 AM",*/
-                                    DateFormat.MMMMEEEEd().format(
+                                      ),
+                                      Row(
+                                        children: [
+                                          providerListener
+                                              .callHistoryList[index]
+                                              .field1 ==
+                                              "whatsapp"
+                                              ? InkWell(
+                                            child: Container(
+                                              width: 30,
+                                              height: 30,
+                                              margin: EdgeInsets.only(
+                                                  left: 5),
+                                              padding: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                //border: Border.all(color: Color(0xffB5B5B5)),
+                                                borderRadius:
+                                                BorderRadius.all(
+                                                    Radius.circular(
+                                                        50)),
+                                                color: Color(0xffE5F3EB),
+                                              ),
+                                              child: Center(
+                                                child: Container(
+                                                  padding: EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 2),
+                                                  child: Image.asset(
+                                                    "assets/images/whatsapp.png",
+                                                    height: 18,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              UrlLauncher.launch(
+                                                  "https://wa.me/?phone=" +
+                                                      providerListener
+                                                          .callHistoryUserObj[
+                                                      index]
+                                                          .mobile
+                                                          .replaceAll(
+                                                          " ", "")
+                                                          .replaceAll(
+                                                          "+", ""));
+                                            },
+                                          )
+                                              : SizedBox(
+                                            width: 0,
+                                          ),
+                                          SizedBox(
+                                            width:
+                                            getProportionateScreenWidth(10),
+                                          ),
+                                          InkWell(
+                                            child: Container(
+                                              width: 30,
+                                              height: 30,
+                                              padding: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                //border: Border.all(color: Color(0xffB5B5B5)),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(50)),
+                                                color: Color(0xffE5F3EB),
+                                              ),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.call,
+                                                  size: 18,
+                                                  color: Color(0xff58C12A),
+                                                ),
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              UrlLauncher.launch("tel://" +
+                                                  providerListener
+                                                      .callHistoryUserObj[index]
+                                                      .mobile);
+                                            },
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      providerListener.callHistoryList[index]
+                                          .field1 !=
+                                          "whatsapp"
+                                          ? Icon(
+                                        providerListener
+                                            .callHistoryList[
+                                        index]
+                                            .field1 ==
+                                            "call"
+                                            ? Icons.call
+                                            : providerListener
+                                            .callHistoryList[
+                                        index]
+                                            .field1 ==
+                                            "request call"
+                                            ? Icons.call_missed
+                                            : Icons.call,
+                                        color: providerListener
+                                            .callHistoryList[
+                                        index]
+                                            .field1 !=
+                                            "request call"
+                                            ? Color(0xff58C12A)
+                                            : Color(0xffF87676),
+                                        size: 15,
+                                      )
+                                          : Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 5),
+                                        child: Image.asset(
+                                          "assets/images/whatsapp.png",
+                                          height: 13,
+                                        ),
+                                      ),
+                                      Text(
+                                        /*"Today, 11:00 AM",*/
+                                        DateFormat.MMMMEEEEd().format(
                                           DateTime.parse(providerListener
                                               .callHistoryList[index]
                                               .activity_datetime),
                                         ) +
-                                        ", " +
-                                        DateFormat.jm().format(
-                                          DateTime.parse(providerListener
-                                              .callHistoryList[index]
-                                              .activity_datetime),
-                                        ),
-                                    style: GoogleFonts.poppins(
-                                      color: providerListener
+                                            ", " +
+                                            DateFormat.jm().format(
+                                              DateTime.parse(providerListener
                                                   .callHistoryList[index]
-                                                  .field1 !=
+                                                  .activity_datetime),
+                                            ),
+                                        style: GoogleFonts.poppins(
+                                          color: providerListener
+                                              .callHistoryList[index]
+                                              .field1 !=
                                               "request call"
-                                          ? Color(0xff58C12A)
-                                          : Color(0xffF87676),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 5),
-                              Row(
-                                children: [
-                                  Text(
-                                    providerListener.callHistoryList[index]
-                                                .field1 ==
-                                            "call"
-                                        ? (getTranslated(context,
-                                                'you_requested_na_call_for') ??
-                                            "")
-                                        : "",
-                                    style: GoogleFonts.poppins(
-                                      color: Color(0xffB5B5B5),
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: getProportionateScreenWidth(20),
-                                  ),
-                                  /* Row(
-                                children: [
-                                  Container(
-                                    width: 30,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                        //border: Border.all(color: Color(0xffB5B5B5)),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(5)),
-                                        color: Color(COLOR_BACKGROUND)),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    "10% Discount\nSonalika Tiger 26",
-                                    style: GoogleFonts.poppins(
-                                      color: Color(0xffB5B5B5),
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),*/
-                                ],
-                              ),
-                            ],
-                          ),
-                          InkWell(
-                            child: Container(
-                              width: 30,
-                              height: 30,
-                              margin: EdgeInsets.only(left: 10),
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                //border: Border.all(color: Color(0xffB5B5B5)),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
-                                color: Color(0xffE5F3EB),
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.call,
-                                  size: 18,
-                                  color: Color(0xff58C12A),
-                                ),
-                              ),
-                            ),
-                            onTap: () {
-                              UrlLauncher.launch("tel://" +
-                                  providerListener
-                                      .callHistoryUserObj[index].mobile);
-                            },
-                          ),
-                          SizedBox(
-                            width: getProportionateScreenWidth(10),
-                          ),
-                          providerListener.callHistoryList[index].field1 ==
-                                  "whatsapp"
-                              ? InkWell(
-                                  child: Container(
-                                    width: 30,
-                                    height: 30,
-                                    margin: EdgeInsets.only(left: 5),
-                                    padding: EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      //border: Border.all(color: Color(0xffB5B5B5)),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(50)),
-                                      color: Color(0xffE5F3EB),
-                                    ),
-                                    child: Center(
-                                      child: Container(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 2),
-                                        child: Image.asset(
-                                          "assets/images/whatsapp.png",
-                                          height: 18,
+                                              ? Color(0xff58C12A)
+                                              : Color(0xffF87676),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
                                         ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                  onTap: () {
-                                    UrlLauncher.launch("https://wa.me/?phone=" +
-                                        providerListener
-                                            .callHistoryUserObj[index].mobile
-                                            .replaceAll(" ", "")
-                                            .replaceAll("+", ""));
-                                  },
-                                )
-                              : SizedBox(
-                                  width: 1,
-                                )
+                                  SizedBox(height: 5),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: getProportionateScreenWidth(120),
+                                        child: Text(
+                                          providerListener
+                                              .callHistoryList[index]
+                                              .field1 ==
+                                              "call"
+                                              ? (getTranslated(context,
+                                              'you_requested_na_call_for') ??
+                                              "")
+                                              : "You connected on whatsapp",
+                                          style: GoogleFonts.poppins(
+                                            color: providerListener
+                                                .callHistoryList[index]
+                                                .field1 !=
+                                                "request call"
+                                                ? Color(0xff58C12A)
+                                                : Color(0xffB5B5B5),
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: getProportionateScreenWidth(10),
+                                      ),
+                                      providerListener.callHistoryList[index]
+                                          .activity_code ==
+                                          "connect_product"
+                                          ? Row(
+                                        children: [
+                                          Container(
+                                            width: 30,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey,
+                                              image: DecorationImage(
+                                                  image: providerListener
+                                                      .productCallObj[
+                                                  index]
+                                                      .bigthumbUrl
+                                                      .toString() ==
+                                                      "null" ||
+                                                      providerListener
+                                                          .productCallObj[
+                                                      index]
+                                                          .bigthumbUrl
+                                                          .toString() ==
+                                                          "" ||
+                                                      providerListener
+                                                          .productCallObj[
+                                                      index]
+                                                          .bigthumbUrl ==
+                                                          null
+                                                      ? AssetImage(
+                                                      "assets/images/product_placeholder.png")
+                                                      : NetworkImage(
+                                                      providerListener
+                                                          .productCallObj[
+                                                      index]
+                                                          .bigthumbUrl ??
+                                                          ""),
+                                                  fit: BoxFit.fill),
+                                              //border: Border.all(color: Color(0xffB5B5B5)),
+                                              borderRadius:
+                                              BorderRadius.all(
+                                                  Radius.circular(5)),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                            width: providerListener
+                                                .productCallObj[
+                                            index]
+                                                .titleEnglish ==
+                                                null ||
+                                                providerListener
+                                                    .productCallObj[
+                                                index]
+                                                    .titleEnglish
+                                                    .toString() ==
+                                                    "null"
+                                                ? 0
+                                                : getProportionateScreenWidth(
+                                                70),
+                                            child: Text(
+                                              parseHtmlString(
+                                                  providerListener
+                                                      .productCallObj[
+                                                  index]
+                                                      .titleEnglish ??
+                                                      ""),
+                                              overflow:
+                                              TextOverflow.ellipsis,
+                                              maxLines: 2,
+                                              style: GoogleFonts.poppins(
+                                                color: Color(0xff696969),
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons
+                                                .arrow_forward_ios_rounded,
+                                            color: Colors.grey,
+                                          )
+                                        ],
+                                      )
+                                          : providerListener
+                                          .callHistoryList[index]
+                                          .activity_code ==
+                                          "connect_profile"
+                                          ? Row(
+                                        children: [
+                                          Container(
+                                            width: 30,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: providerListener
+                                                        .productCallObj[
+                                                    index]
+                                                        .bigthumbUrl
+                                                        .toString() ==
+                                                        "null" ||
+                                                        providerListener
+                                                            .productCallObj[
+                                                        index]
+                                                            .bigthumbUrl
+                                                            .toString() ==
+                                                            "" ||
+                                                        providerListener
+                                                            .productCallObj[
+                                                        index]
+                                                            .bigthumbUrl ==
+                                                            null
+                                                        ? AssetImage(
+                                                        "assets/images/product_placeholder.png")
+                                                        : NetworkImage(providerListener
+                                                        .productCallObj[
+                                                    index]
+                                                        .bigthumbUrl ??
+                                                        ""),
+                                                    fit: BoxFit.fill),
+                                                //border: Border.all(color: Color(0xffB5B5B5)),
+                                                borderRadius:
+                                                BorderRadius.all(
+                                                    Radius
+                                                        .circular(
+                                                        5)),
+                                                color: Colors.grey),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                            width: providerListener
+                                                .productCallObj[
+                                            index]
+                                                .titleEnglish ==
+                                                null ||
+                                                providerListener
+                                                    .productCallObj[
+                                                index]
+                                                    .titleEnglish
+                                                    .toString() ==
+                                                    "null"
+                                                ? 0
+                                                : getProportionateScreenWidth(
+                                                70),
+                                            child: Text(
+                                              parseHtmlString(providerListener
+                                                  .productCallObj[
+                                              index]
+                                                  .titleEnglish ??
+                                                  ""),
+                                              overflow: TextOverflow
+                                                  .ellipsis,
+                                              maxLines: 2,
+                                              style:
+                                              GoogleFonts.poppins(
+                                                color:
+                                                Color(0xff696969),
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons
+                                                .arrow_forward_ios_rounded,
+                                            color: Colors.grey,
+                                          )
+                                        ],
+                                      )
+                                          : SizedBox(
+                                        width:
+                                        getProportionateScreenWidth(
+                                            1),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     );

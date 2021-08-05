@@ -89,6 +89,7 @@ const set_unset_notification_consent =
 const geteventfilters = apiUrl + "/samvaad/geteventfilters/";
 const shuffled_products = apiUrl + "/visitor/shuffled_products";
 const shuffled_companies = apiUrl + "/visitor/shuffled_companies";
+const addrequest = apiUrl + "/callbacks/addrequest/";
 
 List<Map<String, String>> imgSlider = [
   {

@@ -55,9 +55,9 @@ class _ExistingAccountState extends State<ExistingAccount> {
                     ),
                     child: Center(
                         child: Icon(
-                      Icons.phone_android_rounded,
-                      color: Color(constants.COLOR_WHITE),
-                    )),
+                          Icons.phone_android_rounded,
+                          color: Color(constants.COLOR_WHITE),
+                        )),
                   ),
                   SizedBox(
                     width: 20,
@@ -96,13 +96,30 @@ class _ExistingAccountState extends State<ExistingAccount> {
                   SizedBox(
                     height: 50,
                   ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 25, right: 20),
+                    child: Text(
+                      (getTranslated(context, 'we_already_have_an_account_with') ?? ""),
+                      style: GoogleFonts.poppins(
+                          color: Colors.black,
+                          letterSpacing: 1,
+                          fontSize: 18.0),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
                   ConstrainedBox(
                     constraints: BoxConstraints.tightFor(
-                        width: getProportionateScreenWidth(300),
+                        width: getProportionateScreenWidth(350),
                         height: getProportionateScreenHeight(80)),
                     child: ElevatedButton(
                       onPressed: () {
-                        Provider.of<CustomViewModel>(context, listen: false)
+                        pop(context);
+                        pop(context);
+                        pushReplacement(
+                            context, HomeScreen("HomeScreen", 0, 0));
+                        /*Provider.of<CustomViewModel>(context, listen: false)
                             .UpdateProfileDataAfterGoogleAuth(
                                 providerListener.googleFName,
                                 providerListener.googleLName,
@@ -124,22 +141,56 @@ class _ExistingAccountState extends State<ExistingAccount> {
                               toastCommon(context, getTranslated(context, 'tryAgain'));
                             }
                           });
-                        });
+                        });*/
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0xFFFFE44E),
+                        primary: Color(0xff08763F),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Text(
-                        getTranslated(context,
-                            'login_using_this_associted_mobile_number_or'),
-                        style: GoogleFonts.poppins(
-                            color: Colors.black,
-                            letterSpacing: 1,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.bold),
+                      child: Padding(
+                        padding: EdgeInsets.all(1),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 18,
+                              child: ClipOval(
+                                child: Image.network(
+                                    providerListener.tempProfileLink??""),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  getTranslated(context, 'LoginAs') +
+                                      providerListener.tempFName +
+                                      " " +
+                                      providerListener.tempLName,
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.white,
+                                      letterSpacing: 1,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  (getTranslated(context, 'email') ?? "") +
+                                      " - " +
+                                      providerListener.tempEmail,
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.white,
+                                      letterSpacing: 1,
+                                      fontSize: 12.0),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -177,31 +228,59 @@ class _ExistingAccountState extends State<ExistingAccount> {
                   ),
                   ConstrainedBox(
                     constraints: BoxConstraints.tightFor(
-                        width: getProportionateScreenWidth(300),
+                        width: getProportionateScreenWidth(350),
                         height: getProportionateScreenHeight(80)),
                     child: ElevatedButton(
-                      onPressed: () {
-                        push(context, LoginWithOTP());
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: Color(0xff08763F),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                        onPressed: () {
+                          push(context, LoginWithOTP());
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xFFFFE44E),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        (getTranslated(context, 'createanewaccount') ?? "") +
-                            " " +
-                            (getTranslated(
-                                    context, 'by_entering_new_mobile_number') ??
-                                ""),
-                        style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            letterSpacing: 1,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                        child: Padding(
+                          padding: EdgeInsets.all(1),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundColor: Colors.black,
+                                backgroundImage:
+                                AssetImage('assets/images/defaultProfile.png'),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    (getTranslated(
+                                        context, 'createanewaccount') ??
+                                        ""),
+                                    style: GoogleFonts.poppins(
+                                        color: Colors.black,
+                                        letterSpacing: 1,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    (getTranslated(context,
+                                        'by_entering_new_mobile_number') ??
+                                        ""),
+                                    style: GoogleFonts.poppins(
+                                        color: Colors.black,
+                                        letterSpacing: 1,
+                                        fontSize: 12.0),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )),
                   ),
                 ],
               ),
