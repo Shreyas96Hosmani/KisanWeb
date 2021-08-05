@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 //import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,8 @@ class SocialAuth extends StatefulWidget {
 
 class _SocialAuthState extends State<SocialAuth> {
   GoogleSignInAccount _currentUser;
+  FirebaseMessaging messaging;
+  NotificationSettings settings;
 
   @override
   void initState() {
@@ -48,35 +51,60 @@ class _SocialAuthState extends State<SocialAuth> {
 //    } catch (e) {}
   }
 
-  /*
   Future<void> _handleSignIn() async {
-    var fcm_id = await FirebaseMessaging.instance.getToken();
+    messaging = FirebaseMessaging.instance;
 
-    try {
+    settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    print('User granted permission: ${settings.authorizationStatus}');
+
+    if (settings.authorizationStatus == AuthorizationStatus.denied) {
+      // message here without permissions we cant get fcm token, login api wont work
+      toastCommon(context, "Please allow permissions to access features!");
+    }
+    else if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      String token = await messaging.getToken(
+        vapidKey:
+        "BEECUr-PDtUXHI4nJAAMjrONvog8mgx5klU8r0COSThlqjpm23boGsYLSkSD2EgPipGCHBZdBA7yv0z-lqbqeAY",
+      );
+
+      print("token: $token");
+      //var fcm_id = await FirebaseMessaging.instance.getToken();
+
       try {
-        _googleSignIn.disconnect();
-      } catch (e) {}
-      await _googleSignIn.signIn().then((value) {
-        setState(() {
-          Provider.of<CustomViewModel>(context, listen: false).setGoogleData(
-              _googleSignIn.currentUser.email,
-              _googleSignIn.currentUser.displayName,
-              _googleSignIn.currentUser.photoUrl);
+        try {
+          _googleSignIn.disconnect();
+        } catch (e) {}
+        await _googleSignIn.signIn().then((value) {
+          setState(() {
+            Provider.of<CustomViewModel>(context, listen: false).setGoogleData(
+                _googleSignIn.currentUser.email,
+                _googleSignIn.currentUser.displayName,
+                _googleSignIn.currentUser.photoUrl);
 
-          value.authentication.then((googleKey) {
-            print(_googleSignIn.clientId);
-            print(googleKey.accessToken);
-            print("token: " + googleKey.idToken);
-            setState(() {
-              _GoogleLogin(googleKey.idToken.toString(), fcm_id);
+            value.authentication.then((googleKey) {
+              print(_googleSignIn.clientId);
+              print(googleKey.accessToken);
+              print("token: " + googleKey.idToken);
+              setState(() {
+                _GoogleLogin(googleKey.idToken.toString(), token);
+              });
+            }).catchError((err) {
+              print('inner error');
             });
-          }).catchError((err) {
-            print('inner error');
           });
         });
-      });
-    } catch (error) {
-      print(error);
+      } catch (error) {
+        print(error);
+      }
     }
   }
 
@@ -99,8 +127,6 @@ class _SocialAuthState extends State<SocialAuth> {
       });
     });
   }
-
-   */
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +263,7 @@ class _SocialAuthState extends State<SocialAuth> {
                   SizedBox(
                     height: 20,
                   ),
-                  /*Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -268,7 +294,7 @@ class _SocialAuthState extends State<SocialAuth> {
                   ),
                   InkWell(
                     onTap: () {
-                       //_handleSignIn();
+                       _handleSignIn();
                     },
                     child: Container(
                         height: (60),
@@ -308,7 +334,7 @@ class _SocialAuthState extends State<SocialAuth> {
                             ),
                           ],
                         )),
-                  ),*/
+                  ),
                   SizedBox(
                     height: 20,
                   ),

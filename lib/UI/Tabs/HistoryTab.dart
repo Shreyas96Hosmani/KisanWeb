@@ -542,7 +542,6 @@ class _CallHistoryState extends State<CallHistory> {
                 ),
               ),
             );
-      ;
     }
 
     return Scaffold(
@@ -667,7 +666,7 @@ class _CallHistoryState extends State<CallHistory> {
                   ? SizedBox(
                       height: 50,
                     )
-                  : null,
+                  : SizedBox(height: 0,),
             ],
           ),
         ),

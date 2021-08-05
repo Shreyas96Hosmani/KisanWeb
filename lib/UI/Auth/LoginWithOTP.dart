@@ -1,10 +1,12 @@
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:async';
 import 'package:kisanweb/Helpers/constants.dart';
 import 'package:kisanweb/Helpers/helper.dart';
@@ -12,6 +14,7 @@ import 'package:kisanweb/Helpers/images.dart';
 import 'package:kisanweb/Helpers/size_config.dart';
 import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
 import 'package:kisanweb/UI/Auth/EnterOTP.dart';
+import 'package:kisanweb/UI/HomeScreen/HomeScreen.dart';
 import 'package:kisanweb/View%20Models/CustomViewModel.dart';
 import 'package:kisanweb/localization/language_constants.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -23,6 +26,21 @@ import '../../Helpers/size_config.dart';
 
 bool _isChecked = false;
 
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  // Optional clientId
+  //clientId: '379951119240-15s4lmkvm0qn5kfc16cknhtamgkrlumc.apps.googleusercontent.com',
+
+  //Dev:
+  //clientId: '379951119240-tkmkpj996t81g2kqn9qbvdblbht3c8n9.apps.googleusercontent.com',
+  // test
+  clientId:
+  '799381838308-a3u082djeh350q0fqh3iet78sf3al4nr.apps.googleusercontent.com',
+  //prod
+  //clientId: '143325684355-sjmtmsj8rpj73q1pon9qnf3gcmcu2dft.apps.googleusercontent.com',
+
+  scopes: <String>['email'],
+);
+
 class LoginWithOTP extends StatefulWidget {
   @override
   _LoginWithOTPState createState() => _LoginWithOTPState();
@@ -31,6 +49,8 @@ class LoginWithOTP extends StatefulWidget {
 class _LoginWithOTPState extends State<LoginWithOTP> {
   String countryCode = '+91';
   String errorMessage = '';
+  FirebaseMessaging messaging;
+  NotificationSettings settings;
 
   TextEditingController phoneController = TextEditingController();
 
@@ -55,6 +75,83 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
           push(context, EnterOTP(phoneController.text.toString()));
         } else {
           errorMessage = value;
+        }
+      });
+    });
+  }
+
+  Future<void> _handleSignIn() async {
+    messaging = FirebaseMessaging.instance;
+
+    settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    print('User granted permission: ${settings.authorizationStatus}');
+
+    if (settings.authorizationStatus == AuthorizationStatus.denied) {
+      // message here without permissions we cant get fcm token, login api wont work
+      toastCommon(context, "Please allow permissions to access features!");
+    }
+    else if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      String token = await messaging.getToken(
+        vapidKey:
+        "BEECUr-PDtUXHI4nJAAMjrONvog8mgx5klU8r0COSThlqjpm23boGsYLSkSD2EgPipGCHBZdBA7yv0z-lqbqeAY",
+      );
+
+      print("token: $token");
+      //var fcm_id = await FirebaseMessaging.instance.getToken();
+
+      try {
+        try {
+          _googleSignIn.disconnect();
+        } catch (e) {}
+        await _googleSignIn.signIn().then((value) {
+          setState(() {
+            Provider.of<CustomViewModel>(context, listen: false).setGoogleData(
+                _googleSignIn.currentUser.email,
+                _googleSignIn.currentUser.displayName,
+                _googleSignIn.currentUser.photoUrl);
+
+            value.authentication.then((googleKey) {
+              print(_googleSignIn.clientId);
+              print(googleKey.accessToken);
+              print("token: " + googleKey.idToken);
+              setState(() {
+                _GoogleLogin(googleKey.idToken.toString(), token);
+              });
+            }).catchError((err) {
+              print('inner error');
+            });
+          });
+        });
+      } catch (error) {
+        print(error);
+      }
+    }
+  }
+
+  Future<void> _GoogleLogin(String google_id_token, String fcm_id) async {
+    Provider.of<CustomViewModel>(context, listen: false)
+        .GoogleLogin(google_id_token, fcm_id)
+        .then((value) {
+      setState(() {
+        if (value == "error") {
+          toastCommon(context, "Check internet or try after sometime");
+        } else if (value == "success") {
+          push(context, HomeScreen("HomeScreen", 0, 0));
+        } else {
+          if (value == "Account does not exists for given google email") {
+            /*push(context, LoginWithOTP());*/
+          } else {
+            toastCommon(context, "Please try again or use different email");
+          }
         }
       });
     });
@@ -750,9 +847,9 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                         SizedBox(
                           height: 20,
                         ),
-                        /*InkWell(
+                        InkWell(
                           onTap: () {
-                            // _handleSignIn();
+                            _handleSignIn();
                           },
                           child: Container(
                               height: 60,
@@ -792,7 +889,7 @@ class _LoginWithOTPState extends State<LoginWithOTP> {
                                   ),
                                 ],
                               )),
-                        ),*/
+                        ),
                         Spacer()
                       ],
                     ),

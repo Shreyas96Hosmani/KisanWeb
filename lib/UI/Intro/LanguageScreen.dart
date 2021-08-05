@@ -6,6 +6,7 @@ import 'package:kisanweb/Helpers/constants.dart' as constants;
 import 'package:kisanweb/Helpers/images.dart' as images;
 import 'package:kisanweb/Helpers/size_config.dart';
 import 'package:kisanweb/ResponsivenessHelper/responsive.dart';
+import 'package:kisanweb/UI/Auth/LoginWithOTP.dart';
 import 'package:kisanweb/UI/Auth/SocialAuth.dart';
 import 'package:kisanweb/UI/HomeScreen/HomeScreen.dart';
 import 'package:kisanweb/UI/Intro/splash_page_view_builder.dart';
@@ -81,7 +82,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                       MyApp.setLocale(context, _locale);
 
                       if (widget.id == 1) {
-                        push(context, SplashPageViewBuilder());
+                        push(context, /*SplashPageViewBuilder()*/ LoginWithOTP());
                       } else {
                         pop(context);
                       }
@@ -112,7 +113,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                       Locale _locale = await setLocale('hi');
                       MyApp.setLocale(context, _locale);
                       if (widget.id == 1) {
-                        push(context, SocialAuth());
+                        push(context, /*SocialAuth()*/ LoginWithOTP());
                       } else {
                         pop(context);
                       }
@@ -144,7 +145,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                       MyApp.setLocale(context, _locale);
 
                       if (widget.id == 1) {
-                        push(context, SocialAuth());
+                        push(context, /*SocialAuth()*/LoginWithOTP());
                         //push(context, SplashPageViewBuilder());
                       } else {
                         pop(context);
